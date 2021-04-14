@@ -1,0 +1,5 @@
+---
+pedrohdz_devenv_become_for_all: true
+pedrohdz_devenv_packages_unminimize_ubuntu: true
+ansible_python_interpreter: /usr/bin/python3
+...

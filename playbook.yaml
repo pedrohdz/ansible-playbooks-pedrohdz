@@ -1,0 +1,18 @@
+---
+- hosts: all
+  roles:
+    - pedrohdz.devenv.baseline
+    - pedrohdz.devenv.packages
+    - pedrohdz.devenv.pyvenv_apps
+  vars_files:
+    - ['vars/os-{{ ansible_os_family }}.yaml', vars/os-defaults.yaml]
+    - vars/all.yaml
+    #- vars/simple-variants.yaml
+
+# - hosts: workstation
+#   roles:
+#     - pedrohdz.devenv.packages
+#   vars_files:
+#     - ['vars/os-{{ ansible_os_family }}.yaml', vars/os-defaults.yaml]
+#     - vars/workstation.yaml
+...

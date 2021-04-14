@@ -1,0 +1,17 @@
+---
+all:
+  hosts:
+    localhost:
+      ansible_connection: local
+  children:
+    # baseline can be used for CI/CD
+    baseline:
+      hosts:
+        localhost: {}
+    workstation_headless:
+      hosts:
+        localhost: {}
+    workstation:
+      hosts:
+        localhost: {}
+...

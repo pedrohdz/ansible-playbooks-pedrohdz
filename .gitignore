@@ -1,12 +1,63 @@
 
-# Created by https://www.toptal.com/developers/gitignore/api/macos,linux,windows,python,ansible
-# Edit at https://www.toptal.com/developers/gitignore?templates=macos,linux,windows,python,ansible
+# Created by https://www.toptal.com/developers/gitignore/api/macos,linux,windows,python,ansible,vim,emacs
+# Edit at https://www.toptal.com/developers/gitignore?templates=macos,linux,windows,python,ansible,vim,emacs
 
 ### Ansible ###
 *.retry
 
-### Linux ###
+### Emacs ###
+# -*- mode: gitignore; -*-
 *~
+\#*\#
+/.emacs.desktop
+/.emacs.desktop.lock
+*.elc
+auto-save-list
+tramp
+.\#*
+
+# Org-mode
+.org-id-locations
+*_archive
+ltximg/**
+
+# flymake-mode
+*_flymake.*
+
+# eshell files
+/eshell/history
+/eshell/lastdir
+
+# elpa packages
+/elpa/
+
+# reftex files
+*.rel
+
+# AUCTeX auto folder
+/auto/
+
+# cask packages
+.cask/
+dist/
+
+# Flycheck
+flycheck_*.el
+
+# server auth directory
+/server/
+
+# projectiles files
+.projectile
+
+# directory configuration
+.dir-locals.el
+
+# network security
+/network-security.data
+
+
+### Linux ###
 
 # temporary files which can be created if a process still has a handle open of a deleted file
 .fuse_hidden*
@@ -61,7 +112,6 @@ __pycache__/
 .Python
 build/
 develop-eggs/
-dist/
 downloads/
 eggs/
 .eggs/
@@ -197,6 +247,26 @@ Thumbs.db
 .prof
 
 
+### Vim ###
+# Swap
+[._]*.s[a-v][a-z]
+!*.svg  # comment out if you don't need vector files
+[._]*.sw[a-p]
+[._]s[a-rt-v][a-z]
+[._]ss[a-gi-z]
+[._]sw[a-p]
+
+# Session
+Session.vim
+Sessionx.vim
+
+# Temporary
+.netrwhist
+# Auto-generated tag files
+tags
+# Persistent undo
+[._]*.un~
+
 ### Windows ###
 # Windows thumbnail cache files
 Thumbs.db:encryptable
@@ -222,6 +292,14 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
-# End of https://www.toptal.com/developers/gitignore/api/macos,linux,windows,python,ansible
+# End of https://www.toptal.com/developers/gitignore/api/macos,linux,windows,python,ansible,vim,emacs
 
 # Generated using ignr.py - github.com/Antrikshy/ignr.py
+
+
+#------------------------------------------------------------------------------
+# Project local
+#------------------------------------------------------------------------------
+/.vim/
+/tmp/
+/.ansible/

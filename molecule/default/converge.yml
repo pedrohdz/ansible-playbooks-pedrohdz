@@ -1,0 +1,6 @@
+---
+- name: Converge
+  hosts: all
+- name: Playbook under test
+  import_playbook: ../../playbook.yaml
+...

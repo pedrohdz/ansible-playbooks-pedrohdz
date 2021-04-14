@@ -1,0 +1,7 @@
+---
+skip_list:
+  - '701'
+verbosity: 1
+...
+
+# vim: filetype=yaml

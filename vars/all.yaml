@@ -1,0 +1,415 @@
+---
+pedrohdz_devenv_pyvenv_apps:
+  - flake8
+  - isort
+  - netaddr
+  - pip-autoremove
+  - pipdeptree
+  - pylint
+  - tabulate
+  - tox
+  - yamllint
+
+  - name: ansible
+    packages: [ansible, ansible-lint]
+    bin_files: [
+      ansible, ansible-config, ansible-connection, ansible-console,
+      ansible-doc, ansible-galaxy, ansible-inventory, ansible-lint,
+      ansible-playbook, ansible-pull, ansible-test, ansible-vault
+    ]
+  - name: awscli
+    bin_files: [aws, aws_completer]
+  - name: bump2version
+    bin_files: [bump2version, bumpversion]
+  - name: ignr
+    packages: [wheel, https://github.com/Antrikshy/ignr.py/archive/master.zip]
+  - name: jmespath-terminal
+    bin_files: [jpterm]
+  - name: powerline-status
+    packages: [wheel, powerline-status]
+    bin_files: [powerline, powerline-config, powerline-daemon, powerline-lint,
+      powerline-render]
+  - name: sqlparse
+    bin_files: [sqlformat]
+
+
+pedrohdz_devenv_packages:
+  # ----
+  # Install
+  # ----
+  - name: Bulk System Specific Installs
+    packages: []
+    apt:
+      packages:
+        - build-essential
+    macports:
+      packages:
+        - port_cutleaves
+
+  - name: ant
+    apt:
+      packages:
+        - ant
+        - ant-contrib
+        - ant-doc
+        - ant-optional
+    macports: apache-ant
+
+  - name: aspell
+    apt:
+      packages:
+        - aspell
+        - aspell-en
+        - aspell-es
+        - aspell-sv
+    macports:
+      packages:
+        - aspell
+        - aspell-dict-en
+        - aspell-dict-es
+        - aspell-dict-sv
+
+  - name: dnsmasq
+    apt:
+      ignore: true
+
+  - name: helm
+    macports:
+      packages:
+        - helm-2.17
+        - helm-3.5
+        - helm_select
+      alternatives:
+        helm: helm3.5
+
+  - name: imagemagick
+    macports: ImageMagick
+
+  - name: make
+    macports: gmake
+
+  - name: netcat
+    apt:
+      packages:
+        - ncat
+        - netcat-openbsd
+      alternatives:
+        nc: /usr/bin/ncat
+    macports: gnetcat
+
+  - name: tar
+    apt:
+      packages:
+        - tar
+        #- tar-doc  # FIXME - broken on Debian
+    macports: gnutar
+
+  - name: sed
+    macports: gsed
+
+  - name: time
+    macports: gtime
+
+  - name: gnutls
+    apt:
+      packages:
+        - gnutls-bin
+        - gnutls-doc
+
+  - name: go
+    apt:
+      ignore: true
+
+  - name: inetutils
+    apt:
+      packages:
+        - iputils-arping
+        - iputils-clockdiff
+        - iputils-ping
+        - iputils-tracepath
+        - telnet
+        - traceroute
+
+  - name: kubectl
+    macports:
+      packages:
+        - kubectl-1.18
+        - kubectl-1.19
+        - kubectl-1.20
+        - kubectl_select
+      alternatives:
+        kubectl: kubectl1.20
+
+  - name: kubectx
+    apt:
+      ignore: true
+      # FIXME - Broken on Ubuntu
+
+  - name: ldnsutils
+    apt:
+      packages:
+        - dnsutils
+        - ldnsutils
+    macports: ldns
+
+  - name: less
+    apt:
+      alternatives:
+        pager: /usr/bin/less
+
+  - name: maven
+    macports:
+      packages:
+        - maven32
+        - maven_select
+      alternatives:
+        maven: maven32
+
+  - name: nodejs
+    macports:
+      packages:
+        - nodejs14
+        - npm7
+
+  - name: openjdk11
+    apt:
+      packages:
+        - openjdk-11-doc
+        - openjdk-11-jdk-headless
+
+  - name: openssh
+    apt:
+      packages:
+        - openssh-client
+
+  - name: python3
+    apt:
+      packages:
+        - python3
+        - python3-dev
+        - python3-doc
+        - python3-pip
+        - python3-venv
+        - python3-virtualenv
+        - python3-wheel
+    macports:
+      packages:
+        - pip_select
+        - py39-gnureadline
+        - py39-pip
+        - py39-virtualenv
+        - py39-wheel
+        - python39
+        - python3_select
+        - python_select
+        - virtualenv_select
+      alternatives:
+        pip3: pip39
+        pip: pip39
+        # TODO; Upgrade!!
+        python3: python37
+        python: python37
+        virtualenv: virtualenv39
+
+  - name: python2.7
+    apt:
+      packages:
+        #- python2-pip  # Not sure where these live, if at all...
+        #- python2-virtualenv
+        - python2.7
+        - python2.7-dev
+        - python2.7-doc
+    macports:
+      packages:
+        - py27-gnureadline
+        - py27-pip
+        - py27-virtualenv
+        - py27-wheel
+        - python27
+        - python2_select
+      alternatives:
+        pip2: pip27
+        python2: python27
+
+  - name: ruby
+    apt:
+      packages:
+        - ruby-full
+    macports:
+      packages:
+        - ruby27
+        - ruby_select
+      alternatives:
+        ruby: ruby27
+
+  - name: rust
+    apt:
+      packages: [cargo, cargo-doc, rust-gdb, rustc]
+
+  - name: smbclient
+    macports:
+      packages:
+        - samba4
+
+  - name: s3cmd
+    apt:
+      ignore: true
+      # FIXME - Missing on Debian
+
+  - name: terraform
+    apt:
+      ignore: true
+      # FIXME - Binary on on amd64, no arm
+    macports:
+      packages:
+        - terraform-0.11
+        - terraform-0.12
+        - terraform-0.14
+        - terraform-0.15
+        - terraform_select
+      alternatives:
+        terraform: terraform0.15
+
+  - name: tmux
+    macports:
+      packages:
+        - tmux
+        - tmux-pasteboard
+
+  - name: unrar
+    apt:
+      ignore: true
+
+  - name: vim
+    apt:
+      packages:
+        - vim
+        - vim-doc
+      alternatives:
+        editor: /usr/bin/vim.basic
+        ex: /usr/bin/vim.basic
+        vi: /usr/bin/vim.basic
+        view: /usr/bin/vim.basic
+        vim: /usr/bin/vim.basic
+        vimdiff: /usr/bin/vim.basic
+    macports:
+      variant_name: vim
+      variant: +python37+huge
+      # FIXME - variant: +python39+huge+cscope
+
+  - asciidoc
+  - autoconf
+  - automake
+  - autossh
+  - bash
+  - bash-completion
+  - cmake
+  - coreutils
+  - cryptcat
+  - ctags
+  - curl
+  - cvs
+  - findutils
+  - flex
+  - gawk
+  - git
+  - git-secret
+  - gnupg2
+  - gradle
+  - graphviz
+  - grep
+  - htop
+  - lftp
+  - minicom
+  - mtools
+  - nmap
+  - p7zip
+  - pandoc
+  - proxychains-ng
+  - proxytunnel
+  - pssh
+  - pv
+  - qrencode
+  - shellcheck
+  - siege
+  - socat
+  - sshpass
+  - stunnel
+  - tor
+  - tree
+  - tsocks
+  - watch
+  - wget
+  - xmlstarlet
+  - yarn
+
+  # ----
+  # Uninstall
+  # ----
+  - name: Bulk Macports Uninstall
+    packages: []
+    state: absent
+    macports:
+      packages:
+        - awscli_select
+        - helm-2.12
+        - helm-2.13
+        - helm-2.14
+        - helm-2.15
+        - helm-2.16
+        - helm-3.0
+        - helm-3.1
+        - helm-3.2
+        - helm-3.3
+        - helm-3.4
+        - kubectl-1.10
+        - kubectl-1.11
+        - kubectl-1.12
+        - kubectl-1.13
+        - kubectl-1.14
+        - kubectl-1.15
+        - kubectl-1.16
+        - kubectl-1.17
+        - nodejs10
+        - nodejs12
+        - nodejs13
+        - nodejs15
+        - nodejs8
+        - npm4
+        - npm5
+        - npm6
+        - py26-pip
+        - py27-awscli
+        - py33-pip
+        - py34-awscli
+        - py35-awscli
+        - py36-awscli
+        - py37-awscli
+        - python26
+        - python33
+        - samba3
+        # TODO:
+        #- py34-pip
+        #- py35-pip
+        #- py36-pip
+        #- py37-gnureadline
+        #- py37-pip
+        #- python34
+        #- python35
+        #- python36
+        #- python38
+
+
+  # Move to workstation
+  # - minikube
+
+  # FIXME - Relocate?
+  # - name: openssh-server
+  #   macports:
+  #     packages: []
+  #   apt:
+  #     packages:
+  #       - openssh-server
+  #       - openssh-sftp-server
+
+...
