@@ -1,0 +1,73 @@
+---
+name: Continuous Integration
+
+on:
+  push: {}
+  # At 04:56 on Monday
+  schedule:
+    - cron: '56 4 * * 1'
+
+jobs:
+  molecule-test:
+    name: Molecule Test
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        PYTHON_VERSION: [3.8, 3.9]
+    env:
+      PY_COLORS: 'true'
+      ANSIBLE_FORCE_COLOR: 'true'
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python ${{ matrix.PYTHON_VERSION }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.PYTHON_VERSION }}
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install --upgrade --upgrade-strategy eager ansible molecule[docker]
+          ansible-galaxy install -r requirements.yaml
+      - name: Test with molecule
+        run: molecule test
+
+  integration-test-macports:
+    name: Macports integration tests
+    #needs: molecule-test
+    runs-on: ${{ matrix.MACOS_WORKER_VERSION }}
+    strategy:
+      matrix:
+        MACOS_WORKER_VERSION:
+          - macos-10.15
+          #- macos-11.0  # FIXME - Still in private preview (https://github.com/actions/virtual-environments).
+    env:
+      PY_COLORS: 'true'
+      ANSIBLE_FORCE_COLOR: 'true'
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install MacPorts
+        run: .github/scripts/setup-macports.sh
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Add MacPorts to the build PATH
+        run: |
+          echo '/opt/local/sbin' >> $GITHUB_PATH
+          echo '/opt/local/bin' >> $GITHUB_PATH
+          echo '/opt/local/libexec/gnubin' >> $GITHUB_PATH
+
+      - name: System information
+        run: |
+          echo PATH="$PATH"
+
+      - name: Install & setup Ansible
+        run: |
+          /usr/bin/python3 -m venv .venv
+          ./.venv/bin/pip3 install -U pip
+          ./.venv/bin/pip3 install ansible
+          ./.venv/bin/ansible-galaxy install -r requirements.yaml
+
+      - name: Run Ansible Playbook
+        run: ./.venv/bin/ansible-playbook playbook.yaml
+...

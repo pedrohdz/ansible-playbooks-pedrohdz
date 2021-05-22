@@ -38,6 +38,8 @@ provisioner:
   name: ansible
   env:
     ANSIBLE_COLLECTIONS_PATH: ${MOLECULE_PROJECT_DIRECTORY}/.ansible
+    ANSIBLE_FORCE_COLOR: 'true'
+    PY_COLORS: 'true'
 verifier:
   name: ansible
 lint: |
