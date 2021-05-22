@@ -31,3 +31,9 @@ Complete end to end testing:
 ```bash
 molecule test
 ```
+
+## Other helpful commands
+
+```bash
+ansible-galaxy install -r requirements.yaml --force --force-with-deps
+```

@@ -26,7 +26,8 @@ pedrohdz_devenv_pyvenv_apps:
   - name: jmespath-terminal
     bin_files: [jpterm]
   - name: powerline-status
-    packages: [wheel, powerline-status]
+    packages: [wheel, psutil,
+      'https://github.com/powerline/powerline/archive/refs/tags/2.8.2.tar.gz']
     bin_files: [powerline, powerline-config, powerline-daemon, powerline-lint,
       powerline-render]
   - name: sqlparse
@@ -207,8 +208,8 @@ pedrohdz_devenv_packages:
         pip3: pip39
         pip: pip39
         # TODO; Upgrade!!
-        python3: python37
-        python: python37
+        python3: python39
+        python: python39
         virtualenv: virtualenv39
 
   - name: python2.7
@@ -294,8 +295,7 @@ pedrohdz_devenv_packages:
         vimdiff: /usr/bin/vim.basic
     macports:
       variant_name: vim
-      variant: +python37+huge
-      # FIXME - variant: +python39+huge+cscope
+      variant: +python39+huge+cscope
 
   - asciidoc
   - autoconf
@@ -378,6 +378,8 @@ pedrohdz_devenv_packages:
         - npm4
         - npm5
         - npm6
+        - openjdk13
+        - openjdk16
         - py26-pip
         - py27-awscli
         - py33-pip
@@ -389,6 +391,10 @@ pedrohdz_devenv_packages:
         - python33
         - samba3
         # TODO:
+        #- py27-gnureadline
+        #- py27-pip
+        #- py27-virtualenv
+        #- py27-wheel
         #- py34-pip
         #- py35-pip
         #- py36-pip
@@ -398,7 +404,6 @@ pedrohdz_devenv_packages:
         #- python35
         #- python36
         #- python38
-
 
   # Move to workstation
   # - minikube
