@@ -1,6 +1,6 @@
 ---
 ansible_python_interpreter: /usr/bin/python3
-pedrohdz_devenv_become_for_all: true
-pedrohdz_devenv_packages_macosx_pkg_mgr: macports
-pedrohdz_devenv_packages_unminimize_ubuntu: true
+avinode_devenv_become_for_all: true
+avinode_devenv_packages_macosx_pkg_mgr: macports
+avinode_devenv_packages_unminimize_ubuntu: true
 ...

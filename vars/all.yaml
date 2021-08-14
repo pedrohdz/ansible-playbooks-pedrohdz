@@ -1,5 +1,5 @@
 ---
-pedrohdz_devenv_pyvenv_apps:
+avinode_devenv_pyvenv_apps:
   - flake8
   - isort
   - netaddr
@@ -11,12 +11,12 @@ pedrohdz_devenv_pyvenv_apps:
   - yamllint
 
   - name: ansible
-    packages: [ansible, ansible-lint]
+    packages: [ansible, ansible-lint, argcomplete]
     bin_files: [
       ansible, ansible-config, ansible-connection, ansible-console,
       ansible-doc, ansible-galaxy, ansible-inventory, ansible-lint,
-      ansible-playbook, ansible-pull, ansible-test, ansible-vault
-    ]
+      ansible-playbook, ansible-pull, ansible-test, ansible-vault]
+    has_argcomplete: true
   - name: awscli
     bin_files: [aws, aws_completer]
   - name: bump2version
@@ -33,8 +33,7 @@ pedrohdz_devenv_pyvenv_apps:
   - name: sqlparse
     bin_files: [sqlformat]
 
-
-pedrohdz_devenv_packages:
+avinode_devenv_packages:
   # ----
   # Install
   # ----
@@ -102,7 +101,7 @@ pedrohdz_devenv_packages:
     apt:
       packages:
         - tar
-        #- tar-doc  # FIXME - broken on Debian
+        #- tar-doc  # TODO - broken on Debian
     macports: gnutar
 
   - name: sed

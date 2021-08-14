@@ -1,9 +1,12 @@
 ---
 - hosts: all
   roles:
-    - pedrohdz.devenv.baseline
-    - pedrohdz.devenv.packages
-    - pedrohdz.devenv.pyvenv_apps
+    - avinode.devenv.baseline
+    - avinode.devenv.packages
+    - avinode.devenv.pyvenv_apps
+    #- avinode.devenv.install_terraform_versions
+    #- avinode.devenv.install_kubectl_versions
+    #- avinode.devenv.install_helm_versions
   vars_files:
     - ['vars/os-{{ ansible_os_family }}.yaml', vars/os-defaults.yaml]
     - vars/all.yaml
@@ -11,7 +14,7 @@
 
 # - hosts: workstation
 #   roles:
-#     - pedrohdz.devenv.packages
+#     - avinode.devenv.packages
 #   vars_files:
 #     - ['vars/os-{{ ansible_os_family }}.yaml', vars/os-defaults.yaml]
 #     - vars/workstation.yaml
