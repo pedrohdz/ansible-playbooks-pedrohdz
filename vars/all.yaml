@@ -1,5 +1,6 @@
 ---
 avinode_devenv_pyvenv_apps:
+  - diceware
   - flake8
   - isort
   - netaddr
@@ -8,6 +9,7 @@ avinode_devenv_pyvenv_apps:
   - pylint
   - tabulate
   - tox
+  - xkcdpass
   - yamllint
 
   - name: ansible
@@ -32,6 +34,9 @@ avinode_devenv_pyvenv_apps:
       powerline-render]
   - name: sqlparse
     bin_files: [sqlformat]
+  - name: yubikey-manager
+    bin_files: [ykman]
+
 
 avinode_devenv_packages:
   # ----
@@ -42,9 +47,34 @@ avinode_devenv_packages:
     apt:
       packages:
         - build-essential
+        - cryptsetup
+        - exfat-fuse
+        - exfat-utils
+        - f2fs-tools
+        - kbd
+        - libpcsclite-dev
+        - parted
+        - pcscd
+        - rng-tools
+        - scdaemon
+        - secure-delete
     macports:
       packages:
         - port_cutleaves
+
+  - name: Install GnuPG and tools
+    packages: []
+    apt:
+      packages:
+        - dirmngr
+        - gnupg-agent
+        - gnupg2
+        - hopenpgp-tools  # TODO - Try and find for MacPorts
+        - pinentry-curses
+    macports:
+      packages:
+        - gnupg2
+        - pinentry-mac
 
   - name: ant
     apt:
@@ -72,6 +102,11 @@ avinode_devenv_packages:
   - name: dnsmasq
     apt:
       ignore: true
+
+  - name: ffmpeg
+    macports:
+      variant_name: ffmpeg
+      variant: +gpl2+nonfree
 
   - name: helm
     macports:
@@ -117,8 +152,7 @@ avinode_devenv_packages:
         - gnutls-doc
 
   - name: go
-    apt:
-      ignore: true
+    apt: golang-go
 
   - name: inetutils
     apt:
@@ -181,10 +215,14 @@ avinode_devenv_packages:
     apt:
       packages:
         - openssh-client
+    macports:
+      variant_name: openssh
+      variant: +fido2+gsskex+kerberos5+xauth
 
   - name: python3
     apt:
       packages:
+        - libpython3-dev
         - python3
         - python3-dev
         - python3-doc
@@ -231,6 +269,18 @@ avinode_devenv_packages:
         pip2: pip27
         python2: python27
 
+  - name: qemu
+    apt:
+      packages:
+        - qemu
+        - qemu-system
+        - qemu-system-arm
+        - qemu-system-x86
+        - qemu-utils
+    macports:
+      variant_name: qemu
+      variant: +cocoa+target_arm+target_i386+target_x86_64+usb
+
   - name: ruby
     apt:
       packages:
@@ -266,6 +316,7 @@ avinode_devenv_packages:
         - terraform-0.12
         - terraform-0.14
         - terraform-0.15
+        - terraform-1.0
         - terraform_select
       alternatives:
         terraform: terraform0.15
@@ -296,6 +347,26 @@ avinode_devenv_packages:
       variant_name: vim
       variant: +python39+huge+cscope
 
+  - name: yubikey-personalization
+    macports: ykpers
+
+  - name: zbar
+    apt: zbar-tools
+
+  - name: zsh
+    apt:
+      packages:
+        - zsh
+        - zsh-doc
+    macports:
+      packages:
+        - zsh
+        - zsh-completions
+        - zsh-templates-osx
+
+  # Common across MacPorts and APT
+  #- bcrypt  # TODO - Not found on Ubuntu
+  - argon2
   - asciidoc
   - autoconf
   - automake
@@ -318,29 +389,39 @@ avinode_devenv_packages:
   - graphviz
   - grep
   - htop
+  - jq
   - lftp
+  - makepasswd
   - minicom
   - mtools
+  - neovim
   - nmap
   - p7zip
   - pandoc
+  - paperkey
   - proxychains-ng
   - proxytunnel
   - pssh
   - pv
+  - pwgen
   - qrencode
+  - scrypt
   - shellcheck
   - siege
   - socat
   - sshpass
   - stunnel
+  - sudo
+  - swig
   - tor
   - tree
   - tsocks
+  - unzip
   - watch
   - wget
   - xmlstarlet
   - yarn
+  - zip
 
   # ----
   # Uninstall
