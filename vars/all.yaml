@@ -32,6 +32,8 @@ avinode_devenv_pyvenv_apps:
       'https://github.com/powerline/powerline/archive/refs/tags/2.8.2.tar.gz']
     bin_files: [powerline, powerline-config, powerline-daemon, powerline-lint,
       powerline-render]
+  - name: pygments
+    bin_files: [pygmentize]
   - name: sqlparse
     bin_files: [sqlformat]
   - name: yubikey-manager
@@ -99,6 +101,10 @@ avinode_devenv_packages:
         - aspell-dict-es
         - aspell-dict-sv
 
+  - name: bat
+    apt:
+      ignore: true  # TODO - Missing on Ubuntu.
+
   - name: dnsmasq
     apt:
       ignore: true
@@ -116,6 +122,9 @@ avinode_devenv_packages:
         - helm_select
       alternatives:
         helm: helm3.5
+
+  - name: fd-find
+    macports: fd
 
   - name: imagemagick
     macports: ImageMagick
@@ -281,6 +290,12 @@ avinode_devenv_packages:
       variant_name: qemu
       variant: +cocoa+target_arm+target_i386+target_x86_64+usb
 
+  - name: ripgrep
+    macports:
+      packages:
+        - ripgrep
+        - ripgrep-all
+
   - name: ruby
     apt:
       packages:
@@ -296,6 +311,9 @@ avinode_devenv_packages:
     apt:
       packages: [cargo, cargo-doc, rust-gdb, rustc]
 
+  - name: silversearcher-ag
+    macports: the_silver_searcher
+
   - name: smbclient
     macports:
       packages:
@@ -305,6 +323,10 @@ avinode_devenv_packages:
     apt:
       ignore: true
       # FIXME - Missing on Debian
+
+  - name: sudo
+    macports:
+      ignore: true  # Use the MacOS version of `sudo`.
 
   - name: terraform
     apt:
@@ -381,6 +403,7 @@ avinode_devenv_packages:
   - cvs
   - findutils
   - flex
+  - fzf
   - gawk
   - git
   - git-secret
@@ -411,7 +434,6 @@ avinode_devenv_packages:
   - socat
   - sshpass
   - stunnel
-  - sudo
   - swig
   - tor
   - tree
@@ -422,6 +444,7 @@ avinode_devenv_packages:
   - xmlstarlet
   - yarn
   - zip
+
 
   # ----
   # Uninstall
