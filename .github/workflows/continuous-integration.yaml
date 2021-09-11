@@ -30,7 +30,7 @@ jobs:
       - name: Test with molecule
         run: |
           source "${GITHUB_WORKSPACE}/.venv/bin/activate"
-          molecule test
+          molecule test --scenario-name docker
 
   integration-test-macports:
     name: Macports integration tests
