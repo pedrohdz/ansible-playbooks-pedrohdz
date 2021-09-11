@@ -212,8 +212,8 @@ avinode_devenv_packages:
   - name: nodejs
     macports:
       packages:
-        - nodejs14
-        - npm7
+        - nodejs12
+        - npm6
 
   - name: openjdk11
     apt:
@@ -476,13 +476,13 @@ avinode_devenv_packages:
         - kubectl-1.16
         - kubectl-1.17
         - nodejs10
-        - nodejs12
         - nodejs13
+        - nodejs14
         - nodejs15
         - nodejs8
         - npm4
         - npm5
-        - npm6
+        - npm7
         - openjdk13
         - openjdk16
         - py26-pip
