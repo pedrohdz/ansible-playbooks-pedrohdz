@@ -1,7 +1,8 @@
 ---
 - hosts: all
   tasks:
-    - debug:
+    - name: Place holder...
+      debug:
         msg: place holder...
 
 # - hosts: all

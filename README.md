@@ -12,7 +12,7 @@ Then:
 python3.9 -m venv .venv
 source .venv/bin/activate
 pip install -U pip
-pip install ansible 'molecule[docker,lint]'
+pip install ansible 'molecule[docker,lint]' molecule-vagrant python-vagrant
 ansible-galaxy install -r requirements.yaml
 
 # Actually install the infrascructure tools on your workstation.  Enter your
