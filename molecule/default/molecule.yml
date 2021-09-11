@@ -4,14 +4,14 @@ dependency:
 driver:
   name: vagrant
 platforms:
-  # - name: ubuntu2004
-  #   box: ubuntu/focal64
-  #   memory: 1024
-  #   cpus: 2
-  #   config_options:
-  #     ssh.keep_alive: true  # `yes`?
-  #     synced_folder: true
-  #   provision: no
+  - name: ubuntu2004
+    box: ubuntu/focal64
+    memory: 1024
+    cpus: 2
+    config_options:
+      ssh.keep_alive: true  # `yes`?
+      synced_folder: true
+    provision: no
   - name: debian10
     box: debian/contrib-buster64
     memory: 1024

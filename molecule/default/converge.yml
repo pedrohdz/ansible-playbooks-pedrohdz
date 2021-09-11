@@ -16,6 +16,7 @@
         password: '!'
   tags:
     - molecule-home
+  become: true
 
 - name: User home level playbook under test
   import_playbook: ../../playbook-home.yaml
