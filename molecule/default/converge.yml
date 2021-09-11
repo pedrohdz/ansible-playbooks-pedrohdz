@@ -1,6 +1,26 @@
 ---
-- name: Converge
-  hosts: all
-- name: Playbook under test
+# - name: Converge
+#   hosts: all
+- name: System level playbook under test
   import_playbook: ../../playbook.yaml
+  tags:
+    - molecule-system
+
+- name: Ensure test user account
+  hosts: all
+  tasks:
+    - name: Create dummy user account
+      ansible.builtin.user:
+        name: rusty
+        shell: /bin/zsh
+        password: '!'
+  tags:
+    - molecule-home
+
+- name: User home level playbook under test
+  import_playbook: ../../playbook-home.yaml
+  become: true
+  become_user: rusty
+  tags:
+    - molecule-home
 ...

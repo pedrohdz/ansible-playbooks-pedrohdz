@@ -1,0 +1,15 @@
+---
+- hosts: all
+  tasks:
+    - debug:
+        msg: place holder...
+
+# - hosts: all
+#   roles:
+#     - home
+#
+#   vars_files:
+#     - ['vars/os-{{ ansible_os_family }}.yaml', vars/os-defaults.yaml]
+#     - vars/all.yaml
+#     #- vars/simple-variants.yaml
+...
