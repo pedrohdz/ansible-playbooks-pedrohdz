@@ -1,6 +1,7 @@
 ---
 collections:
-  - name: git+https://github.com/Avinode/ansible-collection-devenv.git
+  # FIXME - - name: git+https://github.com/Avinode/ansible-collection-devenv.git
+  - name: git+https://github.com/pedrohdz-scrap/ansible-collection-devenv.git,fixes
     type: git
     version: main
 ...
