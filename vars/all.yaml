@@ -12,13 +12,6 @@ avinode_devenv_pyvenv_apps:
   - xkcdpass
   - yamllint
 
-  - name: ansible
-    packages: [wheel, ansible, ansible-lint, argcomplete]
-    bin_files: [
-      ansible, ansible-config, ansible-connection, ansible-console,
-      ansible-doc, ansible-galaxy, ansible-inventory, ansible-lint,
-      ansible-playbook, ansible-pull, ansible-test, ansible-vault]
-    has_argcomplete: true
   - name: awscli
     bin_files: [aws, aws_completer]
   - name: bump2version
@@ -37,7 +30,18 @@ avinode_devenv_pyvenv_apps:
   - name: sqlparse
     bin_files: [sqlformat]
   - name: yubikey-manager
+    packages: [wheel, yubikey-manager, cryptography<3.4]  # TODO - Fix cryptography
     bin_files: [ykman]
+
+  # TODO - Remove
+  - name: ansible
+    packages: [wheel, ansible, ansible-lint, argcomplete]
+    bin_files: [
+      ansible, ansible-config, ansible-connection, ansible-console,
+      ansible-doc, ansible-galaxy, ansible-inventory, ansible-lint,
+      ansible-playbook, ansible-pull, ansible-test, ansible-vault]
+    has_argcomplete: true
+    state: absent
 
 
 avinode_devenv_packages:
