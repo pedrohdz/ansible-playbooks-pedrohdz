@@ -34,7 +34,7 @@ jobs:
 
   integration-test-macports:
     name: Macports integration tests
-    needs: molecule-test  # MacOS VMs cost money.  Only run if things look good.
+    #needs: molecule-test  # MacOS VMs cost money.  Only run if things look good.
     runs-on: ${{ matrix.MACOS_WORKER_VERSION }}
     strategy:
       matrix:
