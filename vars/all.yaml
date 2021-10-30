@@ -499,6 +499,9 @@ avinode_devenv_packages:
         - py37-awscli
         - python26
         - python33
+        - rb24-bundler
+        - ruby
+        - ruby24
         - samba3
         # TODO:
         #- py27-gnureadline

@@ -17,15 +17,15 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Super Lint the Code Base
-        uses: docker://ghcr.io/github/super-linter:slim-v4
+      - name: Lint Code Base
+        uses: github/super-linter/slim@v4
         env:
-          DEFAULT_BRANCH: main
+          DEFAULT_BRANCH: master
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Set up Ansible & Molecule in a Python venv
         run: |
-          "${GITHUB_WORKSPACE}/.github/scripts/setup-local-ansible.sh"
+          "${GITHUB_WORKSPACE}/scripts/setup-local-ansible.sh"
 
       - name: Test with molecule
         run: |
@@ -34,7 +34,7 @@ jobs:
 
   integration-test-macports:
     name: Macports integration tests
-    #needs: molecule-test  # MacOS VMs cost money.  Only run if things look good.
+    # FIXME - needs: molecule-test  # MacOS VMs cost money.  Only run if things look good.
     runs-on: ${{ matrix.MACOS_WORKER_VERSION }}
     strategy:
       matrix:
@@ -48,7 +48,8 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Install MacPorts
-        run: ".github/scripts/setup-macports.sh"
+        run: |
+          "${GITHUB_WORKSPACE}/scripts/setup-macports.sh"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -66,7 +67,7 @@ jobs:
 
       - name: Set up Ansible & Molecule in a Python venv
         run: |
-          "${GITHUB_WORKSPACE}/.github/scripts/setup-local-ansible.sh"
+          "${GITHUB_WORKSPACE}/scripts/setup-local-ansible.sh"
 
       - name: Run Ansible Playbook
         run: |

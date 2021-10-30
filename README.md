@@ -9,14 +9,13 @@ the your PATH starts with `/opt/local/libexec/gnubin:/opt/local/bin:/opt/local/s
 Then:
 
 ```bash
-python3.9 -m venv .venv
+./scripts/setup-local-ansible.sh
 source .venv/bin/activate
-pip install --upgrade --upgrade-strategy eager wheel pip
-pip install ansible ansible-lint 'molecule[docker,lint]' molecule-vagrant python-vagrant
-ansible-galaxy install -r requirements.yaml
+```
 
-# Actually install the infrascructure tools on your workstation.  Enter your
-# `sudo` password at the prompt.
+To run the playbook:
+
+```bash
 ansible-playbook playbook.yaml --ask-become-pass
 ```
 
@@ -38,8 +37,6 @@ source /opt/local/etc/bash_completion.d/*
 ## Testing and development
 
 ```bash
-pip install ansible ansible-lint molecule[docker] yamllint
-
 molecule create
 molecule converge
 molecule list
@@ -57,7 +54,8 @@ Running [github/super-linter](https://github.com/github/super-linter) locally
 to help debug GitHub Action issues:
 
 ```bash
-docker run -e RUN_LOCAL=true -v $PWD:/tmp/lint github/super-linter
+docker pull github/super-linter:slim-latest
+docker run -e RUN_LOCAL=true -v $PWD:/tmp/lint github/super-linter:slim-latest
 ```
 
 More information can be found at:

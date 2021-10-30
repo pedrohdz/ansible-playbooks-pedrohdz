@@ -68,3 +68,23 @@ hash -r
 log 'Running MacPorts selfupdate/upgrade...'
 /usr/bin/sudo /opt/local/bin/port selfupdate
 /usr/bin/sudo /opt/local/bin/port upgrade outdated
+
+log 'Install minimum required MacPorts...'
+/usr/bin/sudo /opt/local/bin/port install \
+    coreutils \
+    curl-ca-bundle \
+    pip_select \
+    py39-certifi \
+    py39-distlib \
+    py39-pip \
+    py39-setuptools \
+    py39-virtualenv \
+    py39-wheel \
+    python39 \
+    python3_select \
+    python_select
+
+/usr/bin/sudo /opt/local/bin/port select python3 python39
+/usr/bin/sudo /opt/local/bin/port select python python39
+/usr/bin/sudo /opt/local/bin/port select pip3 pip39
+/usr/bin/sudo /opt/local/bin/port select pip pip39
