@@ -33,7 +33,9 @@ function get_macos_friendly_name() {
       '/SOFTWARE LICENSE AGREEMENT FOR macOS/' \
       '/System/Library/CoreServices/Setup Assistant.app/Contents/Resources/en.lproj/OSXSoftwareLicense.rtf' \
     | /usr/bin/awk -F 'macOS ' '{print $NF}' \
-    | /usr/bin/awk '{print substr($0, 0, length($0)-1)}'
+    | /usr/bin/awk '{print substr($0, 0, length($0)-1)}' \
+    | /usr/bin/tr -d '[:space:]'
+
 }
 
 function get_macports_pkg_file_name() {
