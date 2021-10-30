@@ -189,10 +189,12 @@ avinode_devenv_packages:
       alternatives:
         kubectl: kubectl1.20
 
-  - name: kubectx
-    apt:
-      ignore: true
-      # FIXME - Broken on Ubuntu
+  # TODO - Broken because it depends on kubectl-1.22, whhichh is broken!
+  #   - https://trac.macports.org/ticket/63503
+  # - name: kubectx
+  #   apt:
+  #     ignore: true
+  #     # FIXME - Broken on Ubuntu
 
   - name: ldnsutils
     apt:
