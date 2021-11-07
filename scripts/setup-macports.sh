@@ -14,17 +14,28 @@ function log() {
 }
 
 function get_latest_macports_version() {
+  local _auth_header
+  if [[ -n "${GITHUB_TOKEN:-}" ]]; then
+    _auth_header=(--header "authorization: Bearer $GITHUB_TOKEN")
+  fi
   /usr/bin/curl \
-      --fail --silent \
+      --fail --silent "${_auth_header[@]}" \
       --header 'Accept: application/vnd.github.v3+json' \
-      --header "authorization: Bearer $GITHUB_TOKEN" \
       'https://api.github.com/repos/macports/macports-base/releases/latest' \
-    | /usr/local/bin/jq --raw-output '.tag_name' \
+    | jq --raw-output '.tag_name' \
     | /usr/bin/sed -e 's/^v//'
 }
 
 function get_macos_version() {
-  /usr/bin/sw_vers -productVersion | /usr/bin/sed -E 's/\.[0-9]+$//'
+  local _version
+  local _version_parts
+  _version=$(/usr/bin/sw_vers -productVersion)
+  IFS='.' read -r -a _version_parts <<< "$_version"
+  if [[ "${_version_parts[0]}" -lt 11 ]]; then
+    echo "${_version_parts[0]}.${_version_parts[1]}"
+  else
+    echo "${_version_parts[0]}"
+  fi
 }
 
 function get_macos_friendly_name() {
@@ -75,6 +86,7 @@ log 'Install minimum required MacPorts...'
 /usr/bin/sudo /opt/local/bin/port install \
     coreutils \
     curl-ca-bundle \
+    jq \
     pip_select \
     py39-certifi \
     py39-distlib \
