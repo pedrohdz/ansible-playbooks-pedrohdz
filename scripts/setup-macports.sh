@@ -22,7 +22,7 @@ function get_latest_macports_version() {
       --fail --silent "${_auth_header[@]}" \
       --header 'Accept: application/vnd.github.v3+json' \
       'https://api.github.com/repos/macports/macports-base/releases/latest' \
-    | jq --raw-output '.tag_name' \
+    | /usr/bin/python3 -c "import sys, json; print(json.load(sys.stdin)['tag_name'])" \
     | /usr/bin/sed -e 's/^v//'
 }
 
@@ -86,7 +86,6 @@ log 'Install minimum required MacPorts...'
 /usr/bin/sudo /opt/local/bin/port install \
     coreutils \
     curl-ca-bundle \
-    jq \
     pip_select \
     py39-certifi \
     py39-distlib \
