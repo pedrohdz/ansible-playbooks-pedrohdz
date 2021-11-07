@@ -191,11 +191,10 @@ avinode_devenv_packages:
       alternatives:
         kubectl: kubectl1.22
 
-  # Waiting on: https://github.com/macports/macports-ports/pull/12841
-  # - name: kubectx
-  #   apt:
-  #     # FIXME - Broken on Ubuntu
-  #     ignore: true
+  - name: kubectx
+    apt:
+      # FIXME - Broken on Ubuntu
+      ignore: true
 
   - name: ldnsutils
     apt:
