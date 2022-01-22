@@ -1,5 +1,8 @@
 ---
 avinode_devenv_pyvenv_apps:
+  # TODO - Everything here should be installed via `pipx`.
+  - pipx
+
   - diceware
   - flake8
   - isort
@@ -18,22 +21,27 @@ avinode_devenv_pyvenv_apps:
     bin_files: [bump2version, bumpversion]
   - name: ignr
     packages: [wheel, https://github.com/Antrikshy/ignr.py/archive/master.zip]
-  - name: jmespath-terminal
-    bin_files: [jpterm]
   - name: powerline-status
-    packages: [wheel, psutil,
-      'https://github.com/powerline/powerline/archive/refs/tags/2.8.2.tar.gz']
+    packages: 
+      - wheel
+      - psutil
+      - 'https://github.com/powerline/powerline/archive/refs/tags/2.8.2.tar.gz'
     bin_files: [powerline, powerline-config, powerline-daemon, powerline-lint,
-      powerline-render]
+                powerline-render]
   - name: pygments
     bin_files: [pygmentize]
   - name: sqlparse
     bin_files: [sqlformat]
   - name: yubikey-manager
-    packages: [wheel, yubikey-manager, cryptography<3.4]  # TODO - Fix cryptography
+    # TODO - Fix cryptography, old version needed by Debian 10.
+    # packages: [wheel, yubikey-manager, cryptography]
+    packages: [wheel, yubikey-manager, cryptography<3.4]
     bin_files: [ykman]
 
   # TODO - Remove
+  - name: jmespath-terminal  # Project inactive, breaks on Python 3.10.
+    bin_files: [jpterm]
+    state: absent
   - name: ansible
     packages: [wheel, ansible, ansible-lint, argcomplete]
     bin_files: [
@@ -49,7 +57,7 @@ avinode_devenv_packages:
   # Install
   # ----
   - name: Bulk System Specific Installs
-    packages: []
+    packages: [ ]
     apt:
       packages:
         - build-essential
@@ -71,17 +79,19 @@ avinode_devenv_packages:
         - port_cutleaves
 
   - name: Install GnuPG and tools
-    packages: []
+    packages: [ ]
     apt:
       packages:
         - dirmngr
         - gnupg-agent
         - gnupg2
         - hopenpgp-tools  # TODO - Try and find for MacPorts
+        - libffi-dev
         - pinentry-curses
     macports:
       packages:
         - gnupg2
+        - libfido2
         - pinentry-mac
 
   - name: ant
@@ -219,8 +229,8 @@ avinode_devenv_packages:
   - name: nodejs
     macports:
       packages:
-        - nodejs12
-        - npm6
+        - nodejs16
+        - npm8
 
   - name: openjdk11
     apt:
@@ -250,21 +260,21 @@ avinode_devenv_packages:
     macports:
       packages:
         - pip_select
-        - py39-gnureadline
-        - py39-pip
-        - py39-virtualenv
-        - py39-wheel
-        - python39
+        - py310-gnureadline
+        - py310-pip
+        - py310-virtualenv
+        - py310-wheel
+        - python310
         - python3_select
         - python_select
+        - swig-python
         - virtualenv_select
       alternatives:
-        pip3: pip39
-        pip: pip39
-        # TODO; Upgrade!!
-        python3: python39
-        python: python39
-        virtualenv: virtualenv39
+        pip3: pip310
+        pip: pip310
+        python3: python310
+        python: python310
+        virtualenv: virtualenv310
 
   - name: python2.7
     apt:
@@ -377,6 +387,17 @@ avinode_devenv_packages:
       variant_name: vim
       variant: +python39+huge+cscope
 
+  - name: neovim
+    apt:
+      packages:
+        - neovim
+        # - python3-pynvim  # Ubuntu
+        # - python3-neovim  # Debian10
+    macports:
+      packages:
+        - neovim
+        - py310-neovim
+
   - name: yubikey-personalization
     macports: ykpers
 
@@ -426,7 +447,6 @@ avinode_devenv_packages:
   - makepasswd
   - minicom
   - mtools
-  - neovim
   - nmap
   - p7zip
   - pandoc
@@ -459,11 +479,12 @@ avinode_devenv_packages:
   # Uninstall
   # ----
   - name: Bulk Macports Uninstall
-    packages: []
+    packages: [ ]
     state: absent
     macports:
       packages:
         - awscli_select
+        - gobject-introspection
         - helm-2.12
         - helm-2.13
         - helm-2.14
@@ -482,13 +503,17 @@ avinode_devenv_packages:
         - kubectl-1.15
         - kubectl-1.16
         - kubectl-1.17
+        - meson
         - nodejs10
+        - nodejs11
+        - nodejs12
         - nodejs13
         - nodejs14
         - nodejs15
         - nodejs8
         - npm4
         - npm5
+        - npm6
         - npm7
         - openjdk13
         - openjdk16
@@ -496,29 +521,45 @@ avinode_devenv_packages:
         - py27-awscli
         - py33-pip
         - py34-awscli
+        - py34-pip
+        - py34-setuptools
         - py35-awscli
+        - py35-pip
+        - py35-setuptools
         - py36-awscli
+        - py36-pip
+        - py36-setuptools
         - py37-awscli
+        - py37-gnureadline
+        - py37-pip
+        - py37-setuptools
+        - py39-backports
+        - py39-backports.entry-points-selectable
+        - py39-beaker
+        - py39-distlib
+        - py39-filelock
+        - py39-gnureadline
+        - py39-mako
+        - py39-markdown
+        - py39-markupsafe
+        - py39-pip
+        - py39-platformdirs
+        - py39-setuptools
+        - py39-six
+        - py39-virtualenv
+        - py39-wheel
         - python26
         - python33
+        - python34
+        - python35
+        - python36
+        - python37
         - rb24-bundler
         - ruby
         - ruby24
         - samba3
-        # TODO:
-        #- py27-gnureadline
-        #- py27-pip
-        #- py27-virtualenv
-        #- py27-wheel
-        #- py34-pip
-        #- py35-pip
-        #- py36-pip
-        #- py37-gnureadline
-        #- py37-pip
-        #- python34
-        #- python35
-        #- python36
-        #- python38
+        # - python38  # Needed by s3cmd
+        # - python39  # Needed by Vim and others
 
   # Move to workstation
   # - minikube
@@ -526,7 +567,7 @@ avinode_devenv_packages:
   # FIXME - Relocate?
   # - name: openssh-server
   #   macports:
-  #     packages: []
+  #     packages: [ ]
   #   apt:
   #     packages:
   #       - openssh-server

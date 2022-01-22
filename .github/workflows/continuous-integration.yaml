@@ -2,7 +2,7 @@
 name: Continuous Integration
 
 on:
-  push: {}
+  push: { }
   # At 04:56 on Monday
   schedule:
     - cron: '56 4 * * 1'
@@ -34,7 +34,6 @@ jobs:
 
   integration-test-macports:
     name: Macports integration tests
-    # FIXME - needs: molecule-test  # MacOS VMs cost money.  Only run if things look good.
     runs-on: ${{ matrix.MACOS_WORKER_VERSION }}
     strategy:
       matrix:

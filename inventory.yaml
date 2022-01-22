@@ -7,11 +7,11 @@ all:
     # baseline can be used for CI/CD
     baseline:
       hosts:
-        localhost: {}
+        localhost: { }
     workstation_headless:
       hosts:
-        localhost: {}
+        localhost: { }
     workstation:
       hosts:
-        localhost: {}
+        localhost: { }
 ...

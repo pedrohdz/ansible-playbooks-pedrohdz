@@ -44,11 +44,26 @@ molecule login
 molecule destroy
 ```
 
-Complete end to end testing:
+Complete end-to-end testing:
 
 ```bash
 molecule test
 ```
+
+Using [Vagrant][VAGRANT] with [VirtualBox][VIRTUAlBOX], the default, can result
+in at least 50% faster testing times over [Docker][DOCKER].  If you would like
+to run with *Docker* either way:
+
+```bash
+molecule create --scenario-name docker
+molecule converge --scenario-name docker
+molecule test --scenario-name docker
+molecule destroy --scenario-name docker
+```
+
+[VAGRANT]: https://www.vagrantup.com/
+[VIRTUAlBOX]: https://www.virtualbox.org/
+[DOCKER]: https://www.docker.com/
 
 Running [github/super-linter](https://github.com/github/super-linter) locally
 to help debug GitHub Action issues:
