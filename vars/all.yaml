@@ -427,7 +427,6 @@ avinode_devenv_packages:
   - cmake
   - coreutils
   - cryptcat
-  - ctags
   - curl
   - cvs
   - findutils
@@ -467,6 +466,7 @@ avinode_devenv_packages:
   - tor
   - tree
   - tsocks
+  - universal-ctags
   - unzip
   - watch
   - wget
