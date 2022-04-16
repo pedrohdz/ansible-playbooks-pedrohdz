@@ -1,0 +1,139 @@
+---
+#------------------------------------------------------------------------------
+# Dock configuration
+#------------------------------------------------------------------------------
+Configure_Dock: true
+Dock_AppleActionOnDoubleClick: Maximize # Double-click a window's title title bar to: None, Minimize, Maximize
+Dock_Autohide: true                     # Automatically hide and show the Dock
+Dock_AutohideTimeModifier: 1            # 0 - Disable, other Int value - Define Animation timing when hiding/showing the Dock
+Dock_LargeSize: 100                     # Icon size of magnified Dock items
+Dock_LaunchAnim: true                   # Animate opening applications
+Dock_Magnification: true                # Dock magnification
+Dock_MinEffect: genie                   # Minimization effect: genie, scale, suck
+Dock_MinimizeToApplication: false       # Minimize windows appliction into icon (true, false)
+Dock_MouseOverHiliteStack: true         # Enable highlight hover effect for the grid view of a stack (Dock)
+Dock_Orientation: bottom                # Dock orientation: left, bottom, right
+Dock_ShowHidden: true                   # Display translucent Dock icons for hidden applications
+Dock_ShowProcessIndicators: true        # Show indicator for open applications
+Dock_TileSize: 30                       # Dock size
+
+#------------------------------------------------------------------------------
+# Trackpad configuration
+#------------------------------------------------------------------------------
+# Original values:
+#     defaults read com.apple.AppleMultitouchTrackpad
+#     {
+#         ActuateDetents = 1;
+#         Clicking = 0;
+#         DragLock = 0;
+#         Dragging = 0;
+#         FirstClickThreshold = 1;
+#         ForceSuppressed = 0;
+#         SecondClickThreshold = 1;
+#         TrackpadCornerSecondaryClick = 0;
+#         TrackpadFiveFingerPinchGesture = 2;
+#         TrackpadFourFingerHorizSwipeGesture = 2;
+#         TrackpadFourFingerPinchGesture = 2;
+#         TrackpadFourFingerVertSwipeGesture = 2;
+#         TrackpadHandResting = 1;
+#         TrackpadHorizScroll = 1;
+#         TrackpadMomentumScroll = 1;
+#         TrackpadPinch = 1;
+#         TrackpadRightClick = 1;
+#         TrackpadRotate = 1;
+#         TrackpadScroll = 1;
+#         TrackpadThreeFingerDrag = 0;
+#         TrackpadThreeFingerHorizSwipeGesture = 2;
+#         TrackpadThreeFingerTapGesture = 0;
+#         TrackpadThreeFingerVertSwipeGesture = 2;
+#         TrackpadTwoFingerDoubleTapGesture = 1;
+#         TrackpadTwoFingerFromRightEdgeSwipeGesture = 3;
+#         USBMouseStopsTrackpad = 0;
+#         UserPreferences = 1;
+#         version = 12;
+#     }
+#------------
+# Trackpad_ClickHapticFeedback_Options:
+#   - { name: "Light", value: 0}
+#   - { name: "Medium", value: 1}
+#   - { name: "Firm", value: 2}
+#
+# TrackpadThreeFingerVertSwipeGestures:
+#   - { name: "Disabled", value: 0 }
+#   - { name: "Four Fingers Mission Control/App Exposé", value: 1 }
+#   - { name: "Three and Four Fingers Mission Control/App Exposé", value: 2 }
+#
+# TrackpadTwoFingerFromRightEdgeSwipeGestures:
+#   - { name: "Disabled", value: 0 }
+#   - { name: "Notification Center", value: 3 }
+#
+# Trackpad_TrackingSpeed_Options:
+#   - { name: "Very Slow",   value: '0' }
+#   - { name: "Slow",        value: '0.5' }
+#   - { name: "Medium",      value: '1' }
+#   - { name: "Fast",        value: '2' }
+#   - { name: "Really Fast", value: '3' }
+#
+# Trackpad_Options:
+#   - { description: 'Tap to Click',        host: "currentHost", domain: "NSGlobalDomain", key: 'com.apple.mouse.tapBehavior', type: 'int',  value: "{{ EnabledDisabled_Options_Integer }}" }
+#   - { description: 'Tap to Click in Login Screen',             domain: "NSGlobalDomain", key: 'com.apple.mouse.tapBehavior', type: 'int',  value: "{{ EnabledDisabled_Options_Integer }}" }
+#   - { description: 'Clicking',                                 domain: "com.apple.AppleMultitouchTrackpad", key: 'Clicking', type: 'int',  value: "{{ EnabledDisabled_Options_Integer }}" }
+#   - { description: 'DragLock',                                 domain: "com.apple.AppleMultitouchTrackpad", key: 'DragLock',                                   type: 'int',  value: "{{ EnabledDisabled_Options_Integer }}" }
+#   - { description: 'Dragging',                                 domain: "com.apple.AppleMultitouchTrackpad", key: 'Dragging',                                   type: 'int',  value: "{{ EnabledDisabled_Options_Integer }}" }
+#   - { description: 'Force Click & Haptic Feedback',            domain: "com.apple.AppleMultitouchTrackpad", key: 'ActuateDetents',                             type: 'bool',  value: "{{ EnabledDisabled_Options_Boolean }}" }
+#   - { description: 'Force Click & Haptic Feedback',            domain: "com.apple.AppleMultitouchTrackpad", key: 'ForceSuppressed',                            type: 'bool',  value: "{{ EnabledDisabled_Options_Boolean }}" }
+#   - { description: 'Silent Clicking',                          domain: "com.apple.AppleMultitouchTrackpad", key: 'ActuationStrength',                          type: 'int',   value: "{{ EnabledDisabled_Options_Integer }}" }
+#   - { description: 'ClickHapticFeedback',                      domain: "com.apple.AppleMultitouchTrackpad", key: 'FirstClickThreshold',                        type: 'int',   value: "{{ Trackpad_ClickHapticFeedback_Options }}" }
+#   - { description: 'ClickHapticFeedback',                      domain: "com.apple.AppleMultitouchTrackpad", key: 'SecondClickThreshold',                       type: 'int',   value: "{{ Trackpad_ClickHapticFeedback_Options }}" }
+#   - { description: 'Pinch',                                    domain: "com.apple.AppleMultitouchTrackpad", key: 'TrackpadPinch',                              type: 'int',   value: "{{ EnabledDisabled_Options_Integer }}" }
+#   - { description: 'Right Click',                              domain: "com.apple.AppleMultitouchTrackpad", key: 'TrackpadRightClick',                         type: 'int',   value: "{{ EnabledDisabled_Options_Integer }}" }
+#   - { description: 'Rotate',                                   domain: "com.apple.AppleMultitouchTrackpad", key: 'TrackpadRotate',                             type: 'int',   value: "{{ EnabledDisabled_Options_Integer }}" }
+#   - { description: 'Scroll',                                   domain: "com.apple.AppleMultitouchTrackpad", key: 'TrackpadScroll',                             type: 'int',   value: "{{ EnabledDisabled_Options_Integer }}" }
+#   - { description: 'Horizontal Scroll',                        domain: "com.apple.AppleMultitouchTrackpad", key: 'TrackpadHorizScroll',                        type: 'int',   value: "{{ EnabledDisabled_Options_Integer }}" }
+#   - { description: 'Momentum Scroll',                          domain: "com.apple.AppleMultitouchTrackpad", key: 'TrackpadMomentumScroll',                     type: 'int',   value: "{{ EnabledDisabled_Options_Integer }}" }
+#   - { description: 'Natural Scroll Direction',                 domain: "NSGlobalDomain",                    key: 'com.apple.swipescrolldirection',             type: 'bool',  value: "{{ EnabledDisabled_Options_Boolean }}" }
+#   - { description: 'Tracking Speed',                           domain: "NSGlobalDomain",                    key: 'com.apple.trackpad.scaling',                 type: 'float', value: "{{ Trackpad_TrackingSpeed_Options }}" }
+#   - { description: 'Corner Secondary Click',                   domain: "com.apple.AppleMultitouchTrackpad", key: 'TrackpadCornerSecondaryClick',               type: 'int',   value: "{{ EnabledDisabled_Alternate_Options }}" }
+#   - { description: 'Two Finger Double TapGesture',             domain: "com.apple.AppleMultitouchTrackpad", key: 'TrackpadTwoFingerDoubleTapGesture',          type: 'int',   value: "{{ EnabledDisabled_Options_Integer }}" }
+#   - { description: 'Two Finger From Right Edge Swipe Gesture', domain: "com.apple.AppleMultitouchTrackpad", key: 'TrackpadTwoFingerFromRightEdgeSwipeGesture', type: 'int',   value: "{{ TrackpadTwoFingerFromRightEdgeSwipeGestures }}" }
+#   - { description: 'Three Finger Drag',                        domain: "com.apple.AppleMultitouchTrackpad", key: 'TrackpadThreeFingerDrag',                    type: 'int',   value: "{{ EnabledDisabled_Options_Integer }}" }
+#   - { description: 'Three Finger Horizontal Swipe Gesture',    domain: "com.apple.AppleMultitouchTrackpad", key: 'TrackpadThreeFingerHorizSwipeGesture',       type: 'int',   value: "{{ EnabledDisabled_Options_Integer }}" }
+#   - { description: 'Three Finger Tap Gesture',                 domain: "com.apple.AppleMultitouchTrackpad", key: 'TrackpadThreeFingerTapGesture',              type: 'int',   value: "{{ EnabledDisabled_Options_Integer }}" }
+#   - { description: 'Three Finger Vertical Swipe Gesture',      domain: "com.apple.AppleMultitouchTrackpad", key: 'TrackpadThreeFingerVertSwipeGesture',        type: 'int',   value: "{{ TrackpadThreeFingerVertSwipeGestures }}" }
+#   - { description: 'Four Finger Horizontal Swipe Gesture',     domain: "com.apple.AppleMultitouchTrackpad", key: 'TrackpadFourFingerHorizSwipeGesture',        type: 'int',   value: "{{ EnabledDisabled_Alternate_Options }}" }
+#   - { description: 'Four Finger Pinch Gesture',                domain: "com.apple.AppleMultitouchTrackpad", key: 'TrackpadFourFingerPinchGesture',             type: 'int',   value: "{{ EnabledDisabled_Alternate_Options }}" }
+#   - { description: 'Four Finger Vert SwipeGesture',            domain: "com.apple.AppleMultitouchTrackpad", key: 'TrackpadFourFingerVertSwipeGesture',         type: 'int',   value: "{{ EnabledDisabled_Alternate_Options }}" }
+#   - { description: 'FiveFinger Pinch Gesture',                 domain: "com.apple.AppleMultitouchTrackpad", key: 'TrackpadFiveFingerPinchGesture',             type: 'int',   value: "{{ EnabledDisabled_Alternate_Options }}" }
+#   - { description: 'Hand Resting',                             domain: "com.apple.AppleMultitouchTrackpad", key: 'TrackpadHandResting',                        type: 'int',   value: "{{ EnabledDisabled_Options_Integer }}" }
+#   - { description: 'USB Mouse Stops Trackpad',                 domain: "com.apple.AppleMultitouchTrackpad", key: 'USBMouseStopsTrackpad',                      type: 'int',   value: "{{ EnabledDisabled_Options_Integer }}" }
+
+Configure_Trackpad: true
+Trackpad_ClickHapticFeedback: "Light"                                                            # Set Haptic Feedback strength 0 - "Light", 1 - "Medium", 2 - "Firm"
+Trackpad_Clicking: "Disabled"                                                                     # Tap to Click
+Trackpad_Dragging: "Disabled"                                                                     # Dragging
+Trackpad_DragLock: "Disabled"                                                                     # DragLock
+Trackpad_ForceClickAndHapticFeedback: "Enabled"                                                   # Force Click and haptic feedback
+Trackpad_ScrollDirectionNatural: "Enabled"                                                        # Enable Natural Scroll Direction (it's a macOS default)
+Trackpad_SilentClicking: "Disabled"                                                               # Silent clicking
+Trackpad_TrackingSpeed: "Really Fast"                                                             # Modulate the tracking speed "Very Slow", "Slow", "Medium", "Fast", "Really Fast"
+Trackpad_TrackpadCornerSecondaryClick: "Enabled"                                                  # 0 - Disabled, 2 - Enabled
+Trackpad_TrackpadFiveFingerPinchGesture: "Enabled"                                                # 0 - Disabled, 2 - Enabled
+Trackpad_TrackpadFourFingerHorizSwipeGesture: "Enabled"                                           # 0 - Disabled, 2 - Enabled
+Trackpad_TrackpadFourFingerPinchGesture: "Enabled"                                                # 0 - Disabled, 2 - Enabled
+Trackpad_TrackpadFourFingerVertSwipeGesture: "Enabled"                                            # 0 - Disabled, 2 - Enabled
+Trackpad_TrackpadHandResting: "Enabled"                                                           # 0 - Disabled, 1 - Enabled
+Trackpad_TrackpadHorizScroll: "Enabled"                                                           # 0 - Disabled, 1 - Enabled
+Trackpad_TrackpadMomentumScroll: "Enabled"                                                        # 0 - Disabled, 1 - Enabled
+Trackpad_TrackpadPinch: "Enabled"                                                                 # 0 - Disabled, 1 - Enabled
+Trackpad_TrackpadRightClick: "Enabled"                                                            # 0 - Disabled, 1 - Enabled
+Trackpad_TrackpadRotate: "Enabled"                                                                # 0 - Disabled, 1 - Enabled
+Trackpad_TrackpadScroll: "Enabled"                                                                # 0 - Disabled, 1 - Enabled
+Trackpad_TrackpadThreeFingerDrag: "Disabled"                                                      # 0 - Disabled, 1 - Enabled
+Trackpad_TrackpadThreeFingerHorizSwipeGesture: "Disabled"                                         # 0 - Disabled, 1 - Enabled
+Trackpad_TrackpadThreeFingerTapGesture: "Disabled"                                                # 0 - Disabled, 1 - Enabled
+Trackpad_TrackpadThreeFingerVertSwipeGesture: "Three and Four Fingers Mission Control/App Exposé" # 0 - Disabled, 1 - Four Fingers Mission Control/App Exposé, 2 - Three and Four Fingers Mission Control/App Exposé
+Trackpad_TrackpadTwoFingerDoubleTapGesture: "Disabled"                                            # 0 - Disabled, 1 - Enabled
+Trackpad_TrackpadTwoFingerFromRightEdgeSwipeGestapure: "Notification Center"                      # 0 - Disabled, 3 - Notification Center
+Trackpad_USBMouseStopsTrackpad: "Disabled"                                                        # 0 - Disabled, 1 - Enabled
+
+...

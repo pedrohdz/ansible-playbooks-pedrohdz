@@ -7,4 +7,9 @@ collections:
     #version: pyenv
   # Pull latest version of `community.docker`
   - name: community.docker
+roles:
+  - name: lafarer.osx-defaults
+    scm: git
+    src: https://github.com/pedrohdz-scrap/ansible-role-osx-defaults.git
+    version: unstep-on-vars
 ...

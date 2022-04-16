@@ -1,0 +1,10 @@
+---
+- name: Restart MacOS Dock
+  ansible.builtin.shell:
+    cmd: killall Dock
+
+- name: Restart MacOS Finder
+  ansible.builtin.shell:
+    cmd: killall Finder
+
+...

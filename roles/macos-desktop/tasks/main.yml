@@ -1,0 +1,12 @@
+---
+- name: Ensure MacOS Dock preferences
+  import_tasks: dock.yml
+  tags:
+    - macos-dock
+
+- name: Ensure MacOS Finder preferences
+  import_tasks: finder.yml
+  tags:
+    - macos-finder
+
+...
