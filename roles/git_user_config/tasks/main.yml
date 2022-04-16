@@ -1,0 +1,11 @@
+---
+- name: Ensure setting in ~/.gitconfig
+  community.general.git_config:
+    name: '{{ item.name }}'
+    scope: global
+    state: '{{ item.state | default("present")}}'
+    value: '{{ item.value }}'
+  loop: '{{ git_user_config }}'
+  loop_control:
+    label: '{{ item.name + " = " + item.value }}'
+...

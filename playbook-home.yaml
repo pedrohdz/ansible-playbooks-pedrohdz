@@ -6,12 +6,14 @@
       ansible.builtin.debug:
         msg: place holder...
 
-# - hosts: all
-#   roles:
-#     - home
-#
-#   vars_files:
-#     - ['vars/os-{{ ansible_os_family }}.yaml', vars/os-defaults.yaml]
-#     - vars/all.yaml
-#     #- vars/simple-variants.yaml
+- hosts: all
+  roles:
+    # - role: macos-desktop
+    #   when: ansible_os_family == 'Darwin'
+    - role: git_user_config
+    # - role: lafarer.osx-defaults
+    #   when: ansible_os_family == 'Darwin'
+  vars_files:
+    - ['vars/home-{{ ansible_os_family }}.yaml', vars/home-defaults.yaml]
+#     - vars/home-all.yaml
 ...

@@ -1,0 +1,20 @@
+---
+git_user_config:
+  - name: color.ui
+    value: auto
+  - name: color.diff
+    value: auto
+  - name: color.branch
+    value: auto
+  - name: color.status
+    value: auto
+
+  - name: init.defaultBranch
+    value: main
+
+  - name: core.excludesfile
+    value: ~/.config/git/gitignore-global
+  - name: core.pager
+    value: less $LESS --quit-if-one-screen
+
+...

@@ -1,0 +1,128 @@
+---
+# yamllint disable rule:line-length
+
+#------------------------------------------------------------------------------
+# Dock configuration
+#------------------------------------------------------------------------------
+Configure_Dock: true
+Dock_AppleActionOnDoubleClick: Maximize # Double-click a window's title title bar to: None, Minimize, Maximize
+Dock_Autohide: true                     # Automatically hide and show the Dock
+Dock_AutohideTimeModifier: 1            # 0 - Disable, other Int value - Define Animation timing when hiding/showing the Dock
+Dock_LargeSize: 100                     # Icon size of magnified Dock items
+Dock_LaunchAnim: true                   # Animate opening applications
+Dock_Magnification: true                # Dock magnification
+Dock_MinEffect: genie                   # Minimization effect: genie, scale, suck
+Dock_MinimizeToApplication: false       # Minimize windows appliction into icon (true, false)
+Dock_MouseOverHiliteStack: true         # Enable highlight hover effect for the grid view of a stack (Dock)
+Dock_Orientation: bottom                # Dock orientation: left, bottom, right
+Dock_ShowHidden: true                   # Display translucent Dock icons for hidden applications
+Dock_ShowProcessIndicators: true        # Show indicator for open applications
+Dock_TileSize: 30                       # Dock size
+
+#------------------------------------------------------------------------------
+# Trackpad configuration
+#------------------------------------------------------------------------------
+# Original values:
+#     defaults read com.apple.AppleMultitouchTrackpad
+#     {
+#         ActuateDetents = 1;
+#         Clicking = 0;
+#         DragLock = 0;
+#         Dragging = 0;
+#         FirstClickThreshold = 1;
+#         ForceSuppressed = 0;
+#         SecondClickThreshold = 1;
+#         TrackpadCornerSecondaryClick = 0;
+#         TrackpadFiveFingerPinchGesture = 2;
+#         TrackpadFourFingerHorizSwipeGesture = 2;
+#         TrackpadFourFingerPinchGesture = 2;
+#         TrackpadFourFingerVertSwipeGesture = 2;
+#         TrackpadHandResting = 1;
+#         TrackpadHorizScroll = 1;
+#         TrackpadMomentumScroll = 1;
+#         TrackpadPinch = 1;
+#         TrackpadRightClick = 1;
+#         TrackpadRotate = 1;
+#         TrackpadScroll = 1;
+#         TrackpadThreeFingerDrag = 0;
+#         TrackpadThreeFingerHorizSwipeGesture = 2;
+#         TrackpadThreeFingerTapGesture = 0;
+#         TrackpadThreeFingerVertSwipeGesture = 2;
+#         TrackpadTwoFingerDoubleTapGesture = 1;
+#         TrackpadTwoFingerFromRightEdgeSwipeGesture = 3;
+#         USBMouseStopsTrackpad = 0;
+#         UserPreferences = 1;
+#         version = 12;
+#     }
+
+Configure_Trackpad: true
+Trackpad_ClickHapticFeedback: "Light"                                                            # Set Haptic Feedback strength 0 - "Light", 1 - "Medium", 2 - "Firm"
+Trackpad_Clicking: "Disabled"                                                                     # Tap to Click
+Trackpad_Dragging: "Disabled"                                                                     # Dragging
+Trackpad_DragLock: "Disabled"                                                                     # DragLock
+Trackpad_ForceClickAndHapticFeedback: "Enabled"                                                   # Force Click and haptic feedback
+Trackpad_ScrollDirectionNatural: "Enabled"                                                        # Enable Natural Scroll Direction (it's a macOS default)
+Trackpad_SilentClicking: "Disabled"                                                               # Silent clicking
+Trackpad_TrackingSpeed: "Really Fast"                                                             # Modulate the tracking speed "Very Slow", "Slow", "Medium", "Fast", "Really Fast"
+Trackpad_TrackpadCornerSecondaryClick: "Enabled"                                                  # 0 - Disabled, 2 - Enabled
+Trackpad_TrackpadFiveFingerPinchGesture: "Enabled"                                                # 0 - Disabled, 2 - Enabled
+Trackpad_TrackpadFourFingerHorizSwipeGesture: "Enabled"                                           # 0 - Disabled, 2 - Enabled
+Trackpad_TrackpadFourFingerPinchGesture: "Enabled"                                                # 0 - Disabled, 2 - Enabled
+Trackpad_TrackpadFourFingerVertSwipeGesture: "Enabled"                                            # 0 - Disabled, 2 - Enabled
+Trackpad_TrackpadHandResting: "Enabled"                                                           # 0 - Disabled, 1 - Enabled
+Trackpad_TrackpadHorizScroll: "Enabled"                                                           # 0 - Disabled, 1 - Enabled
+Trackpad_TrackpadMomentumScroll: "Enabled"                                                        # 0 - Disabled, 1 - Enabled
+Trackpad_TrackpadPinch: "Enabled"                                                                 # 0 - Disabled, 1 - Enabled
+Trackpad_TrackpadRightClick: "Enabled"                                                            # 0 - Disabled, 1 - Enabled
+Trackpad_TrackpadRotate: "Enabled"                                                                # 0 - Disabled, 1 - Enabled
+Trackpad_TrackpadScroll: "Enabled"                                                                # 0 - Disabled, 1 - Enabled
+Trackpad_TrackpadThreeFingerDrag: "Disabled"                                                      # 0 - Disabled, 1 - Enabled
+Trackpad_TrackpadThreeFingerHorizSwipeGesture: "Disabled"                                         # 0 - Disabled, 1 - Enabled
+Trackpad_TrackpadThreeFingerTapGesture: "Disabled"                                                # 0 - Disabled, 1 - Enabled
+Trackpad_TrackpadThreeFingerVertSwipeGesture: "Three and Four Fingers Mission Control/App Exposé" # 0 - Disabled, 1 - Four Fingers Mission Control/App Exposé, 2 - Three and Four Fingers Mission Control/App Exposé
+Trackpad_TrackpadTwoFingerDoubleTapGesture: "Disabled"                                            # 0 - Disabled, 1 - Enabled
+Trackpad_TrackpadTwoFingerFromRightEdgeSwipeGestapure: "Notification Center"                      # 0 - Disabled, 3 - Notification Center
+Trackpad_USBMouseStopsTrackpad: "Disabled"                                                        # 0 - Disabled, 1 - Enabled
+
+
+#------------------------------------------------------------------------------
+# DateTime configuration
+#------------------------------------------------------------------------------
+Configure_DateTime: true
+DateTime_TimeZone: Europe/Stockholm      # Set the timezone; see `systemsetup -listtimezones` for other values
+DateTime_AutomaticDateTime: 'On'         # Set date and time automatically (on | off)
+DateTime_TimeServer: time.euro.apple.com # Set time server
+DateTime_AutomaticTimeZone: yes          # Set time zome automatically using current location
+DateTime_DateFormat: 'EEE MMM d  j:mm'   # Menu bar clock format ("h:mm": Default, "HH": Use a 24-hour clock, "a": Show AM/PM, "ss": Display the time with seconds
+DateTime_FlashDateSeparators: no         # Flash the time separators
+DateTime_IsAnalog: no                    # Analog menu bar clock
+
+
+#------------------------------------------------------------------------------
+# HotCorners configuration
+#------------------------------------------------------------------------------
+Configure_HotCorners: true
+# HotCorners_AvailableActions:
+#     - { name: "no-op", value: 0 }
+#     - { name: "Disabled", value: 1 }
+#     - { name: "Mission Control", value: 2 }
+#     - { name: "Show Application Windows", value: 3 }
+#     - { name: "Desktop", value: 4 }
+#     - { name: "Start Screen Saver", value: 5 }
+#     - { name: "Disable Screen Saver", value: 6 }
+#     - { name: "Dashboard", value: 7 }
+#     - { name: "Put Display To Sleep", value: 10 }
+#     - { name: "Launchpad", value: 11 }
+#     - { name: "Notification Center", value: 12 }
+HotCorners_BottomLeftAction: "Disabled"        # Chose one of the availlable actions
+HotCorners_BottomLeftModifier: "Disabled"      # Enabled, Disabled
+
+HotCorners_BottomRightAction: "Disabled"       # Chose one of the availlable actions
+HotCorners_BottomRightModifier: "Disabled"     # Enabled, Disabled
+
+HotCorners_TopLeftAction: "Start Screen Saver" # Chose one of the availlable actions
+HotCorners_TopLeftModifier: "Enabled"          # Enabled, Disabled
+
+HotCorners_TopRightAction: "Disabled"          # Chose one of the availlable actions
+HotCorners_TopRightModifier: "Disabled"        # Enabled, Disabled
+...
