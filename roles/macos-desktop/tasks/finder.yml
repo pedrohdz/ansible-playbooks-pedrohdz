@@ -1,0 +1,73 @@
+---
+# https://www.shell-tips.com/mac/defaults/
+#
+#   ```
+#   defaults read com.apple.Finder macos-finder
+#   ```
+
+
+
+
+
+
+# - name: Ensure MacOS Finder is hidden
+#   community.general.osx_defaults:
+#     domain: com.apple.dock
+#     key: autohide
+#     type: bool
+#     value: true
+#     state: present
+#   notify:
+#     - Restart MacOS Finder
+#
+# - name: Ensure MacOS Finder Only shows active apps
+#   community.general.osx_defaults:
+#     domain: com.apple.dock
+#     key: static-only
+#     type: bool
+#     value: true
+#     state: present
+#   notify:
+#     - Restart MacOS Finder
+#
+# - name: Ensure MacOS Finder shows hidden apps
+#   community.general.osx_defaults:
+#     domain: com.apple.dock
+#     key: showhidden
+#     type: bool
+#     value: true
+#     state: present
+#   notify:
+#     - Restart MacOS Finder
+#
+# - name: Ensure MacOS Finder Magnification is on
+#   community.general.osx_defaults:
+#     domain: com.apple.dock
+#     key: magnification
+#     type: bool
+#     value: true
+#     state: present
+#   notify:
+#     - Restart MacOS Finder
+#
+# - name: Ensure MacOS Finder largesize is set
+#   community.general.osx_defaults:
+#     domain: com.apple.dock
+#     key: largesize
+#     state: present
+#     type: float
+#     value: 100
+#   notify:
+#     - Restart MacOS Finder
+#
+# - name: Ensure MacOS Finder tilesize is set
+#   community.general.osx_defaults:
+#     domain: com.apple.dock
+#     key: tilesize
+#     state: present
+#     type: float
+#     value: 30
+#   notify:
+#     - Restart MacOS Finder
+
+...

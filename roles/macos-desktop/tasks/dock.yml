@@ -1,0 +1,70 @@
+---
+# https://www.shell-tips.com/mac/defaults/
+#
+#   ```
+#   defaults domains | tr ',' '\n'
+#   defaults read com.apple.dock
+#   defaults read-type com.apple.dock autohide
+#   ```
+
+# - name: Ensure MacOS Dock is hidden
+#   community.general.osx_defaults:
+#     domain: com.apple.dock
+#     key: autohide
+#     type: bool
+#     value: true
+#     state: present
+#   notify:
+#     - Restart MacOS Dock
+#
+# - name: Ensure MacOS Dock Only shows active apps
+#   community.general.osx_defaults:
+#     domain: com.apple.dock
+#     key: static-only
+#     type: bool
+#     value: true
+#     state: present
+#   notify:
+#     - Restart MacOS Dock
+#
+# - name: Ensure MacOS Dock shows hidden apps
+#   community.general.osx_defaults:
+#     domain: com.apple.dock
+#     key: showhidden
+#     type: bool
+#     value: true
+#     state: present
+#   notify:
+#     - Restart MacOS Dock
+#
+# - name: Ensure MacOS Dock Magnification is on
+#   community.general.osx_defaults:
+#     domain: com.apple.dock
+#     key: magnification
+#     type: bool
+#     value: true
+#     state: present
+#   notify:
+#     - Restart MacOS Dock
+#
+# - name: Ensure MacOS Dock largesize is set
+#   community.general.osx_defaults:
+#     domain: com.apple.dock
+#     key: largesize
+#     state: present
+#     type: float
+#     value: 100
+#   notify:
+#     - Restart MacOS Dock
+#
+# - name: Ensure MacOS Dock tilesize is set
+#   community.general.osx_defaults:
+#     domain: com.apple.dock
+#     key: tilesize
+#     state: present
+#     type: float
+#     value: 30
+#   notify:
+#     - Restart MacOS Dock
+
+...
