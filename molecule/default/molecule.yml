@@ -34,5 +34,5 @@ verifier:
   name: ansible
 lint: |
   set -e
-  yamllint .
-  ansible-lint
+  yamllint --format=colored .
+  ansible-lint --force-color

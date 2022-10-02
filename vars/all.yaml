@@ -75,8 +75,8 @@ avinode_devenv_packages:
       packages:
         - apple-completion
         - bcrypt  # TODO - Not found on Ubuntu
-        - getopt
         - port_cutleaves
+        - util-linux
 
   - name: Install GnuPG and tools
     packages: [ ]

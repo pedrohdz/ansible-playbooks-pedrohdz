@@ -1,5 +1,6 @@
 ---
 - hosts: all
+  name: Common Ansible Playbook
   roles:
     - avinode.devenv.baseline
     - avinode.devenv.packages
@@ -28,7 +29,7 @@
             name: avinode.devenv.packages
 
   vars_files:
-    - ['vars/os-{{ ansible_os_family }}.yaml', vars/os-defaults.yaml]
+    - vars/os-{{ ansible_os_family }}.yaml
     - vars/all.yaml
     #- vars/simple-variants.yaml
 
