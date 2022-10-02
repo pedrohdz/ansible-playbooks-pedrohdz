@@ -5,11 +5,6 @@
 #   defaults read com.apple.Finder macos-finder
 #   ```
 
-
-
-
-
-
 # - name: Ensure MacOS Finder is hidden
 #   community.general.osx_defaults:
 #     domain: com.apple.dock

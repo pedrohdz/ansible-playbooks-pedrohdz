@@ -1,12 +1,13 @@
 ---
 - hosts: all
-  name: User level configuration (does not run as sudo)
+  name: Common user level configuration (does not run as sudo)
   tasks:
     - name: Place holder...
       ansible.builtin.debug:
         msg: place holder...
 
 - hosts: all
+  name: MacOS user level configuration (does not run as sudo)
   roles:
     # - role: macos-desktop
     #   when: ansible_os_family == 'Darwin'
@@ -14,6 +15,6 @@
     # - role: lafarer.osx-defaults
     #   when: ansible_os_family == 'Darwin'
   vars_files:
-    - ['vars/home-{{ ansible_os_family }}.yaml', vars/home-defaults.yaml]
-#     - vars/home-all.yaml
+    - vars/home-{{ ansible_os_family }}.yaml
+    # - vars/home-all.yaml
 ...
