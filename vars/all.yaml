@@ -17,8 +17,8 @@ avinode_devenv_pyvenv_apps:
 
   - name: awscli
     bin_files: [aws, aws_completer]
-  - name: bump2version
-    bin_files: [bump2version, bumpversion]
+  #- name: bump2version
+  #  bin_files: [bump2version, bumpversion]
   - name: ignr
     packages: [wheel, https://github.com/Antrikshy/ignr.py/archive/master.zip]
   - name: powerline-status
@@ -33,9 +33,7 @@ avinode_devenv_pyvenv_apps:
   - name: sqlparse
     bin_files: [sqlformat]
   - name: yubikey-manager
-    # TODO - Fix cryptography, old version needed by Debian 10.
-    # packages: [wheel, yubikey-manager, cryptography]
-    packages: [wheel, yubikey-manager, cryptography<3.4]
+    packages: [wheel, yubikey-manager, cryptography]
     bin_files: [ykman]
 
   # TODO - Remove
@@ -63,7 +61,7 @@ avinode_devenv_packages:
         - build-essential
         - cryptsetup
         - exfat-fuse
-        - exfat-utils
+        - exfatprogs
         - f2fs-tools
         - kbd
         - libpcsclite-dev
@@ -76,7 +74,9 @@ avinode_devenv_packages:
     macports:
       packages:
         - apple-completion
+        - bcrypt  # TODO - Not found on Ubuntu
         - port_cutleaves
+        - util-linux
 
   - name: Install GnuPG and tools
     packages: [ ]
@@ -117,14 +117,6 @@ avinode_devenv_packages:
         - aspell-dict-es
         - aspell-dict-sv
 
-  - name: bat
-    apt:
-      ignore: true  # TODO - Missing on Ubuntu.
-
-  - name: dnsmasq
-    apt:
-      ignore: true
-
   - name: ffmpeg
     macports:
       variant_name: ffmpeg
@@ -133,11 +125,10 @@ avinode_devenv_packages:
   - name: helm
     macports:
       packages:
-        - helm-2.17
-        - helm-3.5
+        - helm-3.9
         - helm_select
       alternatives:
-        helm: helm3.5
+        helm: helm3.9
 
   - name: fd-find
     macports: fd
@@ -158,10 +149,6 @@ avinode_devenv_packages:
     macports: gnetcat
 
   - name: tar
-    apt:
-      packages:
-        - tar
-        #- tar-doc  # TODO - broken on Debian
     macports: gnutar
 
   - name: sed
@@ -192,18 +179,17 @@ avinode_devenv_packages:
   - name: kubectl
     macports:
       packages:
-        - kubectl-1.18
-        - kubectl-1.19
-        - kubectl-1.20
-        #- kubectl-1.21  # Borked - https://trac.macports.org/ticket/63503
         - kubectl-1.22
+        - kubectl-1.23
+        - kubectl-1.24
+        - kubectl-1.25
         - kubectl_select
       alternatives:
-        kubectl: kubectl1.22
+        kubectl: kubectl1.23
 
   - name: kubectx
     apt:
-      # FIXME - Broken on Ubuntu
+      # FIXME - Broken on Ubuntu/Debian
       ignore: true
 
   - name: ldnsutils
@@ -212,6 +198,11 @@ avinode_devenv_packages:
         - dnsutils
         - ldnsutils
     macports: ldns
+
+  - name: lua-language-server
+    apt:
+      # FIXME - Does this exist?
+      ignore: true
 
   - name: less
     apt:
@@ -259,6 +250,11 @@ avinode_devenv_packages:
         - python3-wheel
     macports:
       packages:
+        - python39
+        - py39-gnureadline
+        - py39-pip
+        - py39-virtualenv
+        - py39-wheel
         - pip_select
         - py310-gnureadline
         - py310-pip
@@ -270,11 +266,11 @@ avinode_devenv_packages:
         - swig-python
         - virtualenv_select
       alternatives:
-        pip3: pip310
-        pip: pip310
-        python3: python310
-        python: python310
-        virtualenv: virtualenv310
+        pip3: pip39
+        pip: pip39
+        python3: python39
+        python: python39
+        virtualenv: virtualenv39
 
   - name: python2.7
     apt:
@@ -337,11 +333,6 @@ avinode_devenv_packages:
       packages:
         - samba4
 
-  - name: s3cmd
-    apt:
-      ignore: true
-      # FIXME - Missing on Debian
-
   - name: sudo
     macports:
       ignore: true  # Use the MacOS version of `sudo`.
@@ -352,14 +343,12 @@ avinode_devenv_packages:
       # FIXME - Binary on on amd64, no arm
     macports:
       packages:
-        - terraform-0.11
-        - terraform-0.12
-        - terraform-0.14
-        - terraform-0.15
-        - terraform-1.0
+        - terraform-1.1
+        - terraform-1.2
+        - terraform-1.3
         - terraform_select
       alternatives:
-        terraform: terraform0.15
+        terraform: terraform1.3
 
   - name: tmux
     macports:
@@ -369,7 +358,8 @@ avinode_devenv_packages:
 
   - name: unrar
     apt:
-      ignore: true
+      packages:
+        - unrar-free
 
   - name: vim
     apt:
@@ -385,7 +375,7 @@ avinode_devenv_packages:
         vimdiff: /usr/bin/vim.basic
     macports:
       variant_name: vim
-      variant: +python39+huge+cscope
+      variant: +python310+huge+cscope
 
   - name: neovim
     apt:
@@ -397,6 +387,9 @@ avinode_devenv_packages:
       packages:
         - neovim
         - py310-neovim
+
+  - name: secure-delete
+    macports: srm
 
   - name: yubikey-personalization
     macports: ykpers
@@ -416,7 +409,6 @@ avinode_devenv_packages:
         - zsh-templates-osx
 
   # Common across MacPorts and APT
-  #- bcrypt  # TODO - Not found on Ubuntu
   - argon2
   - asciidoc
   - autoconf
@@ -424,11 +416,13 @@ avinode_devenv_packages:
   - autossh
   - bash
   - bash-completion
+  - bat
   - cmake
   - coreutils
   - cryptcat
   - curl
   - cvs
+  - dnsmasq
   - findutils
   - flex
   - fzf
@@ -440,6 +434,7 @@ avinode_devenv_packages:
   - gradle-completion
   - graphviz
   - grep
+  - grepcidr
   - htop
   - jq
   - lftp
@@ -474,7 +469,6 @@ avinode_devenv_packages:
   - yarn
   - zip
 
-
   # ----
   # Uninstall
   # ----
@@ -483,18 +477,36 @@ avinode_devenv_packages:
     state: absent
     macports:
       packages:
+        #- py39-backports
+        #- py39-backports.entry-points-selectable
+        #- py39-beaker
+        #- py39-certifi
+        #- py39-distlib
+        #- py39-filelock
+        #- py39-gnureadline
+        #- py39-mako
+        #- py39-markdown
+        #- py39-markupsafe
+        #- py39-pip
+        #- py39-platformdirs
+        #- py39-setuptools
+        #- py39-six
+        #- py39-virtualenv
+        #- py39-wheel
+        #- python39
         - awscli_select
-        - gobject-introspection
         - helm-2.12
         - helm-2.13
         - helm-2.14
         - helm-2.15
         - helm-2.16
+        - helm-2.17
         - helm-3.0
         - helm-3.1
         - helm-3.2
         - helm-3.3
         - helm-3.4
+        - helm-3.5
         - kubectl-1.10
         - kubectl-1.11
         - kubectl-1.12
@@ -503,6 +515,10 @@ avinode_devenv_packages:
         - kubectl-1.15
         - kubectl-1.16
         - kubectl-1.17
+        - kubectl-1.18
+        - kubectl-1.19
+        - kubectl-1.20
+        - kubectl-1.21
         - meson
         - nodejs10
         - nodejs11
@@ -533,33 +549,28 @@ avinode_devenv_packages:
         - py37-gnureadline
         - py37-pip
         - py37-setuptools
-        - py39-backports
-        - py39-backports.entry-points-selectable
-        - py39-beaker
-        - py39-distlib
-        - py39-filelock
-        - py39-gnureadline
-        - py39-mako
-        - py39-markdown
-        - py39-markupsafe
-        - py39-pip
-        - py39-platformdirs
-        - py39-setuptools
-        - py39-six
-        - py39-virtualenv
-        - py39-wheel
+        - py38-dateutil
+        - py38-magic
+        - py38-setuptools
+        - py38-six
+        - py38-tz
         - python26
         - python33
         - python34
         - python35
         - python36
         - python37
+        - python38
         - rb24-bundler
         - ruby
         - ruby24
+        - s3cmd
         - samba3
-        # - python38  # Needed by s3cmd
-        # - python39  # Needed by Vim and others
+        - terraform-0.11
+        - terraform-0.12
+        - terraform-0.14
+        - terraform-0.15
+        - terraform-1.0
 
   # Move to workstation
   # - minikube

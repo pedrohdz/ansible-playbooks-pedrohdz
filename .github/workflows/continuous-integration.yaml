@@ -1,6 +1,7 @@
 ---
 name: Continuous Integration
 
+
 on:
   push: { }
   # At 04:56 on Monday

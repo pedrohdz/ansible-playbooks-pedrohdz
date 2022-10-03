@@ -1,8 +1,9 @@
 ---
 - hosts: all
+  name: User level configuration (does not run as sudo)
   tasks:
     - name: Place holder...
-      debug:
+      ansible.builtin.debug:
         msg: place holder...
 
 # - hosts: all

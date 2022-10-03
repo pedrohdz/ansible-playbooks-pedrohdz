@@ -1,6 +1,4 @@
 ---
-# - name: Converge
-#   hosts: all
 - name: System level playbook under test
   import_playbook: ../../playbook.yaml
   tags:

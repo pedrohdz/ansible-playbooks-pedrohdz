@@ -1,6 +1,14 @@
 ---
-skip_list:
-  - '701'
+# skip_list:
+#   - '701'
+
+exclude_paths:
+  - .ansible/
+  - .git/
+  - .github/
+  - .venv/
+  - vars/home-Darwin.yaml
+
 verbosity: 1
 ...
 

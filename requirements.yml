@@ -5,4 +5,6 @@ collections:
     type: git
     version: main
     #version: pyenv
+  # Pull latest version of `community.docker`
+  - name: community.docker
 ...
