@@ -9,6 +9,26 @@ on:
     - cron: '56 4 * * 1'
 
 jobs:
+  super-linter:
+    name: Super Linter
+    runs-on: ubuntu-latest
+    env:
+      PY_COLORS: 'true'
+      ANSIBLE_FORCE_COLOR: 'true'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          # super-linter needs the full git history.
+          fetch-depth: 0
+
+      - name: Lint Code Base
+        uses: super-linter/super-linter@v6
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VALIDATE_CHECKOV: false
+          VALIDATE_SHELL_SHFMT: false
+
   molecule-test:
     name: Molecule Test
     runs-on: ubuntu-latest
@@ -16,13 +36,8 @@ jobs:
       PY_COLORS: 'true'
       ANSIBLE_FORCE_COLOR: 'true'
     steps:
-      - uses: actions/checkout@v3
-
-      - name: Lint Code Base
-        uses: github/super-linter/slim@v4
-        env:
-          DEFAULT_BRANCH: master
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Checkout code
+        uses: actions/checkout@v4
 
       - name: Set up Ansible & Molecule in a Python venv
         run: |
@@ -35,12 +50,15 @@ jobs:
 
   integration-test-macports:
     name: Macports integration tests
+    needs:
+      - molecule-test
+      - super-linter
     runs-on: ${{ matrix.MACOS_WORKER_VERSION }}
     strategy:
       matrix:
         MACOS_WORKER_VERSION:
-          - macos-10.15
-          - macos-11
+          - macos-13
+          - macos-14
     env:
       PY_COLORS: 'true'
       ANSIBLE_FORCE_COLOR: 'true'

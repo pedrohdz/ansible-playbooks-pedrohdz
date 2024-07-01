@@ -2,7 +2,6 @@
 avinode_devenv_pyvenv_apps:
   # TODO - Everything here should be installed via `pipx`.
   - pipx
-
   - diceware
   - flake8
   - isort
@@ -10,6 +9,7 @@ avinode_devenv_pyvenv_apps:
   - pip-autoremove
   - pipdeptree
   - pylint
+  - ssh-audit
   - tabulate
   - tox
   - xkcdpass
@@ -21,13 +21,13 @@ avinode_devenv_pyvenv_apps:
   #  bin_files: [bump2version, bumpversion]
   - name: ignr
     packages: [wheel, https://github.com/Antrikshy/ignr.py/archive/master.zip]
-  - name: powerline-status
-    packages: 
-      - wheel
-      - psutil
-      - 'https://github.com/powerline/powerline/archive/refs/tags/2.8.2.tar.gz'
-    bin_files: [powerline, powerline-config, powerline-daemon, powerline-lint,
-                powerline-render]
+  # - name: powerline-status
+  #   packages: 
+  #     - wheel
+  #     - psutil
+  #     - 'https://github.com/powerline/powerline/archive/refs/tags/2.8.2.tar.gz'
+  #   bin_files: [powerline, powerline-config, powerline-daemon, powerline-lint,
+  #               powerline-render]
   - name: pygments
     bin_files: [pygmentize]
   - name: sqlparse
@@ -36,18 +36,18 @@ avinode_devenv_pyvenv_apps:
     packages: [wheel, yubikey-manager, cryptography]
     bin_files: [ykman]
 
-  # TODO - Remove
-  - name: jmespath-terminal  # Project inactive, breaks on Python 3.10.
-    bin_files: [jpterm]
-    state: absent
-  - name: ansible
-    packages: [wheel, ansible, ansible-lint, argcomplete]
-    bin_files: [
-      ansible, ansible-config, ansible-connection, ansible-console,
-      ansible-doc, ansible-galaxy, ansible-inventory, ansible-lint,
-      ansible-playbook, ansible-pull, ansible-test, ansible-vault]
-    has_argcomplete: true
-    state: absent
+  # # TODO - Remove
+  # - name: jmespath-terminal  # Project inactive, breaks on Python 3.10.
+  #   bin_files: [jpterm]
+  #   state: absent
+  # - name: ansible
+  #   packages: [wheel, ansible, ansible-lint, argcomplete]
+  #   bin_files: [
+  #     ansible, ansible-config, ansible-connection, ansible-console,
+  #     ansible-doc, ansible-galaxy, ansible-inventory, ansible-lint,
+  #     ansible-playbook, ansible-pull, ansible-test, ansible-vault]
+  #   has_argcomplete: true
+  #   state: absent
 
 
 avinode_devenv_packages:
@@ -94,14 +94,14 @@ avinode_devenv_packages:
         - libfido2
         - pinentry-mac
 
-  - name: ant
-    apt:
-      packages:
-        - ant
-        - ant-contrib
-        - ant-doc
-        - ant-optional
-    macports: apache-ant
+  # - name: ant
+  #   apt:
+  #     packages:
+  #       - ant
+  #       - ant-contrib
+  #       - ant-doc
+  #       - ant-optional
+  #   macports: apache-ant
 
   - name: aspell
     apt:
@@ -117,18 +117,13 @@ avinode_devenv_packages:
         - aspell-dict-es
         - aspell-dict-sv
 
-  - name: ffmpeg
-    macports:
-      variant_name: ffmpeg
-      variant: +gpl2+nonfree
-
   - name: helm
     macports:
       packages:
-        - helm-3.9
+        - helm-3.15
         - helm_select
       alternatives:
-        helm: helm3.9
+        helm: helm3.15
 
   - name: fd-find
     macports: fd
@@ -250,27 +245,24 @@ avinode_devenv_packages:
         - python3-wheel
     macports:
       packages:
-        - python39
-        - py39-gnureadline
-        - py39-pip
-        - py39-virtualenv
-        - py39-wheel
+        # select
         - pip_select
-        - py310-gnureadline
-        - py310-pip
-        - py310-virtualenv
-        - py310-wheel
-        - python310
         - python3_select
         - python_select
-        - swig-python
         - virtualenv_select
+        # Python
+        - py312-gnureadline
+        - py312-neovim
+        - py312-pip
+        - py312-virtualenv
+        - py312-wheel
+        - python312
       alternatives:
-        pip3: pip39
-        pip: pip39
-        python3: python39
-        python: python39
-        virtualenv: virtualenv39
+        pip3: pip312
+        pip: pip312
+        python3: python312
+        python: python312
+        virtualenv: virtualenv312
 
   - name: python2.7
     apt:
@@ -291,6 +283,39 @@ avinode_devenv_packages:
       alternatives:
         pip2: pip27
         python2: python27
+
+  - name: Python Unintalls
+    packages: [ ]
+    state: absent
+    macports:
+      packages:
+        # Order matters
+        - py310-virtualenv
+        - py310-neovim
+        - py310-distlib
+        - py310-filelock
+        - py310-gnureadline
+        - py310-greenlet
+        - py310-msgpack
+        - py310-pip
+        - py310-platformdirs
+        - py310-setuptools
+        - py310-wheel
+        - python310
+
+        # Order matters
+        - py39-virtualenv
+        - py39-certifi
+        - py39-distlib
+        - py39-filelock
+        - py39-gnureadline
+        - py39-pip
+        - py39-platformdirs
+        - py39-setuptools
+        - py39-wheel
+        - python39
+
+        - swig-python
 
   - name: qemu
     apt:
@@ -343,12 +368,10 @@ avinode_devenv_packages:
       # FIXME - Binary on on amd64, no arm
     macports:
       packages:
-        - terraform-1.1
-        - terraform-1.2
-        - terraform-1.3
+        - terraform-1.5
         - terraform_select
       alternatives:
-        terraform: terraform1.3
+        terraform: terraform1.5
 
   - name: tmux
     macports:
@@ -386,7 +409,6 @@ avinode_devenv_packages:
     macports:
       packages:
         - neovim
-        - py310-neovim
 
   - name: secure-delete
     macports: srm
@@ -477,23 +499,6 @@ avinode_devenv_packages:
     state: absent
     macports:
       packages:
-        #- py39-backports
-        #- py39-backports.entry-points-selectable
-        #- py39-beaker
-        #- py39-certifi
-        #- py39-distlib
-        #- py39-filelock
-        #- py39-gnureadline
-        #- py39-mako
-        #- py39-markdown
-        #- py39-markupsafe
-        #- py39-pip
-        #- py39-platformdirs
-        #- py39-setuptools
-        #- py39-six
-        #- py39-virtualenv
-        #- py39-wheel
-        #- python39
         - awscli_select
         - helm-2.12
         - helm-2.13
@@ -507,6 +512,7 @@ avinode_devenv_packages:
         - helm-3.3
         - helm-3.4
         - helm-3.5
+        - helm-3.9
         - kubectl-1.10
         - kubectl-1.11
         - kubectl-1.12
@@ -571,6 +577,8 @@ avinode_devenv_packages:
         - terraform-0.14
         - terraform-0.15
         - terraform-1.0
+        - terraform-1.1
+        - terraform-1.2
 
   # Move to workstation
   # - minikube

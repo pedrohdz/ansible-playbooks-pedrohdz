@@ -61,20 +61,24 @@ log 'Disabeling Spotlight Search indexing'
 /usr/bin/sudo mdutil -a -i off
 
 log 'Installation information...'
+MACPORTS_VERSION="$(get_latest_macports_version)"
 MACPORTS_PKG_FILE="$(get_macports_pkg_file_name)"
+MACPORTS_PKG_URL="https://github.com/macports/macports-base/releases/download/v$MACPORTS_VERSION/$MACPORTS_PKG_FILE"
 echo MACPORTS_PKG_FILE="$MACPORTS_PKG_FILE"
+echo MACPORTS_PKG_URL="$MACPORTS_PKG_URL"
 
 log 'Downloading MacPorts...'
 /usr/bin/curl \
-    --fail \
-    --location \
-    --remote-name \
-    --show-error \
-    --silent \
-    "https://distfiles.macports.org/MacPorts/$MACPORTS_PKG_FILE"
+  --fail \
+  --location \
+  --remote-name \
+  --show-error \
+  --silent \
+  "$MACPORTS_PKG_URL"
 
 log 'Installing MacPorts...'
 /usr/bin/sudo /usr/sbin/installer -pkg "$MACPORTS_PKG_FILE" -target /
+rm "$MACPORTS_PKG_FILE"
 export PATH="/opt/local/libexec/gnubin:/opt/local/bin:/opt/local/sbin:$PATH"
 hash -r
 
@@ -83,21 +87,21 @@ log 'Running MacPorts selfupdate/upgrade...'
 /usr/bin/sudo /opt/local/bin/port upgrade outdated
 
 log 'Install minimum required MacPorts...'
-/usr/bin/sudo /opt/local/bin/port install \
-    coreutils \
-    curl-ca-bundle \
-    pip_select \
-    py39-certifi \
-    py39-distlib \
-    py39-pip \
-    py39-setuptools \
-    py39-virtualenv \
-    py39-wheel \
-    python39 \
-    python3_select \
-    python_select
+/usr/bin/sudo /opt/local/bin/port -N install \
+  coreutils \
+  curl-ca-bundle \
+  pip_select \
+  py312-certifi \
+  py312-distlib \
+  py312-pip \
+  py312-setuptools \
+  py312-virtualenv \
+  py312-wheel \
+  python312 \
+  python3_select \
+  python_select
 
-/usr/bin/sudo /opt/local/bin/port select python3 python39
-/usr/bin/sudo /opt/local/bin/port select python python39
-/usr/bin/sudo /opt/local/bin/port select pip3 pip39
-/usr/bin/sudo /opt/local/bin/port select pip pip39
+/usr/bin/sudo /opt/local/bin/port select --set python3 python312
+/usr/bin/sudo /opt/local/bin/port select --set python python312
+/usr/bin/sudo /opt/local/bin/port select --set pip3 pip312
+/usr/bin/sudo /opt/local/bin/port select --set pip pip312
