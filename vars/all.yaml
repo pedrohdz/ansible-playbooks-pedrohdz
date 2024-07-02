@@ -17,17 +17,10 @@ avinode_devenv_pyvenv_apps:
 
   - name: awscli
     bin_files: [aws, aws_completer]
-  #- name: bump2version
-  #  bin_files: [bump2version, bumpversion]
+  - name: bump2version
+    bin_files: [bump2version, bumpversion]
   - name: ignr
     packages: [wheel, https://github.com/Antrikshy/ignr.py/archive/master.zip]
-  # - name: powerline-status
-  #   packages: 
-  #     - wheel
-  #     - psutil
-  #     - 'https://github.com/powerline/powerline/archive/refs/tags/2.8.2.tar.gz'
-  #   bin_files: [powerline, powerline-config, powerline-daemon, powerline-lint,
-  #               powerline-render]
   - name: pygments
     bin_files: [pygmentize]
   - name: sqlparse
@@ -93,15 +86,6 @@ avinode_devenv_packages:
         - gnupg2
         - libfido2
         - pinentry-mac
-
-  # - name: ant
-  #   apt:
-  #     packages:
-  #       - ant
-  #       - ant-contrib
-  #       - ant-doc
-  #       - ant-optional
-  #   macports: apache-ant
 
   - name: aspell
     apt:
@@ -409,6 +393,7 @@ avinode_devenv_packages:
     macports:
       packages:
         - neovim
+        # Look for `py312-neovim` in the Python section below.
 
   - name: secure-delete
     macports: srm
@@ -490,6 +475,42 @@ avinode_devenv_packages:
   - xmlstarlet
   - yarn
   - zip
+
+  # ----
+  # TODO - Checking these tools out
+  # ----
+  - bpytop
+  - entr
+  - gdu
+  - jid
+  - ncdu
+  - rclone
+  - rmlint
+  - thefuck
+
+  - name: btop
+    apt:
+      # FIXME - Not available on Debian
+      ignore: true
+
+  - name: eza
+    apt:
+      # FIXME - Not available on Ubuntu/Debian
+      ignore: true
+
+  - name: git-delta
+    apt:
+      # FIXME - Not available on Ubuntu/Debian
+      ignore: true
+
+  - name: lsd
+    apt:
+      # FIXME - Not available on Ubuntu/Debian
+      ignore: true
+
+  - name: tldr
+    macports: tlrc
+
 
   # ----
   # Uninstall
