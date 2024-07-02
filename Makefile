@@ -1,8 +1,7 @@
-BUILD_RAND_NAME ?= $(shell tr -dc a-z0-9 </dev/urandom | head -c 13)
-
+BUILD_RAND_NAME     ?= $(shell tr -dc a-z0-9 </dev/urandom | head -c 13)
 DEFAULT_BRANCH      ?= master
 MOLECULE_SCENARIO   ?= docker
-SUPER_LINTER_IMAGE  ?=ghcr.io/super-linter/super-linter:v6
+SUPER_LINTER_IMAGE  ?= ghcr.io/super-linter/super-linter:v6
 
 simple_molecule_targets := \
 	molecule-converge \
@@ -49,7 +48,7 @@ super-linter:
 		--env SHELL=/bin/bash \
 		--env VALIDATE_CHECKOV=false \
 		--env VALIDATE_SHELL_SHFMT=false \
-		--name ansible-playbooks-avinode-super-linter-$(BUILD_RAND_NAME) \
+		--name ansible-playbooks-pedrohdz-super-linter-$(BUILD_RAND_NAME) \
 		--platform linux/amd64 \
 		--volume $$PWD:/tmp/lint \
 		$(SUPER_LINTER_IMAGE)

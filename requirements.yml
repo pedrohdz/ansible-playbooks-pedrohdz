@@ -1,10 +1,8 @@
 ---
 collections:
-  #- name: https://github.com/pedrohdz-scrap/ansible-collection-devenv.git
   - name: https://github.com/Avinode/ansible-collection-devenv.git
     type: git
-    version: main
-    #version: pyenv
+    version: nodejs20  # FIXME - Make main
   # Pull latest version of `community.docker`
   - name: community.docker
 ...

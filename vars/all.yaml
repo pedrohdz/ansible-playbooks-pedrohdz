@@ -29,20 +29,6 @@ avinode_devenv_pyvenv_apps:
     packages: [wheel, yubikey-manager, cryptography]
     bin_files: [ykman]
 
-  # # TODO - Remove
-  # - name: jmespath-terminal  # Project inactive, breaks on Python 3.10.
-  #   bin_files: [jpterm]
-  #   state: absent
-  # - name: ansible
-  #   packages: [wheel, ansible, ansible-lint, argcomplete]
-  #   bin_files: [
-  #     ansible, ansible-config, ansible-connection, ansible-console,
-  #     ansible-doc, ansible-galaxy, ansible-inventory, ansible-lint,
-  #     ansible-playbook, ansible-pull, ansible-test, ansible-vault]
-  #   has_argcomplete: true
-  #   state: absent
-
-
 avinode_devenv_packages:
   # ----
   # Install
@@ -78,7 +64,6 @@ avinode_devenv_packages:
         - dirmngr
         - gnupg-agent
         - gnupg2
-        - hopenpgp-tools  # TODO - Try and find for MacPorts
         - libffi-dev
         - pinentry-curses
     macports:
@@ -100,6 +85,10 @@ avinode_devenv_packages:
         - aspell-dict-en
         - aspell-dict-es
         - aspell-dict-sv
+
+  - name: cryptcat
+    apt:
+      ignore: true
 
   - name: helm
     macports:
@@ -158,13 +147,11 @@ avinode_devenv_packages:
   - name: kubectl
     macports:
       packages:
-        - kubectl-1.22
-        - kubectl-1.23
-        - kubectl-1.24
-        - kubectl-1.25
+        - kubectl-1.29
+        - kubectl-1.30
         - kubectl_select
       alternatives:
-        kubectl: kubectl1.23
+        kubectl: kubectl1.29
 
   - name: kubectx
     apt:
@@ -180,7 +167,7 @@ avinode_devenv_packages:
 
   - name: lua-language-server
     apt:
-      # FIXME - Does this exist?
+      # TODO - Does this exist?
       ignore: true
 
   - name: less
@@ -197,16 +184,19 @@ avinode_devenv_packages:
         maven: maven32
 
   - name: nodejs
-    macports:
-      packages:
-        - nodejs16
-        - npm8
-
-  - name: openjdk11
     apt:
       packages:
-        - openjdk-11-doc
-        - openjdk-11-jdk-headless
+        - nodejs
+    macports:
+      packages:
+        - nodejs20
+        - npm10
+
+  - name: openjdk17
+    apt:
+      packages:
+        - openjdk-17-doc
+        - openjdk-17-jdk-headless
 
   - name: openssh
     apt:
@@ -248,32 +238,12 @@ avinode_devenv_packages:
         python: python312
         virtualenv: virtualenv312
 
-  - name: python2.7
-    apt:
-      packages:
-        #- python2-pip  # Not sure where these live, if at all...
-        #- python2-virtualenv
-        - python2.7
-        - python2.7-dev
-        - python2.7-doc
-    macports:
-      packages:
-        - py27-gnureadline
-        - py27-pip
-        - py27-virtualenv
-        - py27-wheel
-        - python27
-        - python2_select
-      alternatives:
-        pip2: pip27
-        python2: python27
-
   - name: Python Unintalls
     packages: [ ]
     state: absent
     macports:
       packages:
-        # Order matters
+        # The following order matters!!!
         - py310-virtualenv
         - py310-neovim
         - py310-distlib
@@ -287,7 +257,34 @@ avinode_devenv_packages:
         - py310-wheel
         - python310
 
-        # Order matters
+        # The following order matters!!!
+        - pssh
+        - py27-importlib-metadata
+        - py27-configparser
+        - py27-backports
+        - py27-distlib
+        - py27-filelock
+        - py27-gnureadline
+        - py27-importlib-resources
+        - py27-pathlib2
+        - py27-zipp
+        - py27-contextlib2
+        - py27-pip
+        - py27-platformdirs
+        - py27-scandir
+        - py27-setuptools
+        - py27-singledispatch
+        - py27-six
+        - py27-typing
+        - py27-virtualenv
+        - py27-wheel
+        - python2.7-dev
+        - python2.7-doc
+        - python2.7
+        - python27
+        - python2_select
+
+        # The following order matters!!!
         - py39-virtualenv
         - py39-certifi
         - py39-distlib
@@ -303,12 +300,7 @@ avinode_devenv_packages:
 
   - name: qemu
     apt:
-      packages:
-        - qemu
-        - qemu-system
-        - qemu-system-arm
-        - qemu-system-x86
-        - qemu-utils
+      ignore: true
     macports:
       variant_name: qemu
       variant: +cocoa+target_arm+target_i386+target_x86_64+usb
@@ -347,9 +339,6 @@ avinode_devenv_packages:
       ignore: true  # Use the MacOS version of `sudo`.
 
   - name: terraform
-    apt:
-      ignore: true
-      # FIXME - Binary on on amd64, no arm
     macports:
       packages:
         - terraform-1.5
@@ -384,17 +373,6 @@ avinode_devenv_packages:
       variant_name: vim
       variant: +python310+huge+cscope
 
-  - name: neovim
-    apt:
-      packages:
-        - neovim
-        # - python3-pynvim  # Ubuntu
-        # - python3-neovim  # Debian10
-    macports:
-      packages:
-        - neovim
-        # Look for `py312-neovim` in the Python section below.
-
   - name: secure-delete
     macports: srm
 
@@ -426,7 +404,6 @@ avinode_devenv_packages:
   - bat
   - cmake
   - coreutils
-  - cryptcat
   - curl
   - cvs
   - dnsmasq
@@ -448,13 +425,13 @@ avinode_devenv_packages:
   - makepasswd
   - minicom
   - mtools
+  - neovim
   - nmap
   - p7zip
   - pandoc
   - paperkey
   - proxychains-ng
   - proxytunnel
-  - pssh
   - pv
   - pwgen
   - qrencode
@@ -487,39 +464,54 @@ avinode_devenv_packages:
   - rclone
   - rmlint
   - thefuck
+  # - hopenpgp-tools  # TODO - Find on Debian12 and MacPorts
 
   - name: btop
     apt:
-      # FIXME - Not available on Debian
+      # TODO - Not available on Debian
       ignore: true
 
   - name: eza
     apt:
-      # FIXME - Not available on Ubuntu/Debian
+      # TODO - Not available on Ubuntu/Debian
       ignore: true
 
   - name: git-delta
     apt:
-      # FIXME - Not available on Ubuntu/Debian
+      # TODO - Not available on Ubuntu/Debian
       ignore: true
 
   - name: lsd
     apt:
-      # FIXME - Not available on Ubuntu/Debian
+      # TODO - Not available on Ubuntu/Debian
       ignore: true
 
   - name: tldr
     macports: tlrc
 
+  - name: wezterm
+    apt:
+      ignore: true
+
 
   # ----
   # Uninstall
   # ----
-  - name: Bulk Macports Uninstall
+  - name: Bulk Uninstall
     packages: [ ]
     state: absent
+    apt:
+      packages:
+        - openjdk-11-doc
+        - openjdk-11-jdk-headless
+
     macports:
       packages:
+        # The following order matters!!!
+        - npm8
+        - nodejs16
+
+        # Any order
         - awscli_select
         - helm-2.12
         - helm-2.13
@@ -546,6 +538,10 @@ avinode_devenv_packages:
         - kubectl-1.19
         - kubectl-1.20
         - kubectl-1.21
+        - kubectl-1.22
+        - kubectl-1.23
+        - kubectl-1.24
+        - kubectl-1.25
         - meson
         - nodejs10
         - nodejs11
@@ -558,6 +554,7 @@ avinode_devenv_packages:
         - npm5
         - npm6
         - npm7
+        - openjdk11
         - openjdk13
         - openjdk16
         - py26-pip
@@ -603,14 +600,5 @@ avinode_devenv_packages:
 
   # Move to workstation
   # - minikube
-
-  # FIXME - Relocate?
-  # - name: openssh-server
-  #   macports:
-  #     packages: [ ]
-  #   apt:
-  #     packages:
-  #       - openssh-server
-  #       - openssh-sftp-server
 
 ...

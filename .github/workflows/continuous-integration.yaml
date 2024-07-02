@@ -12,9 +12,6 @@ jobs:
   super-linter:
     name: Super Linter
     runs-on: ubuntu-latest
-    env:
-      PY_COLORS: 'true'
-      ANSIBLE_FORCE_COLOR: 'true'
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
