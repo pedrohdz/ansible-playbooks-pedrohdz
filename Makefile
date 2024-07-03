@@ -1,6 +1,6 @@
 BUILD_RAND_NAME     ?= $(shell tr -dc a-z0-9 </dev/urandom | head -c 13)
 DEFAULT_BRANCH      ?= master
-MOLECULE_SCENARIO   ?= docker
+MOLECULE_SCENARIO   ?= default
 SUPER_LINTER_IMAGE  ?= ghcr.io/super-linter/super-linter:v6
 
 simple_molecule_targets := \
