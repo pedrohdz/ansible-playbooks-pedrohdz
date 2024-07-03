@@ -2,7 +2,7 @@
 collections:
   - name: https://github.com/Avinode/ansible-collection-devenv.git
     type: git
-    version: nodejs20  # FIXME - Make main
+    version: main
   # Pull latest version of `community.docker`
   - name: community.docker
 ...
