@@ -317,10 +317,10 @@ avinode_devenv_packages:
         - ruby-full
     macports:
       packages:
-        - ruby27
+        - ruby33
         - ruby_select
       alternatives:
-        ruby: ruby27
+        ruby: ruby33
 
   - name: rust
     apt:
@@ -371,7 +371,7 @@ avinode_devenv_packages:
         vimdiff: /usr/bin/vim.basic
     macports:
       variant_name: vim
-      variant: +python310+huge+cscope
+      variant: +huge+cscope
 
   - name: secure-delete
     macports: srm
@@ -456,7 +456,6 @@ avinode_devenv_packages:
   # ----
   # TODO - Checking these tools out
   # ----
-  - bpytop
   - entr
   - gdu
   - jid
@@ -472,6 +471,11 @@ avinode_devenv_packages:
       ignore: true
 
   - name: eza
+    apt:
+      # TODO - Not available on Ubuntu/Debian
+      ignore: true
+
+  - name: glow
     apt:
       # TODO - Not available on Ubuntu/Debian
       ignore: true
@@ -513,6 +517,7 @@ avinode_devenv_packages:
 
         # Any order
         - awscli_select
+        - bpytop
         - helm-2.12
         - helm-2.13
         - helm-2.14
@@ -588,6 +593,7 @@ avinode_devenv_packages:
         - rb24-bundler
         - ruby
         - ruby24
+        - ruby27
         - s3cmd
         - samba3
         - terraform-0.11
