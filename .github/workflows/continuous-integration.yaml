@@ -60,7 +60,7 @@ jobs:
       PY_COLORS: 'true'
       ANSIBLE_FORCE_COLOR: 'true'
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Install MacPorts
         run: |
