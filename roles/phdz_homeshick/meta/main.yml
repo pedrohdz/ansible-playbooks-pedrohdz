@@ -1,0 +1,14 @@
+---
+galaxy_info:
+  author: your_name
+  description: Skeleton role for installing phdz_homeshick (user-scoped)
+  license: MIT
+  min_ansible_version: "2.12"
+  platforms:
+    - name: Ubuntu
+      versions: [all]
+    - name: Debian
+      versions: [all]
+    - name: MacOSX
+      versions: [all]
+dependencies: []

@@ -26,8 +26,15 @@ provisioner:
   name: ansible
   env:
     ANSIBLE_COLLECTIONS_PATH: ${MOLECULE_PROJECT_DIRECTORY}/.ansible
+    ANSIBLE_ROLES_PATH: ${MOLECULE_PROJECT_DIRECTORY}/roles:${MOLECULE_PROJECT_DIRECTORY}/.ansible/roles
     # ANSIBLE_FORCE_COLOR: 'true'
     # PY_COLORS: 'true'
+  inventory:
+    group_vars:
+      all:
+        phdz_homeshick_castles:
+          - https://github.com/pedrohdz/dotfiles-vim.git
+          - https://github.com/pedrohdz/dotfiles-zsh.git
   # config_options:
   #   defaults:
   #     stdout_callback: debug

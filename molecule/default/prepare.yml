@@ -1,0 +1,25 @@
+---
+- name: Prepare instances for testing
+  hosts: all
+  become: true
+  gather_facts: true
+  tasks:
+    - name: Update apt cache (Debian/Ubuntu)
+      ansible.builtin.apt:
+        update_cache: true
+        cache_valid_time: 3600
+      when: ansible_facts['os_family'] == 'Debian'
+
+    - name: Ensure apt packages are installed (Debian/Ubuntu)
+      ansible.builtin.apt:
+        name: "{{ molecule_prepare_apt_packages }}"
+        state: present
+      when: ansible_facts['os_family'] == 'Debian'
+
+    - name: Ensure Molecule test user exists
+      ansible.builtin.user:
+        name: tester
+        shell: /bin/zsh
+        create_home: true
+        state: present
+...

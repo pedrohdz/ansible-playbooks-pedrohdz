@@ -1,0 +1,5 @@
+---
+molecule_prepare_apt_packages:
+  - git
+  - zsh
+...

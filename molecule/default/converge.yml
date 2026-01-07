@@ -1,23 +1,20 @@
 ---
-# - name: System level playbook under test
-#   import_playbook: ../../playbook.yaml
-#   tags:
-#     - molecule-system
-#
-# - name: Ensure test user account
-#   hosts: all
-#   tasks:
-#     - name: Create dummy user account
-#       ansible.builtin.user:
-#         name: rusty
-#         shell: /bin/zsh
-#         password: '!'
+# TODO - Test at the playbook level at some point.
+# - name: User home level playbook under test
+#   become: true
+#   become_user: tester
+#   ansible.builtin.import_playbook: ../../playbook-home.yaml
 #   tags:
 #     - molecule-home
-#   become: true
 
-- name: User home level playbook under test
-  import_playbook: ../../playbook-home.yaml
+- name: Test user configuration roles
+  become: true
+  become_user: tester
+  gather_facts: true
+  hosts: all
+  roles:
+    - phdz_homeshick
   tags:
-    - molecule-home
+    - phdz_homeshick
+
 ...
