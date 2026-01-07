@@ -303,3 +303,4 @@ $RECYCLE.BIN/
 /.vim/
 /tmp/
 /.ansible/
+.aider*
