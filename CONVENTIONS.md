@@ -119,6 +119,35 @@ Example pattern:
   - `.yamllint`
 - Don’t “format fight” the linters—adjust code to pass.
 
+## YAML quoting (single-quote default)
+
+Prefer **single quotes** for YAML scalars whenever possible. This keeps YAML
+strings consistent and avoids accidental escape-sequence behavior.
+
+Use **double quotes** only when needed (e.g., when you want YAML escape
+sequences like `\n`, `\t`, or `\uXXXX`, or when avoiding awkward quoting would
+harm readability).
+
+### Nesting quotes
+When you need quotes *inside* a string, prefer:
+- **outer single quotes**
+- **inner double quotes**
+
+Examples:
+
+```yaml
+# Jinja expressions: single-quote the whole scalar
+dest: '{{ phdz_homeshick_repo_dir }}/{{ _phdz_target_dir }}'
+
+# Regex strings: single quotes, escape backslashes only as needed for the regex
+_phdz_target_dir: >-
+  {{ (item | regex_replace('.*/', '')) | regex_replace('\.git$', '') }}
+
+# Shell/command snippets: outer single quotes, inner double quotes
+ansible.builtin.command:
+  cmd: 'printf "%s\n" "{{ item }}"'
+```
+
 ## Local development workflow
 Use the Makefile targets as the canonical interface:
 - `make pre-commit` (runs `super-linter` + `molecule-test`)
