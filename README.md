@@ -1,6 +1,11 @@
 # ansible-playbooks-pedrohdz
 
 
+## Conventions
+
+See [CONVENTIONS.md](CONVENTIONS.md) for repository conventions (naming, tags, Ansible patterns, etc.).
+
+
 ## Installation
 
 First you need to manually [install MacPorts][INSTALL_MACPORTS] and make sure
