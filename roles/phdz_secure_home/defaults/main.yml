@@ -1,0 +1,26 @@
+---
+# Base home directory. If null/empty, derive it at runtime from the account DB for
+# `phdz_secure_home_user` (Darwin: dscl, others: getent).
+phdz_secure_home_home: null
+
+phdz_secure_home_user: '{{ ansible_user_id }}'
+
+# If null/empty, derive via `id -gn {{ phdz_secure_home_user }}` at runtime.
+phdz_secure_home_group: null
+
+phdz_secure_home_allow_missing: true
+
+# If true, enforce owner/group/mode on the user's home directory itself (no recursion).
+phdz_secure_home_lock_home: true
+
+# Mode to enforce on the user's home directory itself (no recursion).
+phdz_secure_home_home_mode: '0700'
+
+phdz_secure_home_dirs_default:
+  - .ssh
+  - .gnupg
+  - .password-store
+
+phdz_secure_home_dirs_extra: []
+
+phdz_secure_home_dirs: '{{ phdz_secure_home_dirs_default + phdz_secure_home_dirs_extra }}'

@@ -14,7 +14,6 @@
   hosts: all
   roles:
     - phdz_homeshick
-  tags:
-    - phdz_homeshick
+    - phdz_secure_home
 
 ...

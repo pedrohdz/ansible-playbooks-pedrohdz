@@ -1,0 +1,37 @@
+---
+- name: Stat home directory (no symlink follow)
+  ansible.builtin.stat:
+    path: '{{ phdz_secure_home_home_effective }}'
+    follow: false
+  register: _phdz_secure_home_home_stat
+
+- name: Fail when home directory is missing
+  ansible.builtin.fail:
+    msg: "Home directory is missing: {{ phdz_secure_home_home_effective }}"
+  when: not (_phdz_secure_home_home_stat.stat.exists | default(false))
+
+- name: Fail when home path exists but is not a directory
+  ansible.builtin.fail:
+    msg: "Home path exists but is not a directory: {{ phdz_secure_home_home_effective }}"
+  when:
+    - _phdz_secure_home_home_stat.stat.exists | default(false)
+    - not (_phdz_secure_home_home_stat.stat.isdir | default(false))
+
+- name: Secure home directory itself (non-recursive, when not a symlink)
+  ansible.builtin.file:
+    path: '{{ phdz_secure_home_home_effective }}'
+    state: directory
+    owner: '{{ phdz_secure_home_user }}'
+    group: '{{ phdz_secure_home_group_effective }}'
+    mode: '{{ phdz_secure_home_home_mode }}'
+  when:
+    - _phdz_secure_home_home_stat.stat.exists | default(false)
+    - _phdz_secure_home_home_stat.stat.isdir | default(false)
+    - not (_phdz_secure_home_home_stat.stat.islnk | default(false))
+
+- name: Skip securing home directory when it is a symlink
+  ansible.builtin.debug:
+    msg: "Skipping securing home directory because it is a symlink: {{ phdz_secure_home_home_effective }}"
+  when:
+    - _phdz_secure_home_home_stat.stat.exists | default(false)
+    - _phdz_secure_home_home_stat.stat.islnk | default(false)

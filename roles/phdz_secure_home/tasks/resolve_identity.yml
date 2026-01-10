@@ -1,0 +1,76 @@
+---
+- name: Derive effective group (when not provided)
+  ansible.builtin.command:
+    argv:
+      - id
+      - -gn
+      - '{{ phdz_secure_home_user }}'
+  register: _phdz_secure_home_id_gn
+  changed_when: false
+  when: phdz_secure_home_group is not defined or phdz_secure_home_group is none or (phdz_secure_home_group | string | length) == 0
+
+- name: Set effective group fact (derived)
+  ansible.builtin.set_fact:
+    phdz_secure_home_group_effective: '{{ _phdz_secure_home_id_gn.stdout }}'
+  when: phdz_secure_home_group is not defined or phdz_secure_home_group is none or (phdz_secure_home_group | string | length) == 0
+
+- name: Set effective group fact (provided)
+  ansible.builtin.set_fact:
+    phdz_secure_home_group_effective: '{{ phdz_secure_home_group }}'
+  when: not (phdz_secure_home_group is not defined or phdz_secure_home_group is none or (phdz_secure_home_group | string | length) == 0)
+
+- name: Set effective home fact (provided)
+  ansible.builtin.set_fact:
+    phdz_secure_home_home_effective: '{{ phdz_secure_home_home }}'
+  when:
+    - phdz_secure_home_home is defined
+    - phdz_secure_home_home is not none
+    - (phdz_secure_home_home | string | length) > 0
+
+- name: Read home directory from dscl (Darwin)
+  ansible.builtin.command:
+    argv:
+      - dscl
+      - .
+      - -read
+      - '/Users/{{ phdz_secure_home_user }}'
+      - NFSHomeDirectory
+  register: _phdz_secure_home_dscl_home
+  changed_when: false
+  when:
+    - (phdz_secure_home_home is not defined) or (phdz_secure_home_home is none) or (phdz_secure_home_home | string | length) == 0
+    - ansible_os_family == 'Darwin'
+
+- name: Set effective home fact (derived from dscl)
+  ansible.builtin.set_fact:
+    phdz_secure_home_home_effective: >-
+      {{ (_phdz_secure_home_dscl_home.stdout | regex_replace('^NFSHomeDirectory:\s*', '')) | trim }}
+  when:
+    - (phdz_secure_home_home is not defined) or (phdz_secure_home_home is none) or (phdz_secure_home_home | string | length) == 0
+    - ansible_os_family == 'Darwin'
+
+- name: Read passwd entry from getent (non-Darwin)
+  ansible.builtin.command:
+    argv:
+      - getent
+      - passwd
+      - '{{ phdz_secure_home_user }}'
+  register: _phdz_secure_home_getent_passwd
+  changed_when: false
+  when:
+    - (phdz_secure_home_home is not defined) or (phdz_secure_home_home is none) or (phdz_secure_home_home | string | length) == 0
+    - ansible_os_family != 'Darwin'
+
+- name: Set effective home fact (derived from getent)
+  ansible.builtin.set_fact:
+    phdz_secure_home_home_effective: '{{ (_phdz_secure_home_getent_passwd.stdout.split(":"))[5] }}'
+  when:
+    - (phdz_secure_home_home is not defined) or (phdz_secure_home_home is none) or (phdz_secure_home_home | string | length) == 0
+    - ansible_os_family != 'Darwin'
+
+- name: Fail when effective home could not be determined
+  ansible.builtin.fail:
+    msg: >-
+      Could not determine home directory for user '{{ phdz_secure_home_user }}'.
+      Set 'phdz_secure_home_home' explicitly, or ensure 'dscl' (Darwin) / 'getent' (non-Darwin) is available.
+  when: phdz_secure_home_home_effective is not defined or (phdz_secure_home_home_effective | string | length) == 0

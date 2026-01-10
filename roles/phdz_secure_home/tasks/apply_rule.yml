@@ -1,0 +1,97 @@
+---
+- name: Stat target directory (no symlink follow)
+  ansible.builtin.stat:
+    path: '{{ phdz_secure_home_home_effective }}/{{ phdz_secure_home_dir }}'
+    follow: false
+  register: _phdz_secure_home_stat
+
+- name: Fail if missing and missing is not allowed
+  ansible.builtin.fail:
+    msg: 'Required directory is missing: {{ phdz_secure_home_home_effective }}/{{ phdz_secure_home_dir }}'
+  when: (not _phdz_secure_home_stat.stat.exists) and (not phdz_secure_home_allow_missing | bool)
+
+- name: Secure directory tree (when present and not a symlink)
+  block:
+    - name: Fail when target exists but is not a directory
+      ansible.builtin.fail:
+        msg: 'Target exists but is not a directory: {{ phdz_secure_home_home_effective }}/{{ phdz_secure_home_dir }}'
+      when: not (_phdz_secure_home_stat.stat.isdir | default(false))
+
+    - name: Enforce permissions on the target directory itself
+      ansible.builtin.file:
+        path: '{{ phdz_secure_home_home_effective }}/{{ phdz_secure_home_dir }}'
+        state: directory
+        owner: '{{ phdz_secure_home_user }}'
+        group: '{{ phdz_secure_home_group_effective }}'
+        mode: '0700'
+
+    - name: Find directories under target (no symlink follow)
+      ansible.builtin.find:
+        paths:
+          - '{{ phdz_secure_home_home_effective }}/{{ phdz_secure_home_dir }}'
+        recurse: true
+        follow: false
+        hidden: true
+        file_type: directory
+      register: _phdz_secure_home_find_dirs
+
+    - name: Enforce permissions on directories under target
+      ansible.builtin.file:
+        path: '{{ item.path }}'
+        state: directory
+        owner: '{{ phdz_secure_home_user }}'
+        group: '{{ phdz_secure_home_group_effective }}'
+        mode: '0700'
+      loop: '{{ _phdz_secure_home_find_dirs.files }}'
+
+    - name: Find regular files under target (no symlink follow)
+      ansible.builtin.find:
+        paths:
+          - '{{ phdz_secure_home_home_effective }}/{{ phdz_secure_home_dir }}'
+        recurse: true
+        follow: false
+        hidden: true
+        file_type: file
+      register: _phdz_secure_home_find_files
+
+    - name: Enforce permissions on regular files under target
+      ansible.builtin.file:
+        path: '{{ item.path }}'
+        state: file
+        owner: '{{ phdz_secure_home_user }}'
+        group: '{{ phdz_secure_home_group_effective }}'
+        mode: '0600'
+      loop: '{{ _phdz_secure_home_find_files.files }}'
+
+    - name: Find symlinks under target (no symlink follow during walk)
+      ansible.builtin.find:
+        paths:
+          - '{{ phdz_secure_home_home_effective }}/{{ phdz_secure_home_dir }}'
+        recurse: true
+        follow: false
+        hidden: true
+        file_type: link
+      register: _phdz_secure_home_find_links
+
+    - name: Stat symlink targets
+      ansible.builtin.stat:
+        path: '{{ item.path }}'
+        follow: true
+      loop: '{{ _phdz_secure_home_find_links.files }}'
+      register: _phdz_secure_home_link_targets
+
+    - name: Enforce permissions on symlink targets that are regular files
+      ansible.builtin.file:
+        path: '{{ item.stat.path }}'
+        state: file
+        owner: '{{ phdz_secure_home_user }}'
+        group: '{{ phdz_secure_home_group_effective }}'
+        mode: '0600'
+      loop: '{{ _phdz_secure_home_link_targets.results }}'
+      when:
+        - item.stat is defined
+        - item.stat.exists | default(false)
+        - item.stat.isreg | default(false)
+  when:
+    - _phdz_secure_home_stat.stat.exists
+    - not (_phdz_secure_home_stat.stat.islnk | default(false))
