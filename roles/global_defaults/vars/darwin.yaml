@@ -1,0 +1,6 @@
+---
+__avinode_devenv_default_group: wheel
+__avinode_devenv_default_directory_mode: '0755'
+__avinode_devenv_default_owner: root
+__avinode_devenv_python_path: /opt/local/bin/python3
+...

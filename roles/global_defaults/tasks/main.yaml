@@ -1,0 +1,145 @@
+---
+# -----------------------------------------------------------------------------
+# Load defaults
+# -----------------------------------------------------------------------------
+# Pattern for loading variables borrowed from:
+# - https://github.com/geerlingguy/ansible-role-postgresql/blob/master/tasks/variables.yml
+- name: Include OS family specific variables (Darwin).
+  include_vars: darwin.yaml
+  when: ansible_os_family == 'Darwin'
+  tags:
+    - avinode_devenv_global_defaults
+
+- name: Include OS family specific variables (Debian).
+  include_vars: debian.yaml
+  when: ansible_os_family == 'Debian'
+  tags:
+    - avinode_devenv_global_defaults
+
+
+# -----------------------------------------------------------------------------
+# Define global variables
+# -----------------------------------------------------------------------------
+- name: Define avinode_devenv_default_group.
+  ansible.builtin.set_fact:
+    avinode_devenv_default_group: '{{ __avinode_devenv_default_group }}'
+  when: avinode_devenv_default_group is not defined
+  tags:
+    - avinode_devenv_global_defaults
+
+- name: Define avinode_devenv_default_directory_mode.
+  ansible.builtin.set_fact:
+    avinode_devenv_default_directory_mode: '{{ __avinode_devenv_default_directory_mode }}'
+  when: avinode_devenv_default_directory_mode is not defined
+  tags:
+    - avinode_devenv_global_defaults
+
+- name: Define avinode_devenv_default_owner.
+  ansible.builtin.set_fact:
+    avinode_devenv_default_owner: '{{ __avinode_devenv_default_owner }}'
+  when: avinode_devenv_default_owner is not defined
+  tags:
+    - avinode_devenv_global_defaults
+
+- name: Define avinode_devenv_python_path.
+  ansible.builtin.set_fact:
+    avinode_devenv_python_path: '{{ __avinode_devenv_python_path }}'
+  when: avinode_devenv_python_path is not defined
+  tags:
+    - avinode_devenv_global_defaults
+
+
+#------------------------------------------------------------------------------
+# Get GoLang settings
+#------------------------------------------------------------------------------
+- name: Ensure golang is installed on Debian OS family.
+  ansible.builtin.apt:
+    name: golang
+    state: present
+    update_cache: true
+  ignore_errors: true
+  become: true
+  when: ansible_os_family == 'Debian'
+  tags:
+    - avinode_devenv_global_defaults
+
+- name: Ensure golang is installed on MacOS via MacPorts.
+  community.general.macports:
+    name: go
+    state: present
+    selfupdate: false
+  ignore_errors: true
+  become: true
+  when: ansible_os_family == 'Darwin'
+  tags:
+    - avinode_devenv_global_defaults
+
+#----
+# avinode_devenv_go_arch
+#----
+- name: Fecth GOHOSTARCH.
+    # eval "$( {{ _avinode_devenv_go_env_command }} )"; echo $GOHOSTARCH
+  ansible.builtin.shell: |
+    {{ _avinode_devenv_go_arch_command }}
+  register: __avinode_devenv_go_arch
+  tags:
+    - avinode_devenv_global_defaults
+  changed_when: false
+
+- name: Define avinode_devenv_go_arch.
+  ansible.builtin.set_fact:
+    avinode_devenv_go_arch:
+    - "{{ __avinode_devenv_go_arch.stdout | trim }}"
+  when: avinode_devenv_go_arch is not defined
+  tags:
+    - avinode_devenv_global_defaults
+
+- name: Assert that avinode_devenv_go_arch is set.
+  ansible.builtin.assert:
+    fail_msg: avinode_devenv_go_arch must have a value
+    that:
+      - avinode_devenv_go_arch | length > 0
+  tags:
+    - avinode_devenv_global_defaults
+
+# On Mac with M1 processor we can fall back to amd64 using rosetta
+- name: Has fallback arch Apple M1
+  ansible.builtin.set_fact:
+    avinode_devenv_go_arch: "{{ avinode_devenv_go_arch + ['amd64'] }}"
+  when: ansible_os_family == 'Darwin' and 'arm64' in avinode_devenv_go_arch
+  tags:
+    - avinode_devenv_global_defaults
+
+- name: Has fallback arch on ARM64 based Linux
+  ansible.builtin.set_fact:
+    avinode_devenv_go_arch: "{{ avinode_devenv_go_arch + ['arm'] }}"
+  when: ansible_system == 'Linux' and 'arm64' in avinode_devenv_go_arch
+  tags:
+    - avinode_devenv_global_defaults
+
+#----
+# avinode_devenv_go_platform
+#----
+- name: Fecth GOOS.
+  ansible.builtin.shell: |
+    {{ _avinode_devenv_go_platform_command }}
+  register: __avinode_devenv_go_platform
+  tags:
+    - avinode_devenv_global_defaults
+  changed_when: false
+- name: Define avinode_devenv_go_platform.
+  ansible.builtin.set_fact:
+    avinode_devenv_go_platform: '{{ __avinode_devenv_go_platform.stdout | trim }}'
+  when: avinode_devenv_go_platform is not defined
+  tags:
+    - avinode_devenv_global_defaults
+
+- name: Assert that avinode_devenv_go_platform is set.
+  ansible.builtin.assert:
+    fail_msg: avinode_devenv_go_platform must have a value
+    that:
+      - avinode_devenv_go_platform | length > 0
+  tags:
+    - avinode_devenv_global_defaults
+
+...
