@@ -26,3 +26,6 @@
   vars:
     _target_dir: >-
       {{ (item | regex_replace('.*/', '')) | regex_replace('\.git$', '') }}
+
+- name: Flush pending handlers
+  ansible.builtin.meta: flush_handlers
