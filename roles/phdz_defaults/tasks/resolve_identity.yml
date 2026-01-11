@@ -1,0 +1,99 @@
+---
+- name: Derive default user (when not provided)
+  ansible.builtin.set_fact:
+    phdz_defaults_user: >-
+      {{ ansible_user_id | default(ansible_facts['user_id'] | default(ansible_facts['env']['USER'] | default(''))) }}
+  when:
+    - phdz_defaults_user is not defined
+      or phdz_defaults_user is none
+      or (phdz_defaults_user | string | length) == 0
+
+- name: Fail when default user could not be determined
+  ansible.builtin.fail:
+    msg: >-
+      Could not determine default user. Set 'phdz_defaults_user' explicitly,
+      or ensure facts/environment expose the current user.
+  when:
+    - phdz_defaults_user is not defined
+      or phdz_defaults_user is none
+      or (phdz_defaults_user | string | length) == 0
+
+- name: Derive default group (when not provided)
+  ansible.builtin.command:
+    argv:
+      - id
+      - -gn
+      - '{{ phdz_defaults_user }}'
+  register: _phdz_defaults_id_gn
+  changed_when: false
+  when:
+    - phdz_defaults_group is not defined
+      or phdz_defaults_group is none
+      or (phdz_defaults_group | string | length) == 0
+
+- name: Set default group fact (derived)
+  ansible.builtin.set_fact:
+    phdz_defaults_group: '{{ _phdz_defaults_id_gn.stdout }}'
+  when:
+    - phdz_defaults_group is not defined
+      or phdz_defaults_group is none
+      or (phdz_defaults_group | string | length) == 0
+
+- name: Read home directory from dscl (Darwin)
+  ansible.builtin.command:
+    argv:
+      - dscl
+      - .
+      - -read
+      - '/Users/{{ phdz_defaults_user }}'
+      - NFSHomeDirectory
+  register: _phdz_defaults_dscl_home
+  changed_when: false
+  when:
+    - phdz_defaults_home is not defined
+      or phdz_defaults_home is none
+      or (phdz_defaults_home | string | length) == 0
+    - ansible_os_family == 'Darwin'
+
+- name: Set default home fact (derived from dscl)
+  ansible.builtin.set_fact:
+    phdz_defaults_home: >-
+      {{ (_phdz_defaults_dscl_home.stdout | regex_replace('^NFSHomeDirectory:\s*', '')) | trim }}
+  when:
+    - phdz_defaults_home is not defined
+      or phdz_defaults_home is none
+      or (phdz_defaults_home | string | length) == 0
+    - ansible_os_family == 'Darwin'
+
+- name: Read passwd entry from getent (non-Darwin)
+  ansible.builtin.command:
+    argv:
+      - getent
+      - passwd
+      - '{{ phdz_defaults_user }}'
+  register: _phdz_defaults_getent_passwd
+  changed_when: false
+  when:
+    - phdz_defaults_home is not defined
+      or phdz_defaults_home is none
+      or (phdz_defaults_home | string | length) == 0
+    - ansible_os_family != 'Darwin'
+
+- name: Set default home fact (derived from getent)
+  ansible.builtin.set_fact:
+    phdz_defaults_home: '{{ (_phdz_defaults_getent_passwd.stdout.split(":"))[5] }}'
+  when:
+    - phdz_defaults_home is not defined
+      or phdz_defaults_home is none
+      or (phdz_defaults_home | string | length) == 0
+    - ansible_os_family != 'Darwin'
+
+- name: Fail when default home could not be determined
+  ansible.builtin.fail:
+    msg: >-
+      Could not determine home directory for user '{{ phdz_defaults_user }}'.
+      Set 'phdz_defaults_home' explicitly, or ensure 'dscl' (Darwin) / 'getent'
+      (non-Darwin) is available.
+  when:
+    - phdz_defaults_home is not defined
+      or (phdz_defaults_home | string | length) == 0

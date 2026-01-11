@@ -1,34 +1,34 @@
 ---
 - name: Stat target directory (no symlink follow)
   ansible.builtin.stat:
-    path: '{{ phdz_secure_home_home_effective }}/{{ phdz_secure_home_dir }}'
+    path: '{{ phdz_defaults_home }}/{{ phdz_secure_home_dir }}'
     follow: false
   register: _phdz_secure_home_stat
 
 - name: Fail if missing and missing is not allowed
   ansible.builtin.fail:
-    msg: 'Required directory is missing: {{ phdz_secure_home_home_effective }}/{{ phdz_secure_home_dir }}'
+    msg: 'Required directory is missing: {{ phdz_defaults_home }}/{{ phdz_secure_home_dir }}'
   when: (not _phdz_secure_home_stat.stat.exists) and (not phdz_secure_home_allow_missing | bool)
 
 - name: Secure directory tree (when present and not a symlink)
   block:
     - name: Fail when target exists but is not a directory
       ansible.builtin.fail:
-        msg: 'Target exists but is not a directory: {{ phdz_secure_home_home_effective }}/{{ phdz_secure_home_dir }}'
+        msg: 'Target exists but is not a directory: {{ phdz_defaults_home }}/{{ phdz_secure_home_dir }}'
       when: not (_phdz_secure_home_stat.stat.isdir | default(false))
 
     - name: Enforce permissions on the target directory itself
       ansible.builtin.file:
-        path: '{{ phdz_secure_home_home_effective }}/{{ phdz_secure_home_dir }}'
+        path: '{{ phdz_defaults_home }}/{{ phdz_secure_home_dir }}'
         state: directory
-        owner: '{{ phdz_secure_home_user }}'
-        group: '{{ phdz_secure_home_group_effective }}'
+        owner: '{{ phdz_defaults_user }}'
+        group: '{{ phdz_defaults_group }}'
         mode: '0700'
 
     - name: Find directories under target (no symlink follow)
       ansible.builtin.find:
         paths:
-          - '{{ phdz_secure_home_home_effective }}/{{ phdz_secure_home_dir }}'
+          - '{{ phdz_defaults_home }}/{{ phdz_secure_home_dir }}'
         recurse: true
         follow: false
         hidden: true
@@ -39,15 +39,15 @@
       ansible.builtin.file:
         path: '{{ item.path }}'
         state: directory
-        owner: '{{ phdz_secure_home_user }}'
-        group: '{{ phdz_secure_home_group_effective }}'
+        owner: '{{ phdz_defaults_user }}'
+        group: '{{ phdz_defaults_group }}'
         mode: '0700'
       loop: '{{ _phdz_secure_home_find_dirs.files }}'
 
     - name: Find regular files under target (no symlink follow)
       ansible.builtin.find:
         paths:
-          - '{{ phdz_secure_home_home_effective }}/{{ phdz_secure_home_dir }}'
+          - '{{ phdz_defaults_home }}/{{ phdz_secure_home_dir }}'
         recurse: true
         follow: false
         hidden: true
@@ -58,15 +58,15 @@
       ansible.builtin.file:
         path: '{{ item.path }}'
         state: file
-        owner: '{{ phdz_secure_home_user }}'
-        group: '{{ phdz_secure_home_group_effective }}'
+        owner: '{{ phdz_defaults_user }}'
+        group: '{{ phdz_defaults_group }}'
         mode: '0600'
       loop: '{{ _phdz_secure_home_find_files.files }}'
 
     - name: Find symlinks under target (no symlink follow during walk)
       ansible.builtin.find:
         paths:
-          - '{{ phdz_secure_home_home_effective }}/{{ phdz_secure_home_dir }}'
+          - '{{ phdz_defaults_home }}/{{ phdz_secure_home_dir }}'
         recurse: true
         follow: false
         hidden: true
@@ -84,8 +84,8 @@
       ansible.builtin.file:
         path: '{{ item.stat.path }}'
         state: file
-        owner: '{{ phdz_secure_home_user }}'
-        group: '{{ phdz_secure_home_group_effective }}'
+        owner: '{{ phdz_defaults_user }}'
+        group: '{{ phdz_defaults_group }}'
         mode: '0600'
       loop: '{{ _phdz_secure_home_link_targets.results }}'
       when:

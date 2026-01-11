@@ -5,6 +5,15 @@ phdz_defaults_prefix: /opt/devenv
 
 phdz_defaults_packages_update_cache: false
 
+# -----------------------------------------------------------------------------
+# Shared identity defaults
+# -----------------------------------------------------------------------------
+# These start as null and are computed by roles/phdz_defaults/tasks/resolve_identity.yml
+# unless the user overrides them via inventory/group_vars/host_vars.
+phdz_defaults_user: null
+phdz_defaults_group: null
+phdz_defaults_home: null
+
 _phdz_defaults_go_arch_command: eval "$(go env)"; echo $GOHOSTARCH
 _phdz_defaults_go_platform_command: eval "$(go env)"; echo $GOOS
 ...

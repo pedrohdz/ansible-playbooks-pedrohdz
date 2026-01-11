@@ -1,7 +1,4 @@
 ---
-- name: Resolve effective home directory and group
-  ansible.builtin.include_tasks: resolve_identity.yml
-
 - name: Lock down the home directory itself
   ansible.builtin.include_tasks: lock_home.yml
   when: phdz_secure_home_lock_home | bool
@@ -11,6 +8,6 @@
   loop: '{{ phdz_secure_home_dirs }}'
   loop_control:
     loop_var: _phdz_secure_home_dir
-    label: '{{ phdz_secure_home_home_effective }}/{{ _phdz_secure_home_dir }}'
+    label: '{{ phdz_defaults_home }}/{{ _phdz_secure_home_dir }}'
   vars:
     phdz_secure_home_dir: '{{ _phdz_secure_home_dir }}'

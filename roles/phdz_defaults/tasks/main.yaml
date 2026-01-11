@@ -16,6 +16,13 @@
   tags:
     - phdz_defaults_global_defaults
 
+# -----------------------------------------------------------------------------
+# Resolve shared identity (user/group/home)
+# -----------------------------------------------------------------------------
+- name: Resolve default identity variables
+  ansible.builtin.import_tasks: resolve_identity.yml
+  tags:
+    - phdz_defaults_global_defaults
 
 # -----------------------------------------------------------------------------
 # Define global variables
