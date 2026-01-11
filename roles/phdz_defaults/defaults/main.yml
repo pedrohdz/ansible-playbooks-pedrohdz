@@ -13,7 +13,4 @@ phdz_defaults_packages_update_cache: false
 phdz_defaults_user: null
 phdz_defaults_group: null
 phdz_defaults_home: null
-
-_phdz_defaults_go_arch_command: eval "$(go env)"; echo $GOHOSTARCH
-_phdz_defaults_go_platform_command: eval "$(go env)"; echo $GOOS
 ...
