@@ -24,4 +24,5 @@
   when: phdz_homeshick_castles | length > 0
   notify: phdz_homeshick | on-clone-updated
   vars:
-    _target_dir: '{{ (item | regex_replace(".*/", "")) | regex_replace("\.git$", "") }}'
+    _target_dir: >-
+      {{ (item | regex_replace('.*/', '')) | regex_replace('\.git$', '') }}

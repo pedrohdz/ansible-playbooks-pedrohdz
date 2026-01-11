@@ -77,8 +77,8 @@
 #----
 # phdz_defaults_go_arch
 #----
-- name: Fecth GOHOSTARCH.
-    # eval "$( {{ _phdz_defaults_go_env_command }} )"; echo $GOHOSTARCH
+- name: Fetch GOHOSTARCH.
+  # eval "$( {{ _phdz_defaults_go_env_command }} )"; echo $GOHOSTARCH
   ansible.builtin.shell: |
     {{ _phdz_defaults_go_arch_command }}
   register: __phdz_defaults_go_arch
@@ -89,7 +89,7 @@
 - name: Define phdz_defaults_go_arch.
   ansible.builtin.set_fact:
     phdz_defaults_go_arch:
-    - "{{ __phdz_defaults_go_arch.stdout | trim }}"
+      - '{{ __phdz_defaults_go_arch.stdout | trim }}'
   when: phdz_defaults_go_arch is not defined
   tags:
     - phdz_defaults_global_defaults
@@ -106,14 +106,18 @@
 - name: Has fallback arch Apple M1
   ansible.builtin.set_fact:
     phdz_defaults_go_arch: "{{ phdz_defaults_go_arch + ['amd64'] }}"
-  when: ansible_os_family == 'Darwin' and 'arm64' in phdz_defaults_go_arch
+  when:
+    - ansible_os_family == 'Darwin'
+    - "'arm64' in phdz_defaults_go_arch"
   tags:
     - phdz_defaults_global_defaults
 
 - name: Has fallback arch on ARM64 based Linux
   ansible.builtin.set_fact:
     phdz_defaults_go_arch: "{{ phdz_defaults_go_arch + ['arm'] }}"
-  when: ansible_system == 'Linux' and 'arm64' in phdz_defaults_go_arch
+  when:
+    - ansible_system == 'Linux'
+    - "'arm64' in phdz_defaults_go_arch"
   tags:
     - phdz_defaults_global_defaults
 
@@ -127,6 +131,7 @@
   tags:
     - phdz_defaults_global_defaults
   changed_when: false
+
 - name: Define phdz_defaults_go_platform.
   ansible.builtin.set_fact:
     phdz_defaults_go_platform: '{{ __phdz_defaults_go_platform.stdout | trim }}'
@@ -141,5 +146,3 @@
       - phdz_defaults_go_platform | length > 0
   tags:
     - phdz_defaults_global_defaults
-
-...
