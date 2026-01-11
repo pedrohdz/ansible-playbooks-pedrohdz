@@ -119,6 +119,50 @@ Example pattern:
   - `.yamllint`
 - Don’t “format fight” the linters—adjust code to pass.
 
+## Line length and wrapping (79 chars when reasonable)
+
+Keep YAML lines to ~79 characters when practical. Wrap long expressions for
+readability and cleaner diffs.
+
+### Wrapping `when:` conditions
+
+Prefer list-form `when:` for multiple conditions. A `when:` list is an implicit
+logical **AND**: all items must be true.
+
+- Use **list-form** for long **AND** chains (one condition per line).
+- Put **OR** logic inside a *single* condition (since list items do not OR
+  together).
+- For long boolean expressions, use a folded scalar (`>-`) and wrap so
+  continuation lines begin with the boolean operator (`and` / `or`).
+
+Examples:
+
+```yaml
+# Long AND chain: list-form `when:`
+when:
+  - phdz_feature_enabled | bool
+  - ansible_os_family == 'Debian'
+  - phdz_mode == 'workstation'
+  - phdz_packages | length > 0
+```
+
+```yaml
+# Long OR condition: keep ORs within a single item and wrap with `>-`
+when:
+  - ansible_os_family == 'Debian'
+  - >-
+    (phdz_install_method == 'apt')
+    or (phdz_install_method == 'backports')
+    or (phdz_install_method == 'source')
+```
+
+```yaml
+# Mixed grouping: use a single wrapped expression when you need parentheses
+when: >-
+  ((phdz_mode == 'workstation') and (ansible_os_family == 'Debian'))
+  or ((phdz_mode == 'home') and (ansible_os_family == 'Darwin'))
+```
+
 ## YAML quoting (single-quote default)
 
 Prefer **single quotes** for YAML scalars whenever possible. This keeps YAML
