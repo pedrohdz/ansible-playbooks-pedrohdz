@@ -1,0 +1,13 @@
+---
+- name: Ensure .ssh directory exists
+  ansible.builtin.file:
+    path: '{{ phdz_ssh_dir }}'
+    state: directory
+
+- name: Manage authorized_keys entries
+  ansible.builtin.include_tasks: authorized_keys.yml
+  when: phdz_ssh_keys_authorized_keys | length > 0
+
+- name: Manage known_hosts entries
+  ansible.builtin.include_tasks: known_hosts.yml
+  when: phdz_ssh_keys_known_hosts | length > 0

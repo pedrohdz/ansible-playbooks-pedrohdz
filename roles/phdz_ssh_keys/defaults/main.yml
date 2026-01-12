@@ -1,0 +1,32 @@
+---
+# SSH base directory for the user running the play.
+phdz_ssh_dir: '{{ phdz_defaults_home }}/.ssh'
+
+# SSH authorized_keys path for the user running the play.
+phdz_ssh_authorized_keys_path: '{{ phdz_ssh_dir }}/authorized_keys'
+
+# SSH known_hosts path for the user running the play.
+phdz_ssh_known_hosts_path: '{{ phdz_ssh_dir }}/known_hosts'
+
+# List of authorized keys to manage for the target user.
+#
+# Each item is a dict compatible with ansible.posix.authorized_key.
+# Common keys:
+# - key: (required) Public key string
+# - state: present|absent (optional, default: present)
+# - comment: (optional)
+phdz_ssh_keys_authorized_keys: []
+
+# List of known_hosts entries to manage for the target user.
+#
+# Each item is a dict compatible with ansible.builtin.known_hosts.
+# Common keys:
+# - name: (required) Hostname/pattern (e.g. github.com, [github.com]:443)
+# - description: (optional) Used only for loop label / task output readability
+# - key: (required for deterministic behavior) Full known_hosts key line,
+#        including the host field (e.g. "github.com ssh-ed25519 AAAA...")
+# - state: present|absent (optional, default: present)
+phdz_ssh_keys_known_hosts: []
+
+# If true, hash hostnames when writing known_hosts entries.
+phdz_ssh_keys_hash_known_hosts: false

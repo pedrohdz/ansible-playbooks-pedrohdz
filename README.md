@@ -1,93 +1,53 @@
-# ansible-playbooks-pedrohdz
+# phdz_ssh_keys
 
+Manage SSH `authorized_keys` and `known_hosts` for the user running the play.
 
-## Conventions
+This role is user-scoped. It creates `~/.ssh` if needed and manages entries when
+the corresponding input lists are non-empty.
 
-See [CONVENTIONS.md](CONVENTIONS.md) for repository conventions (naming, tags, Ansible patterns, etc.).
+This role depends on `phdz_defaults` to resolve the user home directory via
+`phdz_defaults_home`.
 
+## Variables
 
-## Installation
+### `phdz_ssh_keys_authorized_keys` (default: `[]`)
 
-First you need to manually [install MacPorts][INSTALL_MACPORTS] and make sure
-the your PATH starts with `/opt/local/libexec/gnubin:/opt/local/bin:/opt/local/sbin`.
+List of authorized key entries to manage.
 
-Then:
+Example:
 
-```bash
-./scripts/setup-local-ansible.sh
-source .venv/bin/activate
+```yaml
+phdz_ssh_keys_authorized_keys:
+  - key: 'ssh-ed25519 AAAAC3... user@example.invalid'
+    state: present
+    comment: 'laptop'
 ```
 
-To run the playbook:
+### `phdz_ssh_keys_known_hosts` (default: `[]`)
 
-```bash
-ansible-playbook playbook.yaml --ask-become-pass
+List of known_hosts entries to manage.
+
+Optional field:
+- `description`: used only for Ansible loop labeling / output readability
+
+Example:
+
+```yaml
+phdz_ssh_keys_known_hosts:
+  - name: github.com
+    description: github.com (ssh-ed25519)
+    key: >-
+      github.com ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFakeFakeFakeFakeFakeFakeFakeFakeFakeFakeFakeFakeFake
+    state: present
 ```
 
-Update your `~/.profile` with:
+### `phdz_ssh_keys_hash_known_hosts` (default: `false`)
 
-```sh
-export PATH="/opt/devenv/bin:/opt/local/libexec/gnubin:/opt/local/bin:/opt/local/sbin:$PATH"
-export MANPATH="/opt/local/share/man:$MANPATH"
-```
+If true, set `hash_host: true` when writing entries with
+`ansible.builtin.known_hosts`.
 
-In your `~/.bashrc`, add the following to get the Bash completions:
+## Permissions
 
-```bash
-source /opt/devenv/etc/bash_completion.d/*.sh
-source /opt/local/etc/bash_completion.d/*
-```
-
-
-## Testing and development
-
-```bash
-molecule create
-molecule converge
-molecule list
-molecule login
-molecule destroy
-```
-
-Complete end-to-end testing:
-
-```bash
-molecule test
-```
-
-Using [Vagrant][VAGRANT] with [VirtualBox][VIRTUAlBOX], the default, can result
-in at least 50% faster testing times over [Docker][DOCKER].  If you would like
-to run with *Docker* either way:
-
-```bash
-molecule create --scenario-name docker
-molecule converge --scenario-name docker
-molecule test --scenario-name docker
-molecule destroy --scenario-name docker
-```
-
-[VAGRANT]: https://www.vagrantup.com/
-[VIRTUAlBOX]: https://www.virtualbox.org/
-[DOCKER]: https://www.docker.com/
-
-Running [github/super-linter](https://github.com/github/super-linter) locally
-to help debug GitHub Action issues:
-
-```bash
-docker pull github/super-linter:slim-latest
-docker run -e RUN_LOCAL=true -v $PWD:/tmp/lint github/super-linter:slim-latest
-```
-
-More information can be found at:
-
-- [Run Super-Linter locally to test your branch of code](https://github.com/github/super-linter/blob/master/docs/run-linter-locally.md)
-
-
-## Other helpful commands
-
-```bash
-ansible-galaxy install -r requirements.yaml --force --force-with-deps
-```
-
-
-[INSTALL_MACPORTS]: https://www.macports.org/install.php
+This role focuses on ensuring the required files/directories exist and that
+entries are managed idempotently. If you want centralized enforcement of
+permissions, pair it with the `phdz_secure_home` role.
