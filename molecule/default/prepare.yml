@@ -16,6 +16,10 @@
         state: present
       when: ansible_facts['os_family'] == 'Debian'
 
+    - name: Ensure Nix is installed
+      ansible.builtin.import_role:
+        name: phdz_nix
+
     - name: Ensure Molecule test user exists
       ansible.builtin.user:
         name: tester

@@ -15,7 +15,7 @@
   roles:
     - phdz_homeshick
     - phdz_secure_home
-    - role: phdz_gpg_keys
+    - phdz_gpg_keys
     - phdz_ssh_keys
 
 ...

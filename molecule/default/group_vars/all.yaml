@@ -1,5 +1,7 @@
 ---
 molecule_prepare_apt_packages:
+  - ca-certificates
+  - curl
   - git
   - gnupg
   - gpg-agent

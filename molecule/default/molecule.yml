@@ -6,17 +6,13 @@ platforms:
   # For more pre-baked images:
   # - https://ansible.jeffgeerling.com/
   - name: ubuntu2404
+    cgroupns_mode: host
+    command: "/lib/systemd/systemd"
     image: 'docker.io/geerlingguy/docker-ubuntu2404-ansible:latest'
+    pre_build_image: true
+    privileged: true
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:rw
-    privileged: true
-    pre_build_image: true
-  # - name: debian12
-  #   image: 'geerlingguy/docker-debian12-ansible:latest'
-  #   volumes:
-  #     - /sys/fs/cgroup:/sys/fs/cgroup:rw
-  #   privileged: true
-  #   pre_build_image: true
 
 dependency:
   name: galaxy

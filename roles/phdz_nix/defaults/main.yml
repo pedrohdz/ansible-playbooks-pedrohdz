@@ -1,0 +1,10 @@
+---
+# Upstream installer URL (ensure no trailing characters like backticks).
+phdz_nix_installer_url: 'https://nixos.org/nix/install'
+
+# Number of daemon build users (nixbld1..nixbldN).
+phdz_nix_daemon_user_count: 10
+
+# Extra config passed to the installer via --nix-extra-conf-file.
+phdz_nix_extra_conf_lines:
+  - 'experimental-features = nix-command flakes'

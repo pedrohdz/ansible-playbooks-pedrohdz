@@ -1,0 +1,85 @@
+---
+- name: Check if Nix is already installed
+  ansible.builtin.stat:
+    path: /nix/var/nix/profiles/default/bin/nix
+  register: _phdz_nix_bin_stat
+
+- name: Install Nix (daemon) via upstream installer
+  become: true
+  when: not _phdz_nix_bin_stat.stat.exists
+  block:
+    - name: Create temporary file for upstream installer script
+      ansible.builtin.tempfile:
+        state: file
+        prefix: 'phdz-nix-install-'
+        suffix: '.sh'
+      register: _phdz_nix_installer_tmp
+
+    # ansible.builtin.get_url fails to download the file silently if the
+    # temporary file exists.  We just use ansible.builtin.tempfile above to
+    # create a safe name
+    - name: Remove temporary installer script
+      ansible.builtin.file:
+        path: '{{ _phdz_nix_installer_tmp.path }}'
+        state: absent
+
+    - name: Create temporary file for nix-extra.conf
+      ansible.builtin.tempfile:
+        state: file
+        prefix: 'phdz-nix-extra-'
+        suffix: '.conf'
+      register: _phdz_nix_extra_conf_tmp
+
+    - name: Write nix-extra.conf contents
+      ansible.builtin.copy:
+        dest: '{{ _phdz_nix_extra_conf_tmp.path }}'
+        content: |
+          {% for line in phdz_nix_extra_conf_lines %}
+          {{ line }}
+          {% endfor %}
+        owner: '{{ phdz_defaults_default_owner }}'
+        group: '{{ phdz_defaults_default_group }}'
+        mode: '0600'
+
+    - name: Download upstream installer script
+      ansible.builtin.get_url:
+        url: '{{ phdz_nix_installer_url }}'
+        dest: '{{ _phdz_nix_installer_tmp.path }}'
+        owner: '{{ phdz_defaults_default_owner }}'
+        group: '{{ phdz_defaults_default_group }}'
+        mode: '0600'
+
+    - name: Run upstream installer (multi-user daemon)
+      ansible.builtin.command:
+        argv:
+          - /bin/sh
+          - '{{ _phdz_nix_installer_tmp.path }}'
+          - --daemon
+          - --nix-extra-conf-file
+          - '{{ _phdz_nix_extra_conf_tmp.path }}'
+          - --daemon-user-count
+          - '{{ phdz_nix_daemon_user_count | string }}'
+          - --yes
+      args:
+        creates: /nix/var/nix/profiles/default/bin/nix
+
+  always:
+    - name: Remove temporary installer files
+      ansible.builtin.file:
+        path: '{{ item }}'
+        state: absent
+      loop:
+        - '{{ _phdz_nix_installer_tmp.path | default(omit) }}'
+        - '{{ _phdz_nix_extra_conf_tmp.path | default(omit) }}'
+      when:
+        - _phdz_nix_extra_conf_tmp is defined or _phdz_nix_installer_tmp is defined
+
+- name: Ensure nix-daemon is enabled and started (systemd)
+  ansible.builtin.systemd:
+    name: nix-daemon.service
+    enabled: true
+    state: started
+    daemon_reload: true
+  when:
+    - ansible_service_mgr == 'systemd'
+
