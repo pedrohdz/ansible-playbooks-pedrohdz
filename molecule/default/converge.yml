@@ -14,8 +14,8 @@
   hosts: all
   roles:
     - phdz_homeshick
-    - phdz_secure_home
     - phdz_gpg_keys
     - phdz_ssh_keys
+    - phdz_secure_home # Should almost always be last
 
 ...
