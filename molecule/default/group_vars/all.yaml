@@ -7,6 +7,8 @@ molecule_prepare_apt_packages:
   - gpg-agent
   - zsh
 
+phdz_nix_home_manager_base_config_dir: '.homesick/repos/dotfiles-zsh/home/.config/home-manager'
+
 phdz_gpg_keys_ultimate_trust: true
 phdz_gpg_keys_public:
   - |

@@ -16,6 +16,7 @@
     - phdz_homeshick
     - phdz_gpg_keys
     - phdz_ssh_keys
+    - phdz_nix_home_manager
     - phdz_secure_home # Should almost always be last
 
 ...
