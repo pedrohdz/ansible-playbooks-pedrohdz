@@ -217,3 +217,13 @@ Keep CI green:
   - Put defaults in the appropriate `defaults/main.yml`.
   - Document them (role README and/or repo docs).
 - If you change a workflow/command, keep `README.md` accurate.
+
+## Defaults location and usage
+
+- All shared or baseline defaults belong in `roles/phdz_defaults/`.
+- Other roles should reference these values instead of redefining them.
+- When a role needs its own derived or adjusted default
+  (for example, `phdz_nix_home_manager_home_dir`),
+  define it as a local copy of the appropriate `phdz_defaults_*` variable.
+- Document any intentional deviations, and keep naming consistent
+  (`_phdz_` for internal derived values, `phdz_` for public ones).
