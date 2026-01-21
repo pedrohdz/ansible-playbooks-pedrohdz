@@ -1,0 +1,27 @@
+---
+- name: Fail if phdz_defaults_user not explicitly set
+  ansible.builtin.fail:
+    msg: "'phdz_defaults_user' must be explicitly set (not auto-derived)."
+  when:
+    - phdz_defaults_user_auto_derived | default(false)
+      or phdz_defaults_user is none
+      or (phdz_defaults_user | string | length) == 0
+
+- name: Ensure developer user exists
+  ansible.builtin.user:
+    name: '{{ phdz_defaults_user }}'
+    shell: '{{ phdz_dev_user_shell }}'
+    create_home: true
+    state: present
+    password: '{{ phdz_dev_user_password_hash }}'
+    update_password: on_create
+
+- name: Configure sudoers entry
+  ansible.builtin.template:
+    src: sudoers.j2
+    dest: '/etc/sudoers.d/{{ phdz_defaults_user }}'
+    owner: root
+    group: root
+    mode: '0440'
+    validate: 'visudo -cf %s'
+  when: phdz_dev_user_sudo | bool

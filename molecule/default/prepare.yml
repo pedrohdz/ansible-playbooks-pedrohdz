@@ -20,10 +20,7 @@
       ansible.builtin.import_role:
         name: phdz_nix
 
-    - name: Ensure Molecule test user exists
-      ansible.builtin.user:
-        name: tester
-        shell: /bin/zsh
-        create_home: true
-        state: present
+    - name: Ensure test dev user is configured
+      ansible.builtin.import_role:
+        name: phdz_dev_user
 ...

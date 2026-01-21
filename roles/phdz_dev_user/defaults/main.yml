@@ -1,0 +1,14 @@
+---
+phdz_dev_user_shell: /bin/zsh
+phdz_dev_user_sudo: true
+
+# -----------------------------------------------------------------------------
+# Password settings
+# -----------------------------------------------------------------------------
+# Ubuntu 24.04 uses yescrypt by default (strong and fully supported).
+# Example to generate a yescrypt hash:
+#   mkpasswd --method=yescrypt
+#
+# Keep the resulting hash private; do not store real credentials in source.
+# Default disables password login.
+phdz_dev_user_password_hash: '!'

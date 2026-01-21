@@ -5,7 +5,12 @@ molecule_prepare_apt_packages:
   - git
   - gnupg
   - gpg-agent
+  - whois    # provides mkpasswd for Argon2 password hashing
   - zsh
+
+phdz_defaults_user: tester
+phdz_defaults_group: tester
+phdz_defaults_home: /home/tester
 
 phdz_nix_home_manager_base_config_dir: '.homesick/repos/dotfiles-zsh/home/.config/home-manager'
 
