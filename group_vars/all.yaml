@@ -1,6 +1,5 @@
 ---
-ansible_python_interpreter: /usr/bin/python3
-avinode_devenv_become_for_all: true
-avinode_devenv_packages_macosx_pkg_mgr: macports
-avinode_devenv_packages_unminimize_ubuntu: true
+phdz_defaults_user: pedro
+phdz_defaults_group: pedro
+phdz_defaults_home: /home/pedro.linux # FIXME - Drop .linux
 ...

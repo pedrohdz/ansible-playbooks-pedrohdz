@@ -1,0 +1,14 @@
+---
+- name: Common Ansible Playbook
+  gather_facts: true
+  hosts: all
+  roles:
+    - phdz_linux_baseline
+    - phdz_nix
+    - phdz_dev_user
+
+  # vars_files:
+  #   - vars/os-{{ ansible_os_family }}.yaml
+  #   - vars/all.yaml
+  #   #- vars/simple-variants.yaml
+...

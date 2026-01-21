@@ -1,17 +1,13 @@
 ---
-- hosts: all
-  name: User level configuration (does not run as sudo)
-  gather_facts: true
+- name: User level configuration (does not run as sudo)
   become: false
+  gather_facts: true
+  hosts: all
   roles:
     - phdz_homeshick
+    - phdz_gpg_keys
+    - phdz_ssh_keys
+    - phdz_nix_home_manager
+    - phdz_secure_home # Should almost always be last
 
-# - hosts: all
-#   roles:
-#     - home
-#
-#   vars_files:
-#     - ['vars/os-{{ ansible_os_family }}.yaml', vars/os-defaults.yaml]
-#     - vars/all.yaml
-#     #- vars/simple-variants.yaml
 ...

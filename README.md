@@ -1,4 +1,12 @@
-# phdz_ssh_keys
+# ansible-playbooks-pedrohdz
+
+```shell
+ansible-playbook playbook-home.yaml
+
+
+```
+
+## phdz_ssh_keys
 
 Manage SSH `authorized_keys` and `known_hosts` for the user running the play.
 
@@ -8,9 +16,9 @@ the corresponding input lists are non-empty.
 This role depends on `phdz_defaults` to resolve the user home directory via
 `phdz_defaults_home`.
 
-## Variables
+### Variables
 
-### `phdz_ssh_keys_authorized_keys` (default: `[]`)
+#### `phdz_ssh_keys_authorized_keys` (default: `[]`)
 
 List of authorized key entries to manage.
 
@@ -23,7 +31,7 @@ phdz_ssh_keys_authorized_keys:
     comment: 'laptop'
 ```
 
-### `phdz_ssh_keys_known_hosts` (default: `[]`)
+#### `phdz_ssh_keys_known_hosts` (default: `[]`)
 
 List of known_hosts entries to manage.
 
@@ -41,12 +49,12 @@ phdz_ssh_keys_known_hosts:
     state: present
 ```
 
-### `phdz_ssh_keys_hash_known_hosts` (default: `false`)
+#### `phdz_ssh_keys_hash_known_hosts` (default: `false`)
 
 If true, set `hash_host: true` when writing entries with
 `ansible.builtin.known_hosts`.
 
-## Permissions
+### Permissions
 
 This role focuses on ensuring the required files/directories exist and that
 entries are managed idempotently. If you want centralized enforcement of
