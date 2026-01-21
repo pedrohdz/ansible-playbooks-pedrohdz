@@ -1,3 +1,4 @@
 ---
 dependencies:
   - role: phdz_defaults
+  - role: phdz_linux_baseline

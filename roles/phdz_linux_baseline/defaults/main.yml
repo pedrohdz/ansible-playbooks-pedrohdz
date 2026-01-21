@@ -1,0 +1,26 @@
+---
+phdz_linux_baseline_default_packages:
+  - ca-certificates
+  - curl
+  - git
+  - gnupg
+  - gnupg-agent
+  - less
+  - makepasswd
+  - sudo
+  - tmux
+  - tree
+  - unzip
+  - vim
+  - wget
+  - yq
+  - zip
+  - zsh
+phdz_linux_baseline_packages: []
+phdz_linux_baseline_upgrade: false
+phdz_linux_baseline_services: []
+phdz_linux_baseline_default_alternatives:
+  editor: /usr/bin/vim.basic
+  vi: /usr/bin/vim.basic
+  view: /usr/bin/vim.basic
+phdz_linux_baseline_alternatives: {}

@@ -1,5 +1,5 @@
 ---
-molecule_prepare_apt_packages:
+phdz_linux_baseline_packages:
   - ca-certificates
   - curl
   - git
