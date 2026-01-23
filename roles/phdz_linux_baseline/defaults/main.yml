@@ -4,7 +4,7 @@ phdz_linux_baseline_default_packages:
   - curl
   - git
   - gnupg
-  - gnupg-agent
+  - gpg-agent
   - less
   - makepasswd
   - sudo
@@ -13,9 +13,11 @@ phdz_linux_baseline_default_packages:
   - unzip
   - vim
   - wget
+  - whois # provides mkpasswd for Argon2 password hashing
   - yq
   - zip
   - zsh
+
 phdz_linux_baseline_packages: []
 phdz_linux_baseline_upgrade: false
 phdz_linux_baseline_services: []
