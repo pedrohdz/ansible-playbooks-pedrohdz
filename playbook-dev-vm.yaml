@@ -2,12 +2,9 @@
 - name: Common Ansible Playbook
   gather_facts: true
   hosts: all
-  vars:
-    phdz_defaults_user: pedro
-    phdz_defaults_group: pedro
-    phdz_defaults_home: /home/pedro.linux # FIXME - Drop .linux
-
+  vars_files:
+    - '{{ lookup("env", "HOME") + "/.private/ansible/vars/dev-vm.yaml" }}'
   roles:
     - phdz_linux_baseline
     - phdz_nix
-    - phdz_dev_user
+    # - phdz_dev_user
