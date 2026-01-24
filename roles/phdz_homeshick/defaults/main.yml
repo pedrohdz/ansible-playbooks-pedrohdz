@@ -3,3 +3,4 @@ phdz_homeshick_repo_url: https://github.com/andsens/homeshick.git
 phdz_homeshick_version: v2.0.1
 phdz_homeshick_repo_dir: '{{ ansible_facts["env"]["HOME"] }}/.homesick/repos'
 phdz_homeshick_castles: []
+phdz_homeshick_wait_for_ssh_key_auth: false
