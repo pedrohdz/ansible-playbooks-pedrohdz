@@ -1,10 +1,26 @@
 ---
+# -----------------------------------------------------------------------------
+# System/User
+# -----------------------------------------------------------------------------
 phdz_defaults_user: tester
 phdz_defaults_group: tester
 phdz_defaults_home: /home/tester
 
-phdz_nix_home_manager_base_config_dir: '.homesick/repos/dotfiles-zsh/home/.config/home-manager'
+# -----------------------------------------------------------------------------
+# Homeshick
+# -----------------------------------------------------------------------------
+phdz_homeshick_castles:
+  - https://github.com/pedrohdz/dotfiles-vim.git
+  - https://github.com/pedrohdz/dotfiles-zsh.git
 
+# -----------------------------------------------------------------------------
+# Nix
+# -----------------------------------------------------------------------------
+phdz_nix_home_manager_base_config_dir: ".homesick/repos/dotfiles-zsh/home/.config/home-manager"
+
+# -----------------------------------------------------------------------------
+# GNUGPG/OpenPGP
+# -----------------------------------------------------------------------------
 phdz_gpg_keys_ultimate_trust: true
 phdz_gpg_keys_public:
   - |
@@ -61,6 +77,9 @@ phdz_gpg_keys_public:
     =Z52X
     -----END PGP PUBLIC KEY BLOCK-----
 
+# -----------------------------------------------------------------------------
+# SSH
+# -----------------------------------------------------------------------------
 phdz_ssh_keys_authorized_keys:
   - key: >-
       ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIE5oRZlX2tG7YhZz8oY8oXw0m0m5q0mYVwqQm3sQ0aJ
