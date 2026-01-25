@@ -1,9 +1,26 @@
 ---
 - name: Common Ansible Playbook
-  gather_facts: true
   hosts: all
+  gather_facts: true
+
+  vars:
+    _phdz_private_varfile: >-
+      {{ lookup('env', 'HOME') + '/.private/ansible/vars/dev-vm.yaml' }}
+
+  pre_tasks:
+    - name: Fail if vars file is missing
+      ansible.builtin.stat:
+        path: "{{ _phdz_private_varfile }}"
+      register: _phdz_private_varfile_status
+
+    - name: Abort if vars file not found
+      ansible.builtin.fail:
+        msg: "Required vars file not found: {{ _phdz_private_varfile }}"
+      when: not _phdz_private_varfile_status.stat.exists
+
   vars_files:
-    - '{{ lookup("env", "HOME") + "/.private/ansible/vars/dev-vm.yaml" }}'
+    - "{{ _phdz_private_varfile }}"
+
   roles:
     - phdz_linux_baseline
     - phdz_nix

@@ -4,13 +4,13 @@
   gather_facts: true
   hosts: all
   vars:
-    _phdz_private_vars_path: >-
+    _phdz_private_varfile: >-
       {{ lookup('env', 'HOME') + '/.private/ansible/vars/home.yaml' }}
   pre_tasks:
     - name: Check if private vars file exists
       ansible.builtin.stat:
-        path: "{{ _phdz_private_vars_path }}"
-      register: _phdz_private_vars_file
+        path: "{{ _phdz_private_varfile }}"
+      register: _phdz_private_varfile_status
   tasks:
     - name: Run config only when private vars file is missing
       block:
@@ -20,21 +20,26 @@
         - name: Secure home
           ansible.builtin.include_role:
             name: phdz_secure_home
-      when: not _phdz_private_vars_file.stat.exists
+      when: not _phdz_private_varfile_status.stat.exists
 
 - name: User level configuration (must not run as sudo)
   become: false
   gather_facts: true
   hosts: all
   vars:
-    _phdz_private_vars_path: >-
+    _phdz_private_varfile: >-
       {{ lookup('env', 'HOME') + '/.private/ansible/vars/home.yaml' }}
-  vars_files:
-    - "{{ _phdz_private_vars_path }}"
   pre_tasks:
-    - name: Debug which private vars file was loaded
-      ansible.builtin.debug:
-        msg: Loaded private vars from {{ _phdz_private_vars_path }}
+    - name: Fail if vars file is missing
+      ansible.builtin.stat:
+        path: "{{ _phdz_private_varfile }}"
+      register: _phdz_private_varfile_status
+    - name: Abort if vars file not found
+      ansible.builtin.fail:
+        msg: "Required vars file not found: {{ _phdz_private_varfile }}"
+      when: not _phdz_private_varfile_status.stat.exists
+  vars_files:
+    - "{{ _phdz_private_varfile }}"
   roles:
     - phdz_gpg_keys
     - phdz_ssh_keys
