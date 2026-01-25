@@ -7,4 +7,4 @@
   roles:
     - phdz_linux_baseline
     - phdz_nix
-    # - phdz_dev_user
+    - phdz_dev_user
