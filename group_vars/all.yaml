@@ -1,9 +1,0 @@
----
-# -----------------------------------------------------------------------------
-# Homeshick
-# -----------------------------------------------------------------------------
-phdz_homeshick_wait_for_ssh_key_auth: true
-phdz_homeshick_castles:
-  - git@github.com:pedrohdz/dotfiles-private.git
-  - git@github.com:pedrohdz/dotfiles-vim.git
-  - git@github.com:pedrohdz/dotfiles-zsh.git
