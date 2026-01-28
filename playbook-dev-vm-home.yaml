@@ -1,27 +1,4 @@
 ---
-- name: Prime the user's configurations and dotfiles (must not run as sudo)
-  become: false
-  gather_facts: true
-  hosts: all
-  vars:
-    _phdz_private_varfile: >-
-      {{ lookup('env', 'HOME') + '/.private/ansible/vars/home.yaml' }}
-  pre_tasks:
-    - name: Check if private vars file exists
-      ansible.builtin.stat:
-        path: "{{ _phdz_private_varfile }}"
-      register: _phdz_private_varfile_status
-  tasks:
-    - name: Run config only when private vars file is missing
-      block:
-        - name: Apply homeshick configuration
-          ansible.builtin.include_role:
-            name: phdz_homeshick
-        - name: Secure home
-          ansible.builtin.include_role:
-            name: phdz_secure_home
-      when: not _phdz_private_varfile_status.stat.exists
-
 - name: User level configuration (must not run as sudo)
   become: false
   gather_facts: true
@@ -33,6 +10,7 @@
     - name: Fail if vars file is missing
       ansible.builtin.stat:
         path: "{{ _phdz_private_varfile }}"
+      delegate_to: localhost
       register: _phdz_private_varfile_status
     - name: Abort if vars file not found
       ansible.builtin.fail:
@@ -41,6 +19,7 @@
   vars_files:
     - "{{ _phdz_private_varfile }}"
   roles:
+    - phdz_homeshick
     - phdz_gpg_keys
     - phdz_ssh_keys
     - phdz_nix_home_manager

@@ -11,6 +11,8 @@
     - name: Fail if vars file is missing
       ansible.builtin.stat:
         path: "{{ _phdz_private_varfile }}"
+      become: false # FIXME - Drop this
+      delegate_to: localhost
       register: _phdz_private_varfile_status
 
     - name: Abort if vars file not found
