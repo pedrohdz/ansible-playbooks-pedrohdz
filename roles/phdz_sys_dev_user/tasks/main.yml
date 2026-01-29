@@ -1,16 +1,15 @@
 ---
-- name: Fail if phdz_defaults_user not explicitly set
+- name: Fail if phdz_sys_dev_user_name not set
   ansible.builtin.fail:
-    msg: "'phdz_defaults_user' must be explicitly set (not auto-derived)."
+    msg: '"phdz_sys_dev_user_name" must be set.'
   when:
-    - phdz_defaults_user_auto_derived | default(false)
-      or phdz_defaults_user is none
-      or (phdz_defaults_user | string | length) == 0
+    - phdz_sys_dev_user_name is none
+      or (phdz_sys_dev_user_name | string | length) == 0
 
 - name: Ensure dev user exists
   become: '{{ phdz_defaults_use_become }}'
   ansible.builtin.user:
-    name: '{{ phdz_defaults_user }}'
+    name: '{{ phdz_sys_dev_user_name }}'
     shell: '{{ phdz_sys_dev_user_shell }}'
     create_home: true
     state: present
@@ -21,7 +20,7 @@
   become: '{{ phdz_defaults_use_become }}'
   ansible.builtin.template:
     src: sudoers.j2
-    dest: '/etc/sudoers.d/{{ phdz_defaults_user }}'
+    dest: '/etc/sudoers.d/{{ phdz_sys_dev_user_name }}'
     owner: root
     group: root
     mode: '0440'
@@ -31,7 +30,7 @@
 - name: Ensure dev user's SSH authorized_keys are populated
   become: '{{ phdz_defaults_use_become }}'
   ansible.posix.authorized_key:
-    user: '{{ phdz_defaults_user }}'
+    user: '{{ phdz_sys_dev_user_name }}'
     key: '{{ item.key }}'
     state: '{{ item.state | default("present") }}'
     comment: '{{ item.comment | default(omit) }}'
