@@ -1,5 +1,5 @@
 ---
-phdz_defaults_become_for_all: false
+phdz_defaults_use_become: false
 phdz_defaults_force_upgrade_all: false
 phdz_defaults_prefix: /opt/devenv
 

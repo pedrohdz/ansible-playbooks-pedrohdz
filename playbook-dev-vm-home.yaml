@@ -4,6 +4,7 @@
   gather_facts: true
   hosts: all
   vars:
+    phdz_defaults_use_become: false
     _phdz_private_varfile: >-
       {{ lookup('env', 'HOME') + '/.private/ansible/vars/home.yaml' }}
   pre_tasks:

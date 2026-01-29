@@ -5,7 +5,6 @@
   register: _phdz_nix_bin_stat
 
 - name: Install Nix (daemon) via upstream installer
-  become: true
   when: not _phdz_nix_bin_stat.stat.exists
   block:
     - name: Create temporary file for upstream installer script
@@ -50,6 +49,7 @@
         mode: '0600'
 
     - name: Run upstream installer (multi-user daemon)
+      become: '{{ phdz_defaults_use_become }}'
       ansible.builtin.command:
         argv:
           - /bin/sh
@@ -75,6 +75,7 @@
         - _phdz_nix_extra_conf_tmp is defined or _phdz_nix_installer_tmp is defined
 
 - name: Ensure nix-daemon is enabled and started (systemd)
+  become: '{{ phdz_defaults_use_become }}'
   ansible.builtin.systemd:
     name: nix-daemon.service
     enabled: true

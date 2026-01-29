@@ -4,14 +4,14 @@
   gather_facts: true
 
   vars:
+    phdz_defaults_use_become: true
     _phdz_private_varfile: >-
-      {{ lookup('env', 'HOME') + '/.private/ansible/vars/dev-vm.yaml' }}
+      {{ lookup('env', 'HOME') + '/.private/ansible/vars/home.yaml' }}
 
   pre_tasks:
     - name: Fail if vars file is missing
       ansible.builtin.stat:
         path: "{{ _phdz_private_varfile }}"
-      become: false # FIXME - Drop this
       delegate_to: localhost
       register: _phdz_private_varfile_status
 
