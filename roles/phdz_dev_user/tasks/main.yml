@@ -7,7 +7,7 @@
       or phdz_defaults_user is none
       or (phdz_defaults_user | string | length) == 0
 
-- name: Ensure developer user exists
+- name: Ensure dev user exists
   ansible.builtin.user:
     name: '{{ phdz_defaults_user }}'
     shell: '{{ phdz_dev_user_shell }}'
@@ -16,7 +16,7 @@
     password: '{{ phdz_dev_user_password_hash }}'
     update_password: on_create
 
-- name: Configure sudoers entry
+- name: Configure dev user's sudoers entry
   ansible.builtin.template:
     src: sudoers.j2
     dest: '/etc/sudoers.d/{{ phdz_defaults_user }}'
@@ -25,3 +25,13 @@
     mode: '0440'
     validate: 'visudo -cf %s'
   when: phdz_dev_user_sudo | bool
+
+- name: Ensure dev user's SSH authorized_keys are populated
+  ansible.posix.authorized_key:
+    user: '{{ phdz_defaults_user }}'
+    key: '{{ item.key }}'
+    state: '{{ item.state | default("present") }}'
+    comment: '{{ item.comment | default(omit) }}'
+  loop: '{{ phdz_ssh_keys_authorized_keys }}'
+  loop_control:
+    label: '{{ item.description | default("authorized-key") }}'

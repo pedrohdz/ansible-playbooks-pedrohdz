@@ -81,9 +81,9 @@ phdz_gpg_keys_public:
 # SSH
 # -----------------------------------------------------------------------------
 phdz_ssh_keys_authorized_keys:
-  - key: >-
+  - description: molecule-test@example.invalid
+    key: >-
       ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIE5oRZlX2tG7YhZz8oY8oXw0m0m5q0mYVwqQm3sQ0aJ
-      molecule-test@example.invalid
     state: present
 
 phdz_ssh_keys_known_hosts:
