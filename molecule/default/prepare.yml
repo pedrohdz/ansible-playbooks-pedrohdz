@@ -12,7 +12,7 @@
 
     - name: Ensure Nix is installed
       ansible.builtin.import_role:
-        name: phdz_nix
+        name: phdz_sys_nix
 
     - name: Ensure test dev user is configured
       ansible.builtin.import_role:

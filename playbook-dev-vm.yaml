@@ -25,5 +25,5 @@
 
   roles:
     - phdz_sys_linux_baseline
-    - phdz_nix
+    - phdz_sys_nix
     - phdz_dev_user
