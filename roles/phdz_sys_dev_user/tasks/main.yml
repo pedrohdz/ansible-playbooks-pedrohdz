@@ -11,10 +11,10 @@
   become: '{{ phdz_defaults_use_become }}'
   ansible.builtin.user:
     name: '{{ phdz_defaults_user }}'
-    shell: '{{ phdz_dev_user_shell }}'
+    shell: '{{ phdz_sys_dev_user_shell }}'
     create_home: true
     state: present
-    password: '{{ phdz_dev_user_password_hash }}'
+    password: '{{ phdz_sys_dev_user_password_hash }}'
     update_password: on_create
 
 - name: Configure dev user's sudoers entry
@@ -26,7 +26,7 @@
     group: root
     mode: '0440'
     validate: 'visudo -cf %s'
-  when: phdz_dev_user_sudo | bool
+  when: phdz_sys_dev_user_sudo | bool
 
 - name: Ensure dev user's SSH authorized_keys are populated
   become: '{{ phdz_defaults_use_become }}'

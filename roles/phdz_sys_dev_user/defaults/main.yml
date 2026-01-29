@@ -1,6 +1,6 @@
 ---
-phdz_dev_user_shell: /bin/zsh
-phdz_dev_user_sudo: true
+phdz_sys_dev_user_shell: /bin/zsh
+phdz_sys_dev_user_sudo: true
 
 # -----------------------------------------------------------------------------
 # Password settings
@@ -11,4 +11,4 @@ phdz_dev_user_sudo: true
 #
 # Keep the resulting hash private; do not store real credentials in source.
 # Default disables password login.
-phdz_dev_user_password_hash: '!'
+phdz_sys_dev_user_password_hash: '!'
