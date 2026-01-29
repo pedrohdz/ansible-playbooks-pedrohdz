@@ -8,7 +8,7 @@
   tasks:
     - name: Ensure Linux baseline is prepared
       ansible.builtin.import_role:
-        name: phdz_linux_baseline
+        name: phdz_sys_linux_baseline
 
     - name: Ensure Nix is installed
       ansible.builtin.import_role:

@@ -1,0 +1,5 @@
+---
+galaxy_info:
+  become: true
+  galaxy_tags:
+    - system
