@@ -9,7 +9,7 @@
   vars:
     phdz_defaults_use_become: true
     _phdz_private_varfile: >-
-      {{ lookup('env', 'HOME') + '/.private/ansible/vars/home.yaml' }}
+      {{ lookup('env', 'HOME') + '/.private/ansible/dev-workstation/vars/baseline.yaml' }}
 
   pre_tasks:
     - name: Fail if vars file is missing
