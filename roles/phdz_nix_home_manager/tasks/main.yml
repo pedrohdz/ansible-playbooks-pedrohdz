@@ -1,3 +1,4 @@
+---
 - name: Ensure Nix Home‑Manager is installed
   ansible.builtin.shell:
     executable: /bin/bash

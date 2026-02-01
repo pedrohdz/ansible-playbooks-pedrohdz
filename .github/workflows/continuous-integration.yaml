@@ -1,9 +1,8 @@
 ---
 name: Continuous Integration
 
-
 on:
-  push: { }
+  push: {}
   # At 04:56 on Monday
   schedule:
     - cron: '56 4 * * 1'
@@ -73,7 +72,7 @@ jobs:
           {
             echo '/opt/local/sbin'
             echo '/opt/local/bin'
-            echo '/opt/local/libexec/gnubin' 
+            echo '/opt/local/libexec/gnubin'
           } >> "$GITHUB_PATH"
 
       - name: System information

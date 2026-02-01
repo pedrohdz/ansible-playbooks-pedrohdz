@@ -37,5 +37,3 @@ lint: |
   set -e
   yamllint --format=colored .
   ansible-lint --force-color
-
-...

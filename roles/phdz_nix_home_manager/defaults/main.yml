@@ -1,3 +1,4 @@
+---
 phdz_nix_home_manager_version: 'release-25.11'
 phdz_nix_home_manager_home_dir: '{{ phdz_defaults_home }}'
 phdz_nix_home_manager_base_config_dir: '.config/home-manager'
