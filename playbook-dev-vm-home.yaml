@@ -37,8 +37,8 @@
     - "{{ _phdz_private_varfile }}"
 
   roles:
+    - phdz_ssh_keys # Needed by phdz_homeshick
     - phdz_homeshick
     - phdz_gpg_keys
-    - phdz_ssh_keys
     - phdz_nix_home_manager
     - phdz_secure_home # Should almost always be last
