@@ -2,10 +2,10 @@
 # -----------------------------------------------------------------------------
 # System level workstation configuration
 # -----------------------------------------------------------------------------
-- name: Common Ansible Playbook
-  hosts: all
+- name: System level workstation configuration
   gather_facts: true
-
+  hosts:
+    - dev_workstation
   vars:
     phdz_defaults_use_become: true
     _phdz_private_varfile: >-

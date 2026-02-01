@@ -7,8 +7,8 @@
   vars:
     phdz_defaults_use_become: false # Should not be needed, but just for in case
   roles:
+    - phdz_ssh_keys # Needed by phdz_homeshick
     - phdz_homeshick
     - phdz_gpg_keys
-    - phdz_ssh_keys
     - phdz_nix_home_manager
     - phdz_secure_home # Should almost always be last
