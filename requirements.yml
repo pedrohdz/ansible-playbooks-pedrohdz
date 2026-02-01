@@ -1,6 +1,2 @@
 ---
-collections:
-  - name: https://github.com/Avinode/ansible-collection-devenv.git
-    type: git
-    version: main
-...
+collections: []
