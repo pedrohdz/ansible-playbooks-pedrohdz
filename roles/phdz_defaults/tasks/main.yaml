@@ -20,7 +20,7 @@
 # Resolve shared identity (user/group/home)
 # -----------------------------------------------------------------------------
 - name: Resolve default identity variables
-  ansible.builtin.import_tasks: resolve_identity.yml
+  ansible.builtin.import_tasks: resolve_identity.yaml
   tags:
     - phdz_defaults_global_defaults
 

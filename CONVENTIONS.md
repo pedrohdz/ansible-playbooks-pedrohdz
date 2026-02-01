@@ -214,7 +214,7 @@ Keep CI green:
 
 ## Documentation expectations
 - If you add/change public variables:
-  - Put defaults in the appropriate `defaults/main.yml`.
+  - Put defaults in the appropriate `defaults/main.yaml`.
   - Document them (role README and/or repo docs).
 - If you change a workflow/command, keep `README.md` accurate.
 

@@ -19,6 +19,6 @@ phdz_defaults_home: null
 # Derived-user tracking
 # -----------------------------------------------------------------------------
 # Indicates whether phdz_defaults_user was automatically derived by
-# roles/phdz_defaults/tasks/resolve_identity.yml rather than explicitly set.
+# roles/phdz_defaults/tasks/resolve_identity.yaml rather than explicitly set.
 # This is an internal diagnostic flag; do not set manually.
 phdz_defaults_user_auto_derived: false

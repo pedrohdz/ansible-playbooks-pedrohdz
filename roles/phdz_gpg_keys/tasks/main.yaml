@@ -44,7 +44,7 @@
       }}
 
 - name: Import provided GPG public keys
-  ansible.builtin.include_tasks: import_key.yml
+  ansible.builtin.include_tasks: import_key.yaml
   loop: '{{ phdz_gpg_keys_public }}'
   loop_control:
     loop_var: _phdz_gpg_keys_key_block
