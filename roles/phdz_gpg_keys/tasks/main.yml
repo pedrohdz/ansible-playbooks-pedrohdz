@@ -8,14 +8,14 @@
       --homedir '{{ phdz_gpg_keys_homedir }}'
       --list-keys
       --with-colons
-  register: _phdz_gpg_fetch_existing_fingerprints
+  register: _phdz_gpg_keys_fetch_existing_fingerprints
   changed_when: false
 
 - name: Derive list of existing fingerprints
   ansible.builtin.set_fact:
-    _phdz_gpg_existing_fingerprints: >-
+    _phdz_gpg_keys_existing_fingerprints: >-
       {{
-        (_phdz_gpg_fetch_existing_fingerprints.stdout_lines | default([]))
+        (_phdz_gpg_keys_fetch_existing_fingerprints.stdout_lines | default([]))
         | select('match', '^fpr:')
         | map('regex_replace', '^fpr:([^:]*:){8}([^:]+):.*$', '\2')
         | list
@@ -29,14 +29,14 @@
       --no-tty
       --homedir '{{ phdz_gpg_keys_homedir }}'
       --export-ownertrust
-  register: _phdz_gpg_fetch_existing_trusts
+  register: _phdz_gpg_keys_fetch_existing_trusts
   changed_when: false
 
 - name: Derive list of existing trusts
   ansible.builtin.set_fact:
-    _phdz_gpg_existing_ultimate_trusts: >-
+    _phdz_gpg_keys_existing_ultimate_trusts: >-
       {{
-        (_phdz_gpg_fetch_existing_trusts.stdout_lines | default([]))
+        (_phdz_gpg_keys_fetch_existing_trusts.stdout_lines | default([]))
         | reject('match', '^#')
         | select('match', '^.*:6:$')
         | map('regex_replace', '^([^:]+):6:$', '\1')
@@ -47,6 +47,6 @@
   ansible.builtin.include_tasks: import_key.yml
   loop: '{{ phdz_gpg_keys_public }}'
   loop_control:
-    loop_var: _phdz_gpg_key_block
+    loop_var: _phdz_gpg_keys_key_block
     label: 'embedded-public-key'
   when: phdz_gpg_keys_public | length > 0

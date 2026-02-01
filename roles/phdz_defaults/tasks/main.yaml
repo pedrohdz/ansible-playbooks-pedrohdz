@@ -5,13 +5,13 @@
 # Pattern for loading variables borrowed from:
 # - https://github.com/geerlingguy/ansible-role-postgresql/blob/master/tasks/variables.yml
 - name: Include OS family specific variables (Darwin).
-  include_vars: darwin.yaml
+  ansible.builtin.include_vars: darwin.yaml
   when: ansible_os_family == 'Darwin'
   tags:
     - phdz_defaults_global_defaults
 
 - name: Include OS family specific variables (Debian).
-  include_vars: debian.yaml
+  ansible.builtin.include_vars: debian.yaml
   when: ansible_os_family == 'Debian'
   tags:
     - phdz_defaults_global_defaults

@@ -1,12 +1,12 @@
 ---
 # SSH base directory for the user running the play.
-phdz_ssh_dir: '{{ phdz_defaults_home }}/.ssh'
+phdz_ssh_keys_dir: '{{ phdz_defaults_home }}/.ssh'
 
 # SSH authorized_keys path for the user running the play.
-phdz_ssh_authorized_keys_path: '{{ phdz_ssh_dir }}/authorized_keys'
+phdz_ssh_keys_authorized_keys_path: '{{ phdz_ssh_keys_dir }}/authorized_keys'
 
 # SSH known_hosts path for the user running the play.
-phdz_ssh_known_hosts_path: '{{ phdz_ssh_dir }}/known_hosts'
+phdz_ssh_keys_known_hosts_path: '{{ phdz_ssh_keys_dir }}/known_hosts'
 
 # List of authorized keys to manage for the target user.
 #

@@ -1,10 +1,4 @@
 ---
-galaxy_info:
-  role_name: phdz_sys_nix
-  become: true
-  galaxy_tags:
-    - system
-    - nix
 dependencies:
   - role: phdz_defaults
   - role: phdz_sys_linux_baseline

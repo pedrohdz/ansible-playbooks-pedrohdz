@@ -6,13 +6,13 @@
   ansible.builtin.tempfile:
     state: file
     suffix: '.asc'
-  register: _phdz_gpg_tmp_keyfile
+  register: _phdz_gpg_keys_tmp_keyfile
   changed_when: false
 
 - name: Write embedded public key to temp file
   ansible.builtin.copy:
-    dest: '{{ _phdz_gpg_tmp_keyfile.path }}'
-    content: '{{ _phdz_gpg_key_block }}'
+    dest: '{{ _phdz_gpg_keys_tmp_keyfile.path }}'
+    content: '{{ _phdz_gpg_keys_key_block }}'
     mode: '0600'
   changed_when: false
 
@@ -25,8 +25,8 @@
       --homedir '{{ phdz_gpg_keys_homedir }}'
       --show-keys
       --with-colons
-      '{{ _phdz_gpg_tmp_keyfile.path }}'
-  register: _phdz_gpg_fetch_import_fingerprint
+      '{{ _phdz_gpg_keys_tmp_keyfile.path }}'
+  register: _phdz_gpg_keys_fetch_import_fingerprint
   changed_when: false
 
 
@@ -36,9 +36,9 @@
 # Get list of fingerprints to import
 - name: Derive list of fingerprints to import
   ansible.builtin.set_fact:
-    _phdz_gpg_import_fingerprints: >-
+    _phdz_gpg_keys_import_fingerprints: >-
       {{
-        (_phdz_gpg_fetch_import_fingerprint.stdout_lines | default([]))
+        (_phdz_gpg_keys_fetch_import_fingerprint.stdout_lines | default([]))
         | select('match', '^fpr:')
         | map('regex_replace', '^fpr:([^:]*:){8}([^:]+):.*$', '\2')
         | list
@@ -48,27 +48,27 @@
 # Get primary key fingerprint
 - name: Derive primary key fingerprint in import
   ansible.builtin.set_fact:
-    _phdz_gpg_import_primary_fingerprints: >-
+    _phdz_gpg_keys_import_primary_fingerprints: >-
       {{
-        (_phdz_gpg_fetch_import_fingerprint.stdout | default(''))
+        (_phdz_gpg_keys_fetch_import_fingerprint.stdout | default(''))
         | regex_findall('(?ms)^pub:.*\n^fpr:(?:[^:]*:){8}([^:]+):')
         | list
       }}
 
 - name: Assert there is exactly one primary fingerprint
   ansible.builtin.assert:
-    that: _phdz_gpg_primary_fingerprint_count == 1
+    that: _phdz_gpg_keys_primary_fingerprint_count == 1
     fail_msg: >-
       Expected exactly one primary fingerprint, got
-      {{ _phdz_gpg_primary_fingerprint_count }}
+      {{ _phdz_gpg_keys_primary_fingerprint_count }}
   vars:
-    _phdz_gpg_primary_fingerprint_count: >-
-      {{ _phdz_gpg_import_primary_fingerprints | length }}
+    _phdz_gpg_keys_primary_fingerprint_count: >-
+      {{ _phdz_gpg_keys_import_primary_fingerprints | length }}
 
 - name: Derive primary fingerprint to import
   ansible.builtin.set_fact:
-    _phdz_gpg_import_primary_fingerprint: >-
-      {{ _phdz_gpg_import_primary_fingerprints | first }}
+    _phdz_gpg_keys_import_primary_fingerprint: >-
+      {{ _phdz_gpg_keys_import_primary_fingerprints | first }}
 
 
 #------------------------------------------------------------------------------
@@ -82,27 +82,28 @@
       --no-tty
       --yes
       --homedir '{{ phdz_gpg_keys_homedir }}'
-      --import '{{ _phdz_gpg_tmp_keyfile.path }}'
+      --import '{{ _phdz_gpg_keys_tmp_keyfile.path }}'
   changed_when: true
   when:
-    - _phdz_gpg_import_fingerprints | difference(_phdz_gpg_existing_fingerprints)
+    - _phdz_gpg_keys_import_fingerprints | difference(_phdz_gpg_keys_existing_fingerprints)
       | length != 0
 
 # Grant ultimate trust if needed
 - name: Ensure ultimate ownertrust for a single GPG key
-  ansible.builtin.shell: |
-    set -euo pipefail
-    printf '%s:6:\n' '{{ _phdz_gpg_import_primary_fingerprint }}' \
-      | gpg --import-ownertrust \
-          --batch \
-          --no-tty \
-          --yes \
-          --homedir '{{ phdz_gpg_keys_homedir }}'
-  args:
+  ansible.builtin.shell:
+    cmd: |
+      set -euo pipefail
+      printf '%s:6:\n' '{{ _phdz_gpg_keys_import_primary_fingerprint }}' \
+        | gpg --import-ownertrust \
+            --batch \
+            --no-tty \
+            --yes \
+            --homedir '{{ phdz_gpg_keys_homedir }}'
     executable: /bin/bash
+  changed_when: true
   when:
     - phdz_gpg_keys_ultimate_trust | bool
-    - _phdz_gpg_import_primary_fingerprint not in _phdz_gpg_existing_ultimate_trusts
+    - _phdz_gpg_keys_import_primary_fingerprint not in _phdz_gpg_keys_existing_ultimate_trusts
 
 
 #------------------------------------------------------------------------------
@@ -110,6 +111,6 @@
 #------------------------------------------------------------------------------
 - name: Remove temp key file
   ansible.builtin.file:
-    path: '{{ _phdz_gpg_tmp_keyfile.path }}'
+    path: '{{ _phdz_gpg_keys_tmp_keyfile.path }}'
     state: absent
   changed_when: false

@@ -11,7 +11,6 @@
     dest: '{{ phdz_homeshick_repo_dir }}/homeshick'
     version: '{{ phdz_homeshick_version }}'
     update: false
-  register: _homeshick_repo_clone
   notify: phdz_homeshick | on-clone-updated
 
 - name: Wait for operator confirmation (SSH key auth may be required)
@@ -19,12 +18,12 @@
     prompt: 'Press Enter once ready (SSH key authorization may be needed)...'
   when: phdz_homeshick_wait_for_ssh_key_auth | bool
 
+# noqa: latest[git]
 - name: Ensure homeshick castles are cloned
   ansible.builtin.git:
     repo: '{{ item }}'
     dest: '{{ phdz_homeshick_repo_dir }}/{{ _target_dir }}'
     update: false
-  register: _homeshick_castles_clone
   loop: '{{ phdz_homeshick_castles }}'
   when: phdz_homeshick_castles | length > 0
   notify: phdz_homeshick | on-clone-updated

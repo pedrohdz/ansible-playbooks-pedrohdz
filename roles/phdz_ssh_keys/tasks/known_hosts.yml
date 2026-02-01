@@ -1,14 +1,7 @@
 ---
-- name: Ensure known_hosts file exists (if managing known_hosts)
-  ansible.builtin.file:
-    path: '{{ phdz_ssh_known_hosts_path }}'
-    state: touch
-    access_time: preserve
-    modification_time: preserve
-
 - name: Ensure SSH known_hosts entries are managed
   ansible.builtin.known_hosts:
-    path: '{{ phdz_ssh_known_hosts_path }}'
+    path: '{{ phdz_ssh_keys_known_hosts_path }}'
     name: '{{ item.name }}'
     key: '{{ item.key | default(omit) }}'
     state: '{{ item.state | default("present") }}'

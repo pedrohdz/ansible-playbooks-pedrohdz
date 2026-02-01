@@ -11,6 +11,9 @@
   when: (not _phdz_secure_home_stat.stat.exists) and (not phdz_secure_home_allow_missing | bool)
 
 - name: Secure directory tree (when present and not a symlink)
+  when:
+    - _phdz_secure_home_stat.stat.exists
+    - not (_phdz_secure_home_stat.stat.islnk | default(false))
   block:
     - name: Fail when target exists but is not a directory
       ansible.builtin.fail:
@@ -92,6 +95,3 @@
         - item.stat is defined
         - item.stat.exists | default(false)
         - item.stat.isreg | default(false)
-  when:
-    - _phdz_secure_home_stat.stat.exists
-    - not (_phdz_secure_home_stat.stat.islnk | default(false))

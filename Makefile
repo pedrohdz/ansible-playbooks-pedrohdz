@@ -9,7 +9,9 @@ simple_molecule_targets := \
 
 all_phony_targets := \
 	$(simple_molecule_targets) \
+	ansible-lint \
 	clean \
+	lint \
 	molecule-destroy \
 	pre-commit \
 	super-linter \
@@ -71,6 +73,16 @@ _update-requirements:
 
 help:
 	$(info $(HELP))
+
+
+#------------------------------------------------------------------------------
+# Continuous integration
+#------------------------------------------------------------------------------
+ansible-lint:
+	ansible-lint --force-color
+
+lint: ansible-lint
+
 
 
 #------------------------------------------------------------------------------
