@@ -9,9 +9,10 @@ successfully, writes a brief notice to stderr, and returns {}.
 
 import argparse
 import json
+import re
+import shutil
 import subprocess
 import sys
-import shutil
 import yaml
 
 
@@ -59,14 +60,27 @@ def build_inventory(docs):
         hosts.append(hostname)
         hostvars[hostname] = {
             "ansible_connection": "ssh",
-            "ansible_ssh_common_args": f"-F {ssh_conf} -o ControlMaster=no",
+            "phdz_base_ansible_ssh_common_args": (
+                f"-F {ssh_conf}"
+                + f" -o ControlMaster=yes"
+                + f" -o ControlPath=~/.lima/tester/ssh-ansible-%r@%h:%p.sock"
+            ),
+            "ansible_ssh_common_args": "{{ phdz_base_ansible_ssh_common_args }}",
         }
 
     if not hosts:
         return {}
 
+    dev_hosts_re = re.compile(r"^(lima-)?dev[-.]")
+    dev_workstation = [
+            host for host in hosts
+            # TODO - Drop: host.startswith("lima-tester")
+            if (dev_hosts_re.match(host) or host.startswith("lima-tester"))
+            ]
+
     return {
         "all": {"children": ["lima_vm"]},
+        "dev_workstation": {"hosts": dev_workstation, "children": []},
         "lima_vm": {"hosts": hosts, "children": []},
         "_meta": {"hostvars": hostvars},
     }

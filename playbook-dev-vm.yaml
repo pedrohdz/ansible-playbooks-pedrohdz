@@ -1,4 +1,7 @@
 ---
+# -----------------------------------------------------------------------------
+# System level workstation configuration
+# -----------------------------------------------------------------------------
 - name: Common Ansible Playbook
   hosts: all
   gather_facts: true

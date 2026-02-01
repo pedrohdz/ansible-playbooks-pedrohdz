@@ -1,24 +1,41 @@
 ---
-- name: User level configuration (must not run as sudo)
+# -----------------------------------------------------------------------------
+# User level configuration workstation
+# -----------------------------------------------------------------------------
+- name: User level configuration workstation (must not run as sudo)
   become: false
   gather_facts: true
-  hosts: all
+  hosts:
+    - dev_workstation
   vars:
+    ansible_user: "{{ phdz_sys_dev_user_name }}"
+    ansible_ssh_common_args: >-
+      {{ phdz_base_ansible_ssh_common_args }}
+      -o IdentityFile=~/.ssh/id_ed25519
+
     phdz_defaults_use_become: false
     _phdz_private_varfile: >-
       {{ lookup('env', 'HOME') + '/.private/ansible/vars/home.yaml' }}
+
   pre_tasks:
+    - name: Show which user will be used
+      ansible.builtin.debug:
+        msg: "Running as {{ ansible_user }}"
+
     - name: Fail if vars file is missing
       ansible.builtin.stat:
         path: "{{ _phdz_private_varfile }}"
       delegate_to: localhost
       register: _phdz_private_varfile_status
+
     - name: Abort if vars file not found
       ansible.builtin.fail:
         msg: "Required vars file not found: {{ _phdz_private_varfile }}"
       when: not _phdz_private_varfile_status.stat.exists
+
   vars_files:
     - "{{ _phdz_private_varfile }}"
+
   roles:
     - phdz_homeshick
     - phdz_gpg_keys
