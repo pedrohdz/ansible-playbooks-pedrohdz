@@ -63,7 +63,7 @@ def build_inventory(docs):
             "phdz_base_ansible_ssh_common_args": (
                 f"-F {ssh_conf}"
                 + f" -o ControlMaster=yes"
-                + f" -o ControlPath=~/.lima/tester/ssh-ansible-%r@%h:%p.sock"
+                + f" -o ControlPath=~/.ssh/sockets/ansible-{hostname}-%r@%h:%p.sock"
             ),
             "ansible_ssh_common_args": "{{ phdz_base_ansible_ssh_common_args }}",
         }
@@ -74,8 +74,7 @@ def build_inventory(docs):
     dev_hosts_re = re.compile(r"^(lima-)?dev[-.]")
     dev_workstation = [
             host for host in hosts
-            # TODO - Drop: host.startswith("lima-tester")
-            if (dev_hosts_re.match(host) or host.startswith("lima-tester"))
+            if dev_hosts_re.match(host)
             ]
 
     return {
