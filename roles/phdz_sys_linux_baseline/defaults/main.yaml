@@ -1,5 +1,6 @@
 ---
 phdz_sys_linux_baseline_default_packages:
+  - build-essential
   - ca-certificates
   - curl
   - git
