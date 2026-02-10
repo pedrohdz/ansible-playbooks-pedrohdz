@@ -1,61 +1,110 @@
 # ansible-playbooks-pedrohdz
 
+These are my _Ansible_ playbooks for setting up my development workstations,
+and more.
+
+## Quick start
+
+This section is meant to help you get up and running quickly — from environment
+setup to running the main playbooks.
+
+> **Warning:**  
+> The file `~/.private/ansible/dev-workstation/vars/baseline.yaml` **must
+> exist** before running the playbooks.  
+> Use [molecule/default/group_vars/all.yml](molecule/default/group_vars/all.yml)
+> as an example to create and structure this file.
+
 ```shell
-ansible-playbook playbook-home.yaml
+./scripts/setup-local-ansible.sh
 
+py-activate
 
+ansible-inventory --graph
+
+ansible-playbook --limit lima-dev-vm playbook-dev-vm.yaml
+
+ansible-playbook --limit lima-dev-vm playbook-dev-vm-home.yaml
 ```
 
-## phdz_ssh_keys
+## Overview
 
-Manage SSH `authorized_keys` and `known_hosts` for the user running the play.
+This repository defines reproducible workstation setup through modular Ansible
+playbooks and roles, tested locally via Molecule and continuously in GitHub
+Actions.
 
-This role is user-scoped. It creates `~/.ssh` if needed and manages entries when
-the corresponding input lists are non-empty.
+**Ansible Playbooks**
 
-This role depends on `phdz_defaults` to resolve the user home directory via
-`phdz_defaults_home`.
+- `playbook-dev-vm.yaml`: performs system‑level setup (requires sudo).
+- `playbook-dev-vm-home.yaml`: applies per‑user configuration (non‑sudo).
 
-### Variables
+**Top‑level files**
 
-#### `phdz_ssh_keys_authorized_keys` (default: `[]`)
+- `requirements.yml`: Ansible Galaxy role and collection dependencies.
+- `requirements.txt`: pinned Python package dependencies for venv and CI.
+- `Makefile`: main entry point for linting, testing, and dependency updates.
+- `scripts/`: helper scripts, including `setup-local-ansible.sh` to bootstrap
+  a virtual environment.
 
-List of authorized key entries to manage.
+**Roles**
 
-Example:
+- `roles/phdz_sys_linux_baseline`: base package and service setup.
+- `roles/phdz_sys_nix`: installs/configures Nix daemon.
+- `roles/phdz_sys_dev_user`: creates the dev user and sudo privileges.
+- `roles/phdz_ssh_keys` / `roles/phdz_gpg_keys`: manage SSH and GPG keys.
+- `roles/phdz_homeshick`: clones dotfile repositories (“castles”).
+- `roles/phdz_nix_home_manager`: applies Nix Home‑Manager configuration.
+- `roles/phdz_secure_home`: secures home directory permissions.
 
-```yaml
-phdz_ssh_keys_authorized_keys:
-  - key: 'ssh-ed25519 AAAAC3... user@example.invalid'
-    state: present
-    comment: 'laptop'
+**Testing and CI**
+
+- `molecule/`: Molecule scenario definitions for verification.
+- `.github/workflows/`: GitHub Actions running linting and Molecule tests.
+
+## Development
+
+### Quick Start
+
+This section helps contributors set up a local development and testing
+environment.
+
+```shell
+./scripts/setup-local-ansible.sh
+
+py-activate
+
+# Run linting and molecule test
+make pre-commit
 ```
 
-#### `phdz_ssh_keys_known_hosts` (default: `[]`)
+Example Molecule commands:
 
-List of known_hosts entries to manage.
+```shell
+# Create a test container
+molecule create
 
-Optional field:
-- `description`: used only for Ansible loop labeling / output readability
+# Shell into the test container
+molecule shell
 
-Example:
+# Converge only (apply without destroy)
+molecule converge
 
-```yaml
-phdz_ssh_keys_known_hosts:
-  - name: github.com
-    description: github.com (ssh-ed25519)
-    key: >-
-      github.com ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFakeFakeFakeFakeFakeFakeFakeFakeFakeFakeFakeFakeFake
-    state: present
+# Run full test cycle (destroys current and new containers)
+molecule test
+
+# Verify after converge
+molecule verify
+
+# Cleanup instances
+molecule destroy
 ```
 
-#### `phdz_ssh_keys_hash_known_hosts` (default: `false`)
+### Update Python dependencies
 
-If true, set `hash_host: true` when writing entries with
-`ansible.builtin.known_hosts`.
+```shell
+make update-requirements
+```
 
-### Permissions
+## Resources
 
-This role focuses on ensuring the required files/directories exist and that
-entries are managed idempotently. If you want centralized enforcement of
-permissions, pair it with the `phdz_secure_home` role.
+- [LICENSE](LICENSE)
+- [Development Conventions](CONVENTIONS.md)
