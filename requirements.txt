@@ -38,5 +38,5 @@ ruamel.yaml==0.19.1
 setuptools==80.9.0
 subprocess-tee==0.4.2
 wcmatch==10.1
-wheel==0.45.1
+wheel==0.46.2
 yamllint==1.37.1
