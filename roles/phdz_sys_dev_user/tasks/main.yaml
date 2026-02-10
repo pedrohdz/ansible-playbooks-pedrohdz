@@ -1,0 +1,39 @@
+---
+- name: Fail if phdz_sys_dev_user_name not set
+  ansible.builtin.fail:
+    msg: '"phdz_sys_dev_user_name" must be set.'
+  when:
+    - phdz_sys_dev_user_name is none
+      or (phdz_sys_dev_user_name | string | length) == 0
+
+- name: Ensure dev user exists
+  become: '{{ phdz_defaults_use_become }}'
+  ansible.builtin.user:
+    name: '{{ phdz_sys_dev_user_name }}'
+    shell: '{{ phdz_sys_dev_user_shell }}'
+    create_home: true
+    state: present
+    password: '{{ phdz_sys_dev_user_password_hash }}'
+    update_password: on_create
+
+- name: Configure dev user's sudoers entry
+  become: '{{ phdz_defaults_use_become }}'
+  ansible.builtin.template:
+    src: sudoers.j2
+    dest: '/etc/sudoers.d/{{ phdz_sys_dev_user_name }}'
+    owner: root
+    group: root
+    mode: '0440'
+    validate: 'visudo -cf %s'
+  when: phdz_sys_dev_user_sudo | bool
+
+- name: Ensure dev user's SSH authorized_keys are populated
+  become: '{{ phdz_defaults_use_become }}'
+  ansible.posix.authorized_key:
+    user: '{{ phdz_sys_dev_user_name }}'
+    key: '{{ item.key }}'
+    state: '{{ item.state | default("present") }}'
+    comment: '{{ item.comment | default(omit) }}'
+  loop: '{{ phdz_ssh_keys_authorized_keys }}'
+  loop_control:
+    label: '{{ item.description | default("authorized-key") }}'

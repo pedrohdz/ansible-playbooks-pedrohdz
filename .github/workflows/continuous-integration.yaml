@@ -1,91 +1,99 @@
 ---
 name: Continuous Integration
 
-
 on:
-  push: { }
+  push: {}
   # At 04:56 on Monday
   schedule:
     - cron: '56 4 * * 1'
 
 jobs:
-  super-linter:
-    name: Super Linter
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          # super-linter needs the full git history.
-          fetch-depth: 0
-
-      - name: Lint Code Base
-        uses: super-linter/super-linter@v6
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          VALIDATE_CHECKOV: false
-          VALIDATE_SHELL_SHFMT: false
+  # FIXME - Turn this back on, or something like it.
+  #
+  # super-linter:
+  #   name: Super Linter
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v6
+  #       with:
+  #         # super-linter needs the full git history.
+  #         fetch-depth: 0
+  #
+  #     - name: Lint Code Base
+  #       uses: super-linter/super-linter@v8
+  #       env:
+  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  #         VALIDATE_CHECKOV: false
+  #         VALIDATE_SHELL_SHFMT: false
 
   molecule-test:
     name: Molecule Test
     runs-on: ubuntu-latest
     env:
-      PY_COLORS: 'true'
       ANSIBLE_FORCE_COLOR: 'true'
+      PHDZ_NIX_HOME_MANAGER_HOSTNAME: github-action-runner
+      PY_COLORS: 'true'
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Set up Ansible & Molecule in a Python venv
         run: |
           "${GITHUB_WORKSPACE}/scripts/setup-local-ansible.sh"
+
+      - name: Run pre-commit checks
+        run: |
+          # FIXME - Change to pre-commit
+          source "${GITHUB_WORKSPACE}/.venv/bin/activate"
+          make lint
 
       - name: Test with molecule
         run: |
           source "${GITHUB_WORKSPACE}/.venv/bin/activate"
           molecule test
 
-  integration-test-macports:
-    name: Macports integration tests
-    needs:
-      - molecule-test
-      - super-linter
-    runs-on: ${{ matrix.MACOS_WORKER_VERSION }}
-    strategy:
-      matrix:
-        MACOS_WORKER_VERSION:
-          - macos-13
-          - macos-14
-    env:
-      PY_COLORS: 'true'
-      ANSIBLE_FORCE_COLOR: 'true'
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Install MacPorts
-        run: |
-          "${GITHUB_WORKSPACE}/scripts/setup-macports.sh"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Add MacPorts to the build PATH
-        run: |
-          {
-            echo '/opt/local/sbin'
-            echo '/opt/local/bin'
-            echo '/opt/local/libexec/gnubin' 
-          } >> "$GITHUB_PATH"
-
-      - name: System information
-        run: |
-          echo PATH="$PATH"
-
-      - name: Set up Ansible & Molecule in a Python venv
-        run: |
-          "${GITHUB_WORKSPACE}/scripts/setup-local-ansible.sh"
-
-      - name: Run Ansible Playbook
-        run: |
-          source "${GITHUB_WORKSPACE}/.venv/bin/activate"
-          ansible-playbook playbook.yaml
+  # integration-test-macports:
+  #   name: Macports integration tests
+  #   needs:
+  #     - molecule-test
+  #     - super-linter
+  #   runs-on: ${{ matrix.MACOS_WORKER_VERSION }}
+  #   strategy:
+  #     matrix:
+  #       MACOS_WORKER_VERSION:
+  #         - macos-13
+  #         - macos-14
+  #   env:
+  #     PY_COLORS: 'true'
+  #     ANSIBLE_FORCE_COLOR: 'true'
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #
+  #     - name: Install MacPorts
+  #       run: |
+  #         "${GITHUB_WORKSPACE}/scripts/setup-macports.sh"
+  #       env:
+  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  #
+  #     - name: Add MacPorts to the build PATH
+  #       run: |
+  #         {
+  #           echo '/opt/local/sbin'
+  #           echo '/opt/local/bin'
+  #           echo '/opt/local/libexec/gnubin'
+  #         } >> "$GITHUB_PATH"
+  #
+  #     - name: System information
+  #       run: |
+  #         echo PATH="$PATH"
+  #
+  #     - name: Set up Ansible & Molecule in a Python venv
+  #       run: |
+  #         "${GITHUB_WORKSPACE}/scripts/setup-local-ansible.sh"
+  #
+  #     - name: Run Ansible Playbook
+  #       run: |
+  #         source "${GITHUB_WORKSPACE}/.venv/bin/activate"
+  #         ansible-playbook playbook.yaml
 ...

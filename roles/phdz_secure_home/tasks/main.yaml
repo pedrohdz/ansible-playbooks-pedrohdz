@@ -1,0 +1,13 @@
+---
+- name: Lock down the home directory itself
+  ansible.builtin.include_tasks: lock_home.yaml
+  when: phdz_secure_home_lock_home | bool
+
+- name: Secure home directories
+  ansible.builtin.include_tasks: apply_rule.yaml
+  loop: '{{ phdz_secure_home_dirs }}'
+  loop_control:
+    loop_var: _phdz_secure_home_dir
+    label: '{{ phdz_defaults_home }}/{{ _phdz_secure_home_dir }}'
+  vars:
+    phdz_secure_home_dir: '{{ _phdz_secure_home_dir }}'

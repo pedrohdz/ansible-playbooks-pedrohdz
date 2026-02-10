@@ -1,8 +1,0 @@
-#------------------------------------------------------------------------------
-# Things that do not want to run on GitHub Action Runners
-#------------------------------------------------------------------------------
-avinode_devenv_packages:
-  - name: ffmpeg
-    macports:
-      variant_name: ffmpeg
-      variant: +gpl2+gpl3+nonfree

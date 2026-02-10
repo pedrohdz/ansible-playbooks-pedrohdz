@@ -1,8 +1,2 @@
 ---
-collections:
-  - name: https://github.com/Avinode/ansible-collection-devenv.git
-    type: git
-    version: main
-  # Pull latest version of `community.docker`
-  - name: community.docker
-...
+collections: []

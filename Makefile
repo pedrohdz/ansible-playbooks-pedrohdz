@@ -10,6 +10,9 @@ simple_molecule_targets := \
 all_phony_targets := \
 	$(simple_molecule_targets) \
 	clean \
+	lint \
+	lint-ansible \
+	lint-yaml \
 	molecule-destroy \
 	pre-commit \
 	super-linter \
@@ -59,19 +62,30 @@ clean:
 update-requirements: | clean _update-requirements clean
 
 _update-requirements:
-	/opt/local/bin/python3 -m venv .venv
+	python3 -m venv .venv
 	.venv/bin/pip install --upgrade --upgrade-strategy eager wheel setuptools pip
 	.venv/bin/pip install \
 			ansible \
 			ansible-lint \
 			certifi \
 			molecule \
-			'molecule-plugins[docker,vagrant]' \
-			python-vagrant
+			'molecule-plugins[podman]'
 	.venv/bin/pip freeze > requirements.txt
 
 help:
 	$(info $(HELP))
+
+
+#------------------------------------------------------------------------------
+# Continuous integration
+#------------------------------------------------------------------------------
+lint-ansible:
+	ansible-lint --force-color
+
+lint-yaml:
+	yamllint .
+
+lint: lint-ansible lint-yaml
 
 
 #------------------------------------------------------------------------------

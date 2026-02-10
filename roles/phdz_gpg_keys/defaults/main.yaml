@@ -1,0 +1,9 @@
+---
+# List of embedded ASCII-armored public keys to import.
+phdz_gpg_keys_public: []
+
+# GnuPG home directory. Depends on phdz_defaults (phdz_defaults_home).
+phdz_gpg_keys_homedir: '{{ phdz_defaults_home }}/.gnupg'
+
+# If true, set imported keys' ownertrust to "ultimate" (trust level 6).
+phdz_gpg_keys_ultimate_trust: false

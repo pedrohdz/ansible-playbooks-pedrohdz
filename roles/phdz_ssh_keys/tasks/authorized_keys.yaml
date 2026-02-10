@@ -1,0 +1,11 @@
+---
+- name: Ensure SSH authorized_keys are managed
+  ansible.posix.authorized_key:
+    user: '{{ ansible_user_id }}'
+    key: '{{ item.key }}'
+    state: '{{ item.state | default("present") }}'
+    comment: '{{ item.comment | default(omit) }}'
+    path: '{{ phdz_ssh_keys_authorized_keys_path }}'
+  loop: '{{ phdz_ssh_keys_authorized_keys }}'
+  loop_control:
+    label: '{{ item.comment | default("authorized-key") }}'

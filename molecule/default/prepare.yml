@@ -1,0 +1,10 @@
+---
+- name: Prepare instances for testing
+  hosts: all
+  gather_facts: true
+  vars:
+    phdz_defaults_use_become: true
+  roles:
+    - phdz_sys_linux_baseline
+    - phdz_sys_nix
+    - phdz_sys_dev_user

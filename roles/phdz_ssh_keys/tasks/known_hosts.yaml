@@ -1,0 +1,11 @@
+---
+- name: Ensure SSH known_hosts entries are managed
+  ansible.builtin.known_hosts:
+    path: '{{ phdz_ssh_keys_known_hosts_path }}'
+    name: '{{ item.name }}'
+    key: '{{ item.key | default(omit) }}'
+    state: '{{ item.state | default("present") }}'
+    hash_host: '{{ phdz_ssh_keys_hash_known_hosts | bool }}'
+  loop: '{{ phdz_ssh_keys_known_hosts }}'
+  loop_control:
+    label: '{{ item.description | default(item.name) }}'

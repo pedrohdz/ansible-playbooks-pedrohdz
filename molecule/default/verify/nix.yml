@@ -1,0 +1,33 @@
+---
+- name: Assert Nix is installed (binary exists)
+  ansible.builtin.stat:
+    path: /nix/var/nix/profiles/default/bin/nix
+  register: _phdz_sys_nix_verify_stat
+
+- name: Assert Nix binary is present
+  ansible.builtin.assert:
+    that:
+      - _phdz_sys_nix_verify_stat.stat.exists
+
+- name: Gather service facts
+  ansible.builtin.service_facts:
+
+- name: Assert nix-daemon service is running (facts)
+  ansible.builtin.assert:
+    that:
+      - ansible_facts.services['nix-daemon.service'] is defined
+      - ansible_facts.services['nix-daemon.service'].state == 'running'
+
+- name: Verify nix-daemon would be started and enabled (check mode)
+  become: true
+  ansible.builtin.systemd:
+    name: nix-daemon.service
+    state: started
+    enabled: true
+  check_mode: true
+  register: _phdz_sys_nix_systemd_check
+
+- name: Assert nix-daemon is already started and enabled
+  ansible.builtin.assert:
+    that:
+      - not _phdz_sys_nix_systemd_check.changed

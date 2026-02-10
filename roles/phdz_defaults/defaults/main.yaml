@@ -1,0 +1,24 @@
+---
+phdz_defaults_use_become: false
+phdz_defaults_force_upgrade_all: false
+phdz_defaults_prefix: /opt/devenv
+
+phdz_defaults_packages_update_cache: false
+
+# -----------------------------------------------------------------------------
+# Shared identity defaults
+# -----------------------------------------------------------------------------
+# These start as null and are computed by roles/phdz_defaults/tasks/resolve_identity.yml
+# unless the user overrides them via inventory/group_vars/host_vars.
+phdz_defaults_user: null
+phdz_defaults_group: null
+phdz_defaults_home: null
+
+
+# -----------------------------------------------------------------------------
+# Derived-user tracking
+# -----------------------------------------------------------------------------
+# Indicates whether phdz_defaults_user was automatically derived by
+# roles/phdz_defaults/tasks/resolve_identity.yaml rather than explicitly set.
+# This is an internal diagnostic flag; do not set manually.
+phdz_defaults_user_auto_derived: false

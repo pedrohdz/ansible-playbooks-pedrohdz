@@ -1,88 +1,110 @@
 # ansible-playbooks-pedrohdz
 
+These are my _Ansible_ playbooks for setting up my development workstations,
+and more.
 
-## Installation
+## Quick start
 
-First you need to manually [install MacPorts][INSTALL_MACPORTS] and make sure
-the your PATH starts with `/opt/local/libexec/gnubin:/opt/local/bin:/opt/local/sbin`.
+This section is meant to help you get up and running quickly — from environment
+setup to running the main playbooks.
 
-Then:
+> **Warning:**  
+> The file `~/.private/ansible/dev-workstation/vars/baseline.yaml` **must
+> exist** before running the playbooks.  
+> Use [molecule/default/group_vars/all.yml](molecule/default/group_vars/all.yml)
+> as an example to create and structure this file.
 
-```bash
+```shell
 ./scripts/setup-local-ansible.sh
-source .venv/bin/activate
+
+py-activate
+
+ansible-inventory --graph
+
+ansible-playbook --limit lima-dev-vm playbook-dev-vm.yaml
+
+ansible-playbook --limit lima-dev-vm playbook-dev-vm-home.yaml
 ```
 
-To run the playbook:
+## Overview
 
-```bash
-ansible-playbook playbook.yaml --ask-become-pass
+This repository defines reproducible workstation setup through modular Ansible
+playbooks and roles, tested locally via Molecule and continuously in GitHub
+Actions.
+
+**Ansible Playbooks**
+
+- `playbook-dev-vm.yaml`: performs system‑level setup (requires sudo).
+- `playbook-dev-vm-home.yaml`: applies per‑user configuration (non‑sudo).
+
+**Top‑level files**
+
+- `requirements.yml`: Ansible Galaxy role and collection dependencies.
+- `requirements.txt`: pinned Python package dependencies for venv and CI.
+- `Makefile`: main entry point for linting, testing, and dependency updates.
+- `scripts/`: helper scripts, including `setup-local-ansible.sh` to bootstrap
+  a virtual environment.
+
+**Roles**
+
+- `roles/phdz_sys_linux_baseline`: base package and service setup.
+- `roles/phdz_sys_nix`: installs/configures Nix daemon.
+- `roles/phdz_sys_dev_user`: creates the dev user and sudo privileges.
+- `roles/phdz_ssh_keys` / `roles/phdz_gpg_keys`: manage SSH and GPG keys.
+- `roles/phdz_homeshick`: clones dotfile repositories (“castles”).
+- `roles/phdz_nix_home_manager`: applies Nix Home‑Manager configuration.
+- `roles/phdz_secure_home`: secures home directory permissions.
+
+**Testing and CI**
+
+- `molecule/`: Molecule scenario definitions for verification.
+- `.github/workflows/`: GitHub Actions running linting and Molecule tests.
+
+## Development
+
+### Quick Start
+
+This section helps contributors set up a local development and testing
+environment.
+
+```shell
+./scripts/setup-local-ansible.sh
+
+py-activate
+
+# Run linting and molecule test
+make pre-commit
 ```
 
-Update your `~/.profile` with:
+Example Molecule commands:
 
-```sh
-export PATH="/opt/devenv/bin:/opt/local/libexec/gnubin:/opt/local/bin:/opt/local/sbin:$PATH"
-export MANPATH="/opt/local/share/man:$MANPATH"
-```
-
-In your `~/.bashrc`, add the following to get the Bash completions:
-
-```bash
-source /opt/devenv/etc/bash_completion.d/*.sh
-source /opt/local/etc/bash_completion.d/*
-```
-
-
-## Testing and development
-
-```bash
+```shell
+# Create a test container
 molecule create
+
+# Shell into the test container
+molecule shell
+
+# Converge only (apply without destroy)
 molecule converge
-molecule list
-molecule login
+
+# Run full test cycle (destroys current and new containers)
+molecule test
+
+# Verify after converge
+molecule verify
+
+# Cleanup instances
 molecule destroy
 ```
 
-Complete end-to-end testing:
+### Update Python dependencies
 
-```bash
-molecule test
+```shell
+make update-requirements
 ```
 
-Using [Vagrant][VAGRANT] with [VirtualBox][VIRTUAlBOX], the default, can result
-in at least 50% faster testing times over [Docker][DOCKER].  If you would like
-to run with *Docker* either way:
+## Resources
 
-```bash
-molecule create --scenario-name docker
-molecule converge --scenario-name docker
-molecule test --scenario-name docker
-molecule destroy --scenario-name docker
-```
-
-[VAGRANT]: https://www.vagrantup.com/
-[VIRTUAlBOX]: https://www.virtualbox.org/
-[DOCKER]: https://www.docker.com/
-
-Running [github/super-linter](https://github.com/github/super-linter) locally
-to help debug GitHub Action issues:
-
-```bash
-docker pull github/super-linter:slim-latest
-docker run -e RUN_LOCAL=true -v $PWD:/tmp/lint github/super-linter:slim-latest
-```
-
-More information can be found at:
-
-- [Run Super-Linter locally to test your branch of code](https://github.com/github/super-linter/blob/master/docs/run-linter-locally.md)
-
-
-## Other helpful commands
-
-```bash
-ansible-galaxy install -r requirements.yaml --force --force-with-deps
-```
-
-
-[INSTALL_MACPORTS]: https://www.macports.org/install.php
+- [LICENSE](LICENSE)
+- [Development Conventions](CONVENTIONS.md)

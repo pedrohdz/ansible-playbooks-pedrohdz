@@ -1,25 +1,18 @@
 ---
-- name: System level playbook under test
-  import_playbook: ../../playbook.yaml
-  tags:
-    - molecule-system
-
-- name: Ensure test user account
+- name: Test user configuration roles
+  become: true
+  become_user: "{{ phdz_sys_dev_user_name }}" # ansible_user does not work with nix
+  gather_facts: true
   hosts: all
-  tasks:
-    - name: Create dummy user account
-      ansible.builtin.user:
-        name: rusty
-        shell: /bin/zsh
-        password: '!'
-  tags:
-    - molecule-home
-  become: true
 
-- name: User home level playbook under test
-  import_playbook: ../../playbook-home.yaml
-  become: true
-  become_user: rusty
-  tags:
-    - molecule-home
-...
+  vars:
+    phdz_defaults_use_become: false # Should not be needed, but just for in case
+    phdz_nix_home_manager_hostname: >-
+      {{ lookup('env', 'PHDZ_NIX_HOME_MANAGER_HOSTNAME') | default(ansible_hostname, true) }}
+
+  roles:
+    - phdz_ssh_keys # Needed by phdz_homeshick
+    - phdz_homeshick
+    - phdz_gpg_keys
+    - phdz_nix_home_manager
+    - phdz_secure_home # Should almost always be last

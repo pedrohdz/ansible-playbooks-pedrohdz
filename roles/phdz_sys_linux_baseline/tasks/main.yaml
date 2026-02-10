@@ -1,0 +1,75 @@
+---
+- name: Ensure Debian system baseline is configured
+  when: ansible_facts['os_family'] == 'Debian'
+  block:
+    - name: Update apt cache
+      become: '{{ phdz_defaults_use_become | default(false) }}'
+      ansible.builtin.apt:
+        update_cache: true
+        cache_valid_time: 3600
+      register: _phdz_sys_linux_baseline_result
+      retries: 5
+      delay: 10
+      until: _phdz_sys_linux_baseline_result is succeeded
+      vars:
+        ansible_command_timeout: 180
+
+    - name: Dist-upgrade system packages
+      become: '{{ phdz_defaults_use_become | default(false) }}'
+      ansible.builtin.apt:
+        upgrade: dist
+      when: phdz_sys_linux_baseline_upgrade | bool
+      register: _phdz_sys_linux_baseline_result
+      retries: 5
+      delay: 10
+      until: _phdz_sys_linux_baseline_result is succeeded
+      vars:
+        ansible_command_timeout: 180
+
+    - name: Ensure baseline packages are installed
+      become: '{{ phdz_defaults_use_become | default(false) }}'
+      ansible.builtin.apt:
+        name: '{{ _phdz_sys_linux_baseline_all_packages }}'
+        state: present
+      vars:
+        _phdz_sys_linux_baseline_all_packages: >-
+          {{ (phdz_sys_linux_baseline_default_packages + phdz_sys_linux_baseline_packages)
+             | unique | list }}
+        ansible_command_timeout: 180
+      register: _phdz_sys_linux_baseline_result
+      retries: 5
+      delay: 10
+      until: _phdz_sys_linux_baseline_result is succeeded
+
+    - name: Clean up apt cache and unused packages
+      become: '{{ phdz_defaults_use_become | default(false) }}'
+      ansible.builtin.apt:
+        autoremove: true
+        autoclean: true
+      register: _phdz_sys_linux_baseline_result
+      retries: 5
+      delay: 10
+      until: _phdz_sys_linux_baseline_result is succeeded
+      vars:
+        ansible_command_timeout: 180
+
+    - name: Configure system alternatives
+      become: '{{ phdz_defaults_use_become | default(false) }}'
+      community.general.alternatives:
+        name: '{{ item.key }}'
+        path: '{{ item.value }}'
+      loop: '{{ _phdz_sys_linux_baseline_alternatives | dict2items }}'
+      vars:
+        _phdz_sys_linux_baseline_alternatives: >-
+          {{ phdz_sys_linux_baseline_default_alternatives
+             | combine(phdz_sys_linux_baseline_alternatives) }}
+      when: _phdz_sys_linux_baseline_alternatives | length > 0
+
+    - name: Ensure essential services are running
+      become: '{{ phdz_defaults_use_become | default(false) }}'
+      ansible.builtin.service:
+        name: '{{ item }}'
+        state: started
+        enabled: true
+      loop: '{{ phdz_sys_linux_baseline_services }}'
+      when: phdz_sys_linux_baseline_services | length > 0

@@ -1,0 +1,20 @@
+---
+dependencies:
+  - role: phdz_defaults
+
+galaxy_info:
+  role_name: phdz_gpg_keys
+  author: pedrohdz
+  description: Import GPG public keys into the user keyring and optionally set ownertrust.
+  license: MIT
+  min_ansible_version: '2.14'
+  platforms:
+    - name: Debian
+      versions:
+        - all
+    - name: Ubuntu
+      versions:
+        - all
+    - name: MacOSX
+      versions:
+        - all

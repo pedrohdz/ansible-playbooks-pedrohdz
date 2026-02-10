@@ -1,0 +1,10 @@
+---
+phdz_nix_home_manager_version: 'release-25.11'
+
+# Nix Flake URI
+phdz_nix_home_manager_home_dir: '{{ phdz_defaults_home }}'
+phdz_nix_home_manager_base_config_dir: '.config/home-manager'
+phdz_nix_home_manager_config_dir: '{{ phdz_nix_home_manager_home_dir }}/{{ phdz_nix_home_manager_base_config_dir }}'
+phdz_nix_home_manager_hostname: '{{ ansible_hostname }}'
+phdz_nix_home_manager_flake_uri: >-
+  {{ phdz_nix_home_manager_config_dir }}#{{ phdz_defaults_user }}@{{ phdz_nix_home_manager_hostname }}

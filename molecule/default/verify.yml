@@ -1,10 +1,7 @@
 ---
-# This is an example playbook to execute Ansible tests.
 - name: Verify
   hosts: all
-  gather_facts: false
+  gather_facts: true
   tasks:
-  - name: Example assertion
-    ansible.builtin.assert:
-      that: true
-...
+    - name: Verify the Nix installation
+      ansible.builtin.import_tasks: verify/nix.yml

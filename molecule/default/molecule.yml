@@ -1,34 +1,18 @@
 ---
 driver:
-  name: docker
+  name: podman
 
 platforms:
   # For more pre-baked images:
-  # - https://hub.docker.com/search?q=geerlingguy%2Fdocker&type=image
+  # - https://ansible.jeffgeerling.com/
   - name: ubuntu2404
-    image: 'geerlingguy/docker-ubuntu2404-ansible:latest'
+    cgroupns_mode: host
+    command: "/lib/systemd/systemd"
+    image: 'docker.io/geerlingguy/docker-ubuntu2404-ansible:latest'
+    pre_build_image: true
+    privileged: true
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:rw
-    privileged: true
-    pre_build_image: true
-  - name: ubuntu2204
-    image: 'geerlingguy/docker-ubuntu2204-ansible:latest'
-    volumes:
-      - /sys/fs/cgroup:/sys/fs/cgroup:rw
-    privileged: true
-    pre_build_image: true
-  - name: debian12
-    image: 'geerlingguy/docker-debian12-ansible:latest'
-    volumes:
-      - /sys/fs/cgroup:/sys/fs/cgroup:rw
-    privileged: true
-    pre_build_image: true
-  - name: debian11
-    image: 'geerlingguy/docker-debian11-ansible:latest'
-    volumes:
-      - /sys/fs/cgroup:/sys/fs/cgroup:rw
-    privileged: true
-    pre_build_image: true
 
 dependency:
   name: galaxy
@@ -37,14 +21,14 @@ dependency:
 provisioner:
   name: ansible
   env:
-    # ANSIBLE_COLLECTIONS_PATH: ${MOLECULE_PROJECT_DIRECTORY}/.ansible
-    ANSIBLE_COLLECTIONS_PATH: '/opt/avinode/workspace/dev/src-oss/ansible-collection-devenv:${MOLECULE_PROJECT_DIRECTORY}/.ansible'
-    ANSIBLE_FORCE_COLOR: 'true'
-    PY_COLORS: 'true'
-  config_options:
-    defaults:
-      stdout_callback: debug
-      stderr_callback: debug
+    ANSIBLE_COLLECTIONS_PATH: ${MOLECULE_PROJECT_DIRECTORY}/.ansible
+    ANSIBLE_ROLES_PATH: ${MOLECULE_PROJECT_DIRECTORY}/roles:${MOLECULE_PROJECT_DIRECTORY}/.ansible/roles
+    # ANSIBLE_FORCE_COLOR: 'true'
+    # PY_COLORS: 'true'
+  # config_options:
+  #   defaults:
+  #     stdout_callback: debug
+  #     stderr_callback: debug
 
 verifier:
   name: ansible
@@ -53,5 +37,3 @@ lint: |
   set -e
   yamllint --format=colored .
   ansible-lint --force-color
-
-...

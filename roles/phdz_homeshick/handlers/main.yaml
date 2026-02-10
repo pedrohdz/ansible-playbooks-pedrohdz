@@ -1,0 +1,11 @@
+---
+- name: Link homeshick castles
+  ansible.builtin.command:
+    argv:
+      - /bin/bash
+      - '{{ phdz_homeshick_repo_dir }}/homeshick/bin/homeshick'
+      - --batch
+      - --force
+      - link
+  changed_when: true # TODO - Make cleaner
+  listen: phdz_homeshick | on-clone-updated

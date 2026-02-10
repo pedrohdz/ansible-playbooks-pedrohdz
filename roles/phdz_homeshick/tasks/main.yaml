@@ -1,0 +1,35 @@
+---
+- name: Ensure homeshick repos directory exists
+  ansible.builtin.file:
+    path: '{{ phdz_homeshick_repo_dir }}'
+    state: directory
+    mode: '0700'
+
+- name: Ensure homeshick is cloned
+  ansible.builtin.git:
+    repo: '{{ phdz_homeshick_repo_url }}'
+    dest: '{{ phdz_homeshick_repo_dir }}/homeshick'
+    version: '{{ phdz_homeshick_version }}'
+    update: false
+  notify: phdz_homeshick | on-clone-updated
+
+- name: Wait for operator confirmation (SSH key auth may be required)
+  ansible.builtin.pause:
+    prompt: 'Press Enter once ready (SSH key authorization may be needed)...'
+  when: phdz_homeshick_wait_for_ssh_key_auth | bool
+
+# noqa: latest[git]
+- name: Ensure homeshick castles are cloned
+  ansible.builtin.git:
+    repo: '{{ item }}'
+    dest: '{{ phdz_homeshick_repo_dir }}/{{ _target_dir }}'
+    update: false
+  loop: '{{ phdz_homeshick_castles }}'
+  when: phdz_homeshick_castles | length > 0
+  notify: phdz_homeshick | on-clone-updated
+  vars:
+    _target_dir: >-
+      {{ (item | regex_replace('.*/', '')) | regex_replace('\.git$', '') }}
+
+- name: Flush pending handlers
+  ansible.builtin.meta: flush_handlers

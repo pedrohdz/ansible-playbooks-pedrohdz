@@ -1,0 +1,32 @@
+---
+# -----------------------------------------------------------------------------
+# System level workstation configuration
+# -----------------------------------------------------------------------------
+- name: System level workstation configuration
+  gather_facts: true
+  hosts:
+    - dev_workstation
+  vars:
+    phdz_defaults_use_become: true
+    _phdz_private_varfile: >-
+      {{ lookup('env', 'HOME') + '/.private/ansible/dev-workstation/vars/baseline.yaml' }}
+
+  pre_tasks:
+    - name: Fail if vars file is missing
+      ansible.builtin.stat:
+        path: "{{ _phdz_private_varfile }}"
+      delegate_to: localhost
+      register: _phdz_private_varfile_status
+
+    - name: Abort if vars file not found
+      ansible.builtin.fail:
+        msg: "Required vars file not found: {{ _phdz_private_varfile }}"
+      when: not _phdz_private_varfile_status.stat.exists
+
+  vars_files:
+    - "{{ _phdz_private_varfile }}"
+
+  roles:
+    - phdz_sys_linux_baseline
+    - phdz_sys_nix
+    - phdz_sys_dev_user

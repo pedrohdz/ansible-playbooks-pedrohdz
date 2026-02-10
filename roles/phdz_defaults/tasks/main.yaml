@@ -1,0 +1,56 @@
+---
+# -----------------------------------------------------------------------------
+# Load defaults
+# -----------------------------------------------------------------------------
+# Pattern for loading variables borrowed from:
+# - https://github.com/geerlingguy/ansible-role-postgresql/blob/master/tasks/variables.yml
+- name: Include OS family specific variables (Darwin).
+  ansible.builtin.include_vars: darwin.yaml
+  when: ansible_os_family == 'Darwin'
+  tags:
+    - phdz_defaults_global_defaults
+
+- name: Include OS family specific variables (Debian).
+  ansible.builtin.include_vars: debian.yaml
+  when: ansible_os_family == 'Debian'
+  tags:
+    - phdz_defaults_global_defaults
+
+# -----------------------------------------------------------------------------
+# Resolve shared identity (user/group/home)
+# -----------------------------------------------------------------------------
+- name: Resolve default identity variables
+  ansible.builtin.import_tasks: resolve_identity.yaml
+  tags:
+    - phdz_defaults_global_defaults
+
+# -----------------------------------------------------------------------------
+# Define global variables
+# -----------------------------------------------------------------------------
+- name: Define phdz_defaults_default_group.
+  ansible.builtin.set_fact:
+    phdz_defaults_default_group: '{{ __phdz_defaults_default_group }}'
+  when: phdz_defaults_default_group is not defined
+  tags:
+    - phdz_defaults_global_defaults
+
+- name: Define phdz_defaults_default_directory_mode.
+  ansible.builtin.set_fact:
+    phdz_defaults_default_directory_mode: '{{ __phdz_defaults_default_directory_mode }}'
+  when: phdz_defaults_default_directory_mode is not defined
+  tags:
+    - phdz_defaults_global_defaults
+
+- name: Define phdz_defaults_default_owner.
+  ansible.builtin.set_fact:
+    phdz_defaults_default_owner: '{{ __phdz_defaults_default_owner }}'
+  when: phdz_defaults_default_owner is not defined
+  tags:
+    - phdz_defaults_global_defaults
+
+- name: Define phdz_defaults_python_path.
+  ansible.builtin.set_fact:
+    phdz_defaults_python_path: '{{ __phdz_defaults_python_path }}'
+  when: phdz_defaults_python_path is not defined
+  tags:
+    - phdz_defaults_global_defaults

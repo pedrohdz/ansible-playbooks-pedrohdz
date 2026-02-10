@@ -1,0 +1,5 @@
+---
+- name: Test phdz_homeshick role
+  hosts: localhost
+  roles:
+    - phdz_homeshick
