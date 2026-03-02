@@ -18,13 +18,7 @@ fi
 #------------------------------------------------------------------------------
 # Pick Python version
 #------------------------------------------------------------------------------
-if [ "${PYTHON:-}" ]; then
-  true # NOP
-elif [ -x /opt/local/bin/python3 ]; then
-  PYTHON=/opt/local/bin/python3
-else
-  PYTHON=/usr/bin/python3
-fi
+PYTHON=$(command -v python)
 
 set -o xtrace
 
