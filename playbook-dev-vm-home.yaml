@@ -9,10 +9,6 @@
     - dev_workstation
   vars:
     ansible_user: "{{ phdz_sys_dev_user_name }}"
-    ansible_ssh_common_args: >-
-      {{ phdz_base_ansible_ssh_common_args }}
-      -o IdentityFile=~/.ssh/id_ed25519
-
     phdz_defaults_use_become: false
     _phdz_private_varfile: >-
       {{ lookup('env', 'HOME') + '/.private/ansible/dev-workstation/vars/baseline.yaml' }}
