@@ -17,6 +17,36 @@
     _phdz_private_varfile: >-
       {{ lookup('env', 'HOME') + '/.private/ansible/dev-workstation/vars/baseline.yaml' }}
 
+    # TODO:
+    #   - move into group_vars/?
+    #   - make comment dynamic,pulled from regex?
+    #   - drop local SSH key from `make shell-user`
+    #
+    # ^\s*([^\s]+)\s+([^\s]+)(?:\s+(.+))?\s*$
+    #
+    _phdz_ssh_keys_authorized_keys:
+      - key: >-
+          {{
+            lookup('file', phdz_ssh_public_key_file)
+              | trim
+          }}
+        comment: foo-hoo
+      - key: >-
+          {{
+            lookup(
+              'file',
+              lookup('env', 'HOME') + '/.ssh/id_ed25519.pub'
+            )
+              | trim
+          }}
+        comment: foo-bar
+
+    phdz_ssh_keys_authorized_keys: >-
+      {{
+        phdz_ssh_keys_authorized_keys_extras | default([])
+          + _phdz_ssh_keys_authorized_keys
+      }}
+
   pre_tasks:
     - name: Show which user will be used
       ansible.builtin.debug:

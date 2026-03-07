@@ -54,18 +54,20 @@ def build_inventory(docs):
 
         hostname = inst.get("hostname")
         ssh_conf = inst.get("sshConfigFile")
+        ssh_key_file = doc.get("identityfile")
         if not hostname or not ssh_conf:
             continue
 
         hosts.append(hostname)
         hostvars[hostname] = {
             "ansible_connection": "ssh",
+            "ansible_ssh_common_args": "{{ phdz_base_ansible_ssh_common_args }}",
             "phdz_base_ansible_ssh_common_args": (
                 f"-F {ssh_conf}"
                 + f" -o ControlMaster=yes"
                 + f" -o ControlPath=~/.ssh/sockets/ansible-{hostname}-%r@%h:%p.sock"
             ),
-            "ansible_ssh_common_args": "{{ phdz_base_ansible_ssh_common_args }}",
+            "phdz_ssh_public_key_file": ssh_key_file + '.pub',
         }
 
     if not hosts:
