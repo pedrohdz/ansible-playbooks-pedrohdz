@@ -1,4 +1,3 @@
 ---
-# Default variables for copying SSH public keys
-phdz_copy_ssh_pubkeys_local_dir: "~/.ssh"
-phdz_copy_ssh_pubkeys_remote_dir: "~/.ssh"
+phdz_copy_ssh_pubkeys_local_dir: '{{ lookup("env", "HOME") }}/.ssh'
+phdz_copy_ssh_pubkeys_remote_dir: '{{ phdz_defaults_home }}/.ssh'
