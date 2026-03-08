@@ -4,3 +4,18 @@ phdz_homeshick_version: v2.0.1
 phdz_homeshick_repo_dir: '{{ ansible_facts["env"]["HOME"] }}/.homesick/repos'
 phdz_homeshick_castles: []
 phdz_homeshick_wait_for_ssh_key_auth: false
+
+
+#------------------------------------------------------------------------------
+# Git SSH configuration
+#------------------------------------------------------------------------------
+phdz_homeshick_ssh_sockets_dir: '{{ ansible_facts["env"]["HOME"] }}/.ssh/sockets'
+
+# TODO - ControlPath might cause problems if a castle in phdz_homeshick_castles
+# spans across Git account on the same server.  This will make for a single
+# socket used across accounts and create authorization issues.  Look into
+# fixing this.
+phdz_homeshick_ssh_opts: >-
+  -o 'ControlMaster=auto'
+  -o 'ControlPath={{ phdz_homeshick_ssh_sockets_dir }}/ansible-phdz-homeshick-%r@%h:%p.sock'
+  -o 'ControlPersist=2m'
