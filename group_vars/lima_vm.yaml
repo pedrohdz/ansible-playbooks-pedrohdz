@@ -1,0 +1,46 @@
+---
+ansible_ssh_common_args: >-
+  {{ phdz_lima_base_ansible_ssh_common_args }}
+
+#------------------------------------------------------------------------------
+#
+#------------------------------------------------------------------------------
+__phdz_ssh_key_regex: ^\s*([^\s]+)\s+([^\s]+)(?:\s+(.+))?\s*$
+__phdz_lima_ssh_public_key_string: >-
+  {{
+    lookup('file', phdz_lima_ssh_public_key_file)
+      | trim
+  }}
+
+__phdz_user_ssh_public_key_string: >-
+  {{
+    lookup(
+      'file',
+      lookup('env', 'HOME') + '/.ssh/id_ed25519.pub'
+    )
+      | trim
+  }}
+
+__phdz_ssh_keys_authorized_keys:
+  - key: >-
+      {{
+        __phdz_lima_ssh_public_key_string
+          | regex_replace(__phdz_ssh_key_regex, '\1 \2')
+      }}
+    comment: 'Lima shared key ({{ phdz_lima_hostname }})'
+  - key: >-
+      {{
+        __phdz_user_ssh_public_key_string
+          | regex_replace(__phdz_ssh_key_regex, '\1 \2')
+      }}
+    comment: >-
+      {{
+        __phdz_user_ssh_public_key_string
+          | regex_replace(__phdz_ssh_key_regex, '\3')
+      }}
+
+phdz_ssh_keys_authorized_keys: >-
+  {{
+    phdz_ssh_keys_authorized_keys_extras | default([])
+      + __phdz_ssh_keys_authorized_keys
+  }}
