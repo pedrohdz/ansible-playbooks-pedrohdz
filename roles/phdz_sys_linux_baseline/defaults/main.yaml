@@ -11,6 +11,7 @@ phdz_sys_linux_baseline_default_packages:
   - sudo
   - tmux
   - tree
+  - uidmap # Needed by Ansible/podman
   - unzip
   - vim
   - wget
