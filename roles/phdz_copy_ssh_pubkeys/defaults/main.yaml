@@ -1,0 +1,4 @@
+---
+# Default variables for copying SSH public keys
+phdz_copy_ssh_pubkeys_local_dir: "~/.ssh"
+phdz_copy_ssh_pubkeys_remote_dir: "~/.ssh"
