@@ -7,7 +7,7 @@ ignore: |
   /build/
   /.git/
   /tmp/
-  /.venv/
+  /.venv*/
   /.virtualenv/
 
 yaml-files:

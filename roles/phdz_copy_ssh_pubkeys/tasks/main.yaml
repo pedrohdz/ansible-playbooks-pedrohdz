@@ -1,0 +1,80 @@
+---
+- name: Find ids-* directories in SSH directory
+  ansible.builtin.find:
+    paths: "{{ phdz_copy_ssh_pubkeys_local_dir }}"
+    patterns: "ids-*"
+    file_type: directory
+    recurse: false
+  become: false # Needed for molecule to work
+  changed_when: false
+  delegate_to: localhost
+  register: _phdz_copy_ssh_pubkeys_subdirs
+
+- name: Find local SSH public keys
+  ansible.builtin.find:
+    paths: "{{ _phdz_copy_ssh_pubkeys_search_paths }}"
+    patterns: "id_*.pub"
+    recurse: false
+  become: false # Needed for molecule to work
+  changed_when: false
+  delegate_to: localhost
+  register: _phdz_copy_ssh_pubkeys_found
+  vars:
+    _phdz_copy_ssh_pubkeys_search_paths: >-
+      {{
+        [phdz_copy_ssh_pubkeys_local_dir]
+          + (_phdz_copy_ssh_pubkeys_subdirs.files | map(attribute='path')
+          | list)
+      }}
+
+- name: Process local SSH public keys to copy
+  vars:
+    _phdz_copy_ssh_pubkeys_local_prefix: >-
+      {{ (phdz_copy_ssh_pubkeys_local_dir | expanduser | realpath) + '/' }}
+
+    _phdz_copy_ssh_pubkeys_relative_key_paths: >-
+      {{
+        _phdz_copy_ssh_pubkeys_found.files
+          | default([])
+          | map(attribute='path')
+          | map('regex_replace', '^' + _phdz_copy_ssh_pubkeys_local_prefix, '')
+          | map('trim', '/')
+          | sort
+      }}
+
+  when: _phdz_copy_ssh_pubkeys_found.matched > 0
+  block:
+    - name: Ensure remote directories for public keys exist
+      ansible.builtin.file:
+        path: "{{ item }}"
+        state: directory
+        mode: "0700"
+      loop: "{{ _phdz_copy_ssh_pubkeys_dirs }}"
+      vars:
+        _phdz_copy_ssh_pubkeys_dirs: >-
+          {{
+            [phdz_copy_ssh_pubkeys_remote_dir]
+              | product(
+                _phdz_copy_ssh_pubkeys_relative_key_paths
+                  | default([])
+                  | map('dirname')
+                  | unique
+              )
+              | map('join', '/')
+          }}
+      loop_control:
+        label: "{{ item }}"
+
+    - name: Copy each public key to remote target
+      ansible.builtin.copy:
+        src: "{{ _phdz_copy_ssh_pubkeys_src }}"
+        dest: "{{ _phdz_copy_ssh_pubkeys_dest }}"
+        mode: "0600"
+      loop: "{{ _phdz_copy_ssh_pubkeys_relative_key_paths | default([]) }}"
+      vars:
+        _phdz_copy_ssh_pubkeys_dest: >-
+          {{ phdz_copy_ssh_pubkeys_remote_dir + '/' + item }}
+        _phdz_copy_ssh_pubkeys_src: >-
+          {{ _phdz_copy_ssh_pubkeys_local_prefix + '/' + item }}
+      loop_control:
+        label: "{{ _phdz_copy_ssh_pubkeys_dest }}"
