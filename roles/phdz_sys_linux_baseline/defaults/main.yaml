@@ -1,5 +1,6 @@
 ---
 phdz_sys_linux_baseline_default_packages:
+  - binfmt-support # Cross platform support for podman
   - build-essential
   - ca-certificates
   - curl
@@ -8,6 +9,7 @@ phdz_sys_linux_baseline_default_packages:
   - gpg-agent
   - less
   - makepasswd
+  - qemu-user-static # Cross platform support for podman
   - sudo
   - tmux
   - tree
