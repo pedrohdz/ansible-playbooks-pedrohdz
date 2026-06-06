@@ -15,15 +15,15 @@
     state: present
     password: '{{ phdz_sys_dev_user_password_hash }}'
     update_password: on_create
-  register: _phdz_sys_dev_user
+  register: _phdz_sys_dev_user_info
 
 - name: Ensure dev user home directory ownership and permissions
   become: '{{ phdz_defaults_use_become }}'
   ansible.builtin.file:
-    path: '{{ _phdz_sys_dev_user.home }}'
+    path: '{{ _phdz_sys_dev_user_info.home }}'
     state: directory
-    owner: '{{ _phdz_sys_dev_user.uid }}'
-    group: '{{ _phdz_sys_dev_user.group }}'
+    owner: '{{ _phdz_sys_dev_user_info.uid }}'
+    group: '{{ _phdz_sys_dev_user_info.group }}'
     mode: '0700'
 
 - name: Configure dev user's sudoers entry
