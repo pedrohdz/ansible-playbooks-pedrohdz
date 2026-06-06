@@ -8,9 +8,16 @@ phdz_secure_home_lock_home: true
 phdz_secure_home_home_mode: '0700'
 
 phdz_secure_home_dirs_default:
-  - .ssh
+  - .aider
+  - .claude
+  - .claude-accounts
+  - .codex
+  - .config
   - .gnupg
+  - .local
   - .password-store
+  - .private
+  - .ssh
 
 phdz_secure_home_dirs_extra: []
 
