@@ -1,0 +1,45 @@
+---
+- name: Check if Claude Code is already installed
+  ansible.builtin.stat:
+    path: '{{ phdz_claude_code_bin_path }}'
+  register: _phdz_claude_code_bin_stat
+
+- name: Install Claude Code via upstream native installer
+  when: not _phdz_claude_code_bin_stat.stat.exists
+  block:
+    - name: Create temporary file for upstream installer script
+      ansible.builtin.tempfile:
+        state: file
+        prefix: 'phdz-claude-code-install-'
+        suffix: '.sh'
+      register: _phdz_claude_code_installer_tmp
+
+    # ansible.builtin.get_url fails to download the file silently if the
+    # temporary file exists.  We just use ansible.builtin.tempfile above to
+    # create a safe name
+    - name: Remove temporary installer placeholder
+      ansible.builtin.file:
+        path: '{{ _phdz_claude_code_installer_tmp.path }}'
+        state: absent
+
+    - name: Download upstream installer script
+      ansible.builtin.get_url:
+        url: '{{ phdz_claude_code_installer_url }}'
+        dest: '{{ _phdz_claude_code_installer_tmp.path }}'
+        mode: '0700'
+
+    - name: Run upstream installer (native, user-scoped)
+      ansible.builtin.command:
+        argv:
+          - /bin/bash
+          - '{{ _phdz_claude_code_installer_tmp.path }}'
+          - '{{ phdz_claude_code_version }}'
+      args:
+        creates: '{{ phdz_claude_code_bin_path }}'
+
+  always:
+    - name: Remove temporary installer script
+      ansible.builtin.file:
+        path: '{{ _phdz_claude_code_installer_tmp.path | default(omit) }}'
+        state: absent
+      when: _phdz_claude_code_installer_tmp is defined

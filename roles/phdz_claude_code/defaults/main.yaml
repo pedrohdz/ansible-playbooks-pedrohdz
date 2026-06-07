@@ -1,0 +1,10 @@
+---
+# Upstream installer URL (ensure no trailing characters like backticks).
+phdz_claude_code_installer_url: 'https://claude.ai/install.sh'
+
+# Release channel ('stable' or 'latest') or a specific version number
+# (e.g. '2.1.89') passed through to the upstream installer.
+phdz_claude_code_version: 'stable'
+
+phdz_claude_code_home_dir: '{{ phdz_defaults_home }}'
+phdz_claude_code_bin_path: '{{ phdz_claude_code_home_dir }}/.local/bin/claude'

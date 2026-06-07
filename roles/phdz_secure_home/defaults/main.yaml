@@ -8,9 +8,20 @@ phdz_secure_home_lock_home: true
 phdz_secure_home_home_mode: '0700'
 
 phdz_secure_home_dirs_default:
-  - .ssh
+  - .config
   - .gnupg
   - .password-store
+  - .private
+  - .ssh
+
+  # TODO: Find a way of adding the directories below. They can contain
+  # executable files, so they should be skipped in
+  # phdz_secure_home_dirs_default for now:
+  # - .local
+  # - .aider
+  # - .claude
+  # - .claude-accounts
+  # - .codex
 
 phdz_secure_home_dirs_extra: []
 

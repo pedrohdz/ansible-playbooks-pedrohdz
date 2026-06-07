@@ -11,11 +11,32 @@ phdz_homeshick_wait_for_ssh_key_auth: false
 #------------------------------------------------------------------------------
 phdz_homeshick_ssh_sockets_dir: '{{ ansible_facts["env"]["HOME"] }}/.ssh/sockets'
 
-# TODO - ControlPath might cause problems if a castle in phdz_homeshick_castles
-# spans across Git account on the same server.  This will make for a single
-# socket used across accounts and create authorization issues.  Look into
-# fixing this.
+# Distinguishes ControlMaster sockets from one another. Defaults to the
+# standard SSH connection tokens, which is fine for the single homeshick
+# clone. Castles override this (see phdz_homeshick castles task) so that
+# repos under different Git account namespaces never share a socket.
+phdz_homeshick_ssh_socket_key: '%r@%h:%p'
+
 phdz_homeshick_ssh_opts: >-
   -o 'ControlMaster=auto'
-  -o 'ControlPath={{ phdz_homeshick_ssh_sockets_dir }}/ansible-phdz-homeshick-%r@%h:%p.sock'
+  -o 'ControlPath={{ phdz_homeshick_ssh_sockets_dir }}/ansible-phdz-homeshick-{{ phdz_homeshick_ssh_socket_key }}.sock'
   -o 'ControlPersist=2m'
+
+# Per-namespace SSH option overrides (e.g. `-o IdentityFile=...`), keyed by
+# the owner/namespace segment of a castle's URL. These are appended to
+# phdz_homeshick_ssh_opts for that castle's clone.
+#
+# Why this exists: selecting the right account/key can't be delegated to
+# core.sshCommand / includeIf "hasconfig:remote.*.url:..." -- both require a
+# remote to already be configured locally, which isn't true for a fresh
+# `git clone`. (In some setups the relevant config files even live inside the
+# castle being cloned, making that approach circular besides.) This variable
+# lets the *initial* clone pick the correct identity directly.
+#
+# Left empty here since identity file paths are account-identifying; populate
+# via host_vars or a private vars file, e.g.:
+#   phdz_homeshick_castle_ssh_opts:
+#     pedro-drounin: >-
+#       -o IdentitiesOnly=yes
+#       -o IdentityFile=~/.ssh/ids-example/id_ed25519_sk.pub
+phdz_homeshick_castle_ssh_opts: {}
