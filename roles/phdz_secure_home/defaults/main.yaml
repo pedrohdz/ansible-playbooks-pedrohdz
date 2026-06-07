@@ -14,7 +14,6 @@ phdz_secure_home_dirs_default:
   - .codex
   - .config
   - .gnupg
-  - .homesick
   - .local
   - .password-store
   - .private
