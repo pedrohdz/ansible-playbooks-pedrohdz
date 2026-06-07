@@ -26,22 +26,31 @@
     prompt: 'Press Enter once ready (SSH key authorization may be needed)...'
   when: phdz_homeshick_wait_for_ssh_key_auth | bool
 
-# TODO - ControlPath might cause problems if a castle in phdz_homeshick_castles
-# spans across Git account on the same server.  This will make for a single
-# socket used across accounts and create authorization issues.  Look into
-# fixing this.
 - name: Ensure homeshick castles are cloned
   ansible.builtin.git: # noqa: latest[git]
     repo: '{{ item }}'
     dest: '{{ phdz_homeshick_repo_dir }}/{{ _target_dir }}'
     update: false
-    ssh_opts: '{{ phdz_homeshick_ssh_opts }}'
+    ssh_opts: >-
+      {{ phdz_homeshick_ssh_opts }}
+      {{ phdz_homeshick_castle_ssh_opts[_castle_namespace] | default('') }}
   loop: '{{ phdz_homeshick_castles }}'
   when: phdz_homeshick_castles | length > 0
   notify: phdz_homeshick | on-clone-updated
   vars:
     _target_dir: >-
       {{ (item | regex_replace('.*/', '')) | regex_replace('\.git$', '') }}
+    # Group the ControlMaster socket -- and pick the right account identity --
+    # by the repo's owner/namespace rather than by SSH connection tokens
+    # (%r@%h:%p). Git hosts like GitHub always use "git" as the SSH user, so
+    # two castles owned by different accounts on the same host would otherwise
+    # collapse onto a single socket and reuse whichever account authenticated
+    # first -- the exact problem this avoids. Castles sharing a namespace (and
+    # therefore the same key) still share one socket, so multiplexing
+    # continues to minimize hardware-key prompts.
+    _castle_namespace: >-
+      {{ item | regex_replace('^.*[:/]([^/:]+)/[^/]+?(?:\.git)?$', '\1') }}
+    phdz_homeshick_ssh_socket_key: '{{ _castle_namespace }}'
 
 - name: Flush pending handlers
   ansible.builtin.meta: flush_handlers
