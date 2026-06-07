@@ -1,0 +1,59 @@
+---
+- name: Gather mount facts
+  ansible.builtin.mount_facts:
+
+- name: Find directories under home
+  become: '{{ phdz_defaults_use_become }}'
+  ansible.builtin.find:
+    paths: '{{ phdz_sys_dev_user_home_path }}'
+    recurse: true
+    hidden: true
+    follow: false
+    file_type: directory
+  register: _phdz_sys_dev_user_home_dirs
+
+- name: Find files under home
+  become: '{{ phdz_defaults_use_become }}'
+  ansible.builtin.find:
+    paths: '{{ phdz_sys_dev_user_home_path }}'
+    recurse: true
+    hidden: true
+    follow: false
+    file_type: file
+  register: _phdz_sys_dev_user_home_files
+
+- name: Set ownership on home content (excluding mount points)
+  vars:
+    _phdz_sys_dev_user_mount_prefix_re: >-
+      {{ (mount_points | default({})).keys()
+         | map('regex_escape')
+         | map('regex_replace', '$', '/')
+         | join('|') }}
+  block:
+    - name: Ensure dev user owns all directories under home (excluding mount points)  # noqa: risky-file-permissions
+      become: '{{ phdz_defaults_use_become }}'
+      ansible.builtin.file:
+        path: '{{ item.path }}'
+        state: directory
+        owner: '{{ phdz_sys_dev_user_home_uid }}'
+        group: '{{ phdz_sys_dev_user_home_gid }}'
+      loop: '{{ _phdz_sys_dev_user_home_dirs.files }}'
+      loop_control:
+        label: '{{ item.path }}'
+      when: >-
+        _phdz_sys_dev_user_mount_prefix_re | length == 0
+        or not (item.path ~ '/') is match(_phdz_sys_dev_user_mount_prefix_re)
+
+    - name: Ensure dev user owns all files under home (excluding mount points)  # noqa: risky-file-permissions
+      become: '{{ phdz_defaults_use_become }}'
+      ansible.builtin.file:
+        path: '{{ item.path }}'
+        state: file
+        owner: '{{ phdz_sys_dev_user_home_uid }}'
+        group: '{{ phdz_sys_dev_user_home_gid }}'
+      loop: '{{ _phdz_sys_dev_user_home_files.files }}'
+      loop_control:
+        label: '{{ item.path }}'
+      when: >-
+        _phdz_sys_dev_user_mount_prefix_re | length == 0
+        or not (item.path ~ '/') is match(_phdz_sys_dev_user_mount_prefix_re)

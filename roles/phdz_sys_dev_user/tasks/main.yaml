@@ -26,6 +26,16 @@
     group: '{{ _phdz_sys_dev_user_info.group }}'
     mode: '0700'
 
+# ansible.builtin.file with recurse:true crosses mount boundaries. We delegate to
+# set_home_ownership.yaml which filters against phdz_defaults_mount_targets
+# (gathered by phdz_defaults) to skip mount-point directories explicitly.
+- name: Ensure dev user owns all content under home (excluding mount points)
+  ansible.builtin.include_tasks: set_home_ownership.yaml
+  vars:
+    phdz_sys_dev_user_home_path: '{{ _phdz_sys_dev_user_info.home }}'
+    phdz_sys_dev_user_home_uid: '{{ _phdz_sys_dev_user_info.uid }}'
+    phdz_sys_dev_user_home_gid: '{{ _phdz_sys_dev_user_info.group }}'
+
 - name: Configure dev user's sudoers entry
   become: '{{ phdz_defaults_use_become }}'
   ansible.builtin.template:

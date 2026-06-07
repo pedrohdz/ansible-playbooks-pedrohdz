@@ -1,4 +1,7 @@
 ---
+- name: Gather mount facts
+  ansible.builtin.mount_facts:
+
 - name: Lock down the home directory itself
   ansible.builtin.include_tasks: lock_home.yaml
   when: phdz_secure_home_lock_home | bool
