@@ -48,13 +48,12 @@ def build_inventory(docs):
     hostvars = {}
 
     for doc in docs:
-        inst = doc.get("instance", {})
-        if inst.get("status") != "Running":
+        if doc.get("status") != "Running":
             continue
 
-        hostname = inst.get("hostname")
-        ssh_conf = inst.get("sshConfigFile")
-        ssh_key_file = doc.get("identityfile")
+        hostname = doc.get("hostname")
+        ssh_conf = doc.get("sshConfigFile")
+        ssh_key_file = doc.get("IdentityFile")
         if not hostname or not ssh_conf:
             continue
 
