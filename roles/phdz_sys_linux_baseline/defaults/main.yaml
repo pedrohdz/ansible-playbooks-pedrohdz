@@ -1,6 +1,7 @@
 ---
 phdz_sys_linux_baseline_default_packages:
   - binfmt-support # Cross platform support for podman
+  - bubblewrap # Claude-code sandboxing, install at system level
   - build-essential
   - ca-certificates
   - curl
@@ -17,7 +18,7 @@ phdz_sys_linux_baseline_default_packages:
   - unzip
   - vim
   - wget
-  - whois # provides mkpasswd for Argon2 password hashing
+  - whois # Provides mkpasswd for Argon2 password hashing
   - yq
   - zip
   - zsh
